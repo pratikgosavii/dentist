@@ -1,0 +1,11 @@
+db.sqlite3
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+dentist/firebase_key.json
+media
+.env
+# Ignore wsgi.py
+dentist/wsgi.py
+
