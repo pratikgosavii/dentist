@@ -43,11 +43,13 @@ class SignupView(APIView):
     def post(self, request):
         id_token = request.data.get("idToken")
         user_type = request.data.get("user_type")
+        city = request.data.get("city")
+        area = request.data.get("area")
         name = request.data.get("name")
         email = request.data.get("email")
 
-        if not id_token or not user_type:
-            return Response({"error": "idToken and user_type are required"}, status=400)
+        if not id_token or not user_type or not city or not area:
+            return Response({"error": "idToken or user_type of city or area are required"}, status=400)
 
         try:
             decoded_token = firebase_auth.verify_id_token(id_token)
@@ -68,7 +70,7 @@ class SignupView(APIView):
             if f"is_{user_type}" not in role_flags:
                 return Response({"error": "Invalid user_type"}, status=400)
 
-            user = User.objects.filter(mobile=mobile).first()
+            user = User.objects.filter(mobile=mobile, city = city, area = area).first()
             created = False
 
             if user:
