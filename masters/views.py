@@ -448,3 +448,53 @@ def list_area(request):
     }
     return render(request, 'list_city.html', context)
 
+
+
+
+
+@login_required(login_url='login_admin')
+def update_enquiry(request, enquiry_id):
+
+    if request.method == 'POST':
+
+        instance = enquiry.objects.get(id=enquiry_id)
+
+        forms = enquiry_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            forms.save()
+
+            return redirect('list_enquiry')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = enquiry.objects.get(id=enquiry_id)
+        forms = enquiry_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_enquiry.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_enquiry(request, enquiry_id):
+
+    enquiry.objects.get(id=enquiry_id).delete()
+
+    return HttpResponseRedirect(reverse('list_enquiry'))
+
+
+@login_required(login_url='login_admin')
+def list_enquiry(request):
+
+    data = enquiry.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'list_enquiry.html', context)
+

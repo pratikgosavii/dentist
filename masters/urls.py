@@ -42,6 +42,9 @@ urlpatterns = [
     path('list-area/', list_area, name='list_area'),
 
     path('enquiry/', EnquiryCreateView.as_view(), name='enquiry'),
+    path('update-enquiry/<enquiry_id>', update_enquiry, name='update_enquiry'),
+    path('delete-enquiry/<enquiry_id>', delete_enquiry, name='delete_enquiry'),
+    path('list-enquiry/', list_enquiry, name='list_enquiry'),
     
 
     ]  + router.urls

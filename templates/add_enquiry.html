@@ -1,7 +1,7 @@
 {% extends "partials/adminBase.html" %}
 {% load static %}
 
-{% block title %}Add Medicine{% endblock title %}
+{% block title %}Add Enquiry{% endblock title %}
 
 {% block extra_css %}
 <link
@@ -52,12 +52,42 @@
 
             <div class="container">
                 <div class="form-container">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST">
                         {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label">Status:</label>
+                            {{ form.status }}
+                        </div>
 
                         <div class="mb-4">
                             <label class="form-label">Name:</label>
                             {{ form.name }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Age:</label>
+                            {{ form.age }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Mobile:</label>
+                            {{ form.mobile }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Treatment:</label>
+                            {{ form.treatment }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Email:</label>
+                            {{ form.email }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Address:</label>
+                            {{ form.address }}
                         </div>
 
                         <div class="text-center">

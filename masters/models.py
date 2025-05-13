@@ -84,12 +84,23 @@ class city(models.Model):
   
     name = models.CharField(max_length=50)
     
+    def __str__(self):
+        return self.name
 
 class area(models.Model):
     
     city = models.ForeignKey(city, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+        
+    def __str__(self):
+        return f"{self.city} - {self.name}"
     
+
+STATUS_CHOICES = [
+    ('Pending', 'Pending'),
+    ('completed', 'Completed'),
+]
+
 
 class enquiry(models.Model):
   
@@ -99,6 +110,7 @@ class enquiry(models.Model):
     treatment = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
