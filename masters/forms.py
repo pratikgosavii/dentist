@@ -24,6 +24,25 @@ class coupon_Form(forms.ModelForm):
         }
 
 
+class city_Form(forms.ModelForm):
+
+    class Meta:
+        model = city
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city Name'}),
+        }
+
+class area_Form(forms.ModelForm):
+
+    class Meta:
+        model = area
+        fields = ['name']
+        widgets = {
+            'city': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter area Name'}),
+        }
+
 class medicine_Form(forms.ModelForm):
 
     class Meta:

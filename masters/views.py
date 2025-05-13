@@ -290,3 +290,161 @@ from .serializers import EnquirySerializer
 class EnquiryCreateView(generics.ListCreateAPIView):
     queryset = enquiry.objects.all().order_by('-created_at')
     serializer_class = EnquirySerializer
+
+
+
+
+
+
+@login_required(login_url='login_admin')
+def add_city(request):
+
+    if request.method == 'POST':
+
+        forms = city_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            forms.save()
+
+            return redirect('list_city')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+            return render(request, 'add_city.html', context)
+    
+    else:
+
+        forms = city_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_city.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def update_city(request, city_id):
+
+    if request.method == 'POST':
+
+        instance = city.objects.get(id=city_id)
+
+        forms = city_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            
+            forms.save()
+            return redirect('list_city')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = city.objects.get(id=city_id)
+        forms = city_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_city.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_city(request, city_id):
+
+    city.objects.get(id=city_id).delete()
+
+    return HttpResponseRedirect(reverse('list_city'))
+
+
+@login_required(login_url='login_admin')
+def list_city(request):
+
+    data = city.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'list_city.html', context)
+
+
+
+@login_required(login_url='login_admin')
+def add_area(request):
+
+    if request.method == 'POST':
+
+        forms = area_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            
+            forms.save()
+            return redirect('list_area')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+            return render(request, 'add_area.html', context)
+    
+    else:
+
+        forms = area_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_area.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def update_area(request, area_id):
+
+    if request.method == 'POST':
+
+        instance = area.objects.get(id=area_id)
+
+        forms = area_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            forms.save()
+
+            return redirect('list_area')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = area.objects.get(id=area_id)
+        forms = area_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_area.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_area(request, area_id):
+
+    area.objects.get(id=area_id).delete()
+
+    return HttpResponseRedirect(reverse('list_area'))
+
+
+@login_required(login_url='login_admin')
+def list_area(request):
+
+    data = city.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'list_city.html', context)
+

@@ -19,10 +19,14 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(mobile, password, **extra_fields)
 
+
+from masters.models import *
+
+
 class User(AbstractUser):
 
     firebase_uid = models.CharField(max_length=128, unique=True, null=True, blank=True)
-    
+   
     is_customer = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
     is_daycare = models.BooleanField(default=False)

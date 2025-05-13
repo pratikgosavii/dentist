@@ -31,6 +31,16 @@ urlpatterns = [
     path('delete-slot/<slot_id>', delete_slot, name='delete_slot'),
     path('list-slot/', list_slot, name='list_slot'),
 
+    path('add-city/', add_city, name='add_city'),
+    path('update-city/<city_id>', update_city, name='update_city'),
+    path('delete-city/<city_id>', delete_city, name='delete_city'),
+    path('list-city/', list_city, name='list_city'),
+
+    path('add-area/', add_area, name='add_area'),
+    path('update-area/<area_id>', update_area, name='update_area'),
+    path('delete-area/<area_id>', delete_area, name='delete_area'),
+    path('list-area/', list_area, name='list_area'),
+
     path('enquiry/', EnquiryCreateView.as_view(), name='enquiry'),
     
 

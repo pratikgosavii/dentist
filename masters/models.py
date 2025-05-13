@@ -10,7 +10,6 @@ from django.db import models
 from django.db import models
 
 
-from users.models import User
 from django.utils.timezone import now
 from datetime import datetime, timezone
 
@@ -19,7 +18,6 @@ ist = pytz.timezone('Asia/Kolkata')
 
 
 
-from users.models import User
 
 
 
@@ -49,7 +47,7 @@ class coupon(models.Model):
 
 class medicine(models.Model):
 
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    created_by = models.ForeignKey("users.User", on_delete=models.CASCADE, blank=True, null=True)
     
     name = models.CharField(max_length=255)
     brand = models.CharField(max_length=255, blank=True, null=True)
@@ -80,6 +78,17 @@ class slot(models.Model):
     def __str__(self):
         return f"{self.start}‑{self.end}"
 
+    
+
+class city(models.Model):
+  
+    name = models.CharField(max_length=50)
+    
+
+class area(models.Model):
+    
+    city = models.ForeignKey(city, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
     
 
 class enquiry(models.Model):
