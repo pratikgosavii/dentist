@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'masters',
     'doctor',
     'customer',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
