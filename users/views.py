@@ -116,6 +116,8 @@ class SignupView(APIView):
                     "mobile": user.mobile,
                     "email": user.email,
                     "name": user.first_name,
+                    "city": user.city,
+                    "area": user.area,
                     "user_type": user_type,
                     "created": created
                 }
@@ -197,7 +199,9 @@ class LoginAPIView(APIView):
                     "id": user.id,
                     "mobile": user.mobile,
                     "email": user.email,
-                    "created": created
+                    "created": created,
+                    "city": user.city,
+                    "area": user.area,
                 }
             })
 
