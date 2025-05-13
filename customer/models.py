@@ -23,7 +23,7 @@ class customer(models.Model):
         ('female', 'Female'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer")
     dob = models.DateField()
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
     is_active = models.BooleanField(default=True)
@@ -40,9 +40,9 @@ class customer(models.Model):
 class Appointment(models.Model):
 
     doctor   = models.ForeignKey("doctor.doctor", on_delete=models.CASCADE, related_name="appointments")
-    patient  = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments",)
+    customer  = models.ForeignKey("customer.customer", on_delete=models.CASCADE, related_name="sdsd",)
     date     = models.DateField()
-    slot     = models.ForeignKey(slot, on_delete=models.PROTECT, related_name="appointments")
+    slot     = models.ForeignKey(slot, on_delete=models.PROTECT, related_name="sdssdsdd")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -52,4 +52,6 @@ class Appointment(models.Model):
         ordering        = ["date", "slot__start"]
 
     def __str__(self):
-        return f"{self.patient} with {self.doctor} on {self.date} @ {self.slot.start}"
+        return f"{self.customer} with {self.doctor} on {self.date} @ {self.slot.start}"
+
+    

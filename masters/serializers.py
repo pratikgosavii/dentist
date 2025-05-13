@@ -7,3 +7,9 @@ class coupon_serializer(serializers.ModelSerializer):
         model = coupon
         fields = '__all__'
 
+
+
+class EnquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = enquiry
+        fields = '__all__'

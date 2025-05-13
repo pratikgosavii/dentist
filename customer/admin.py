@@ -6,3 +6,4 @@ from .models import *
 
 
 admin.site.register(customer)
+admin.site.register(Appointment)

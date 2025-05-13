@@ -283,4 +283,10 @@ def list_slot(request):
     return render(request, 'list_slot.html', context)
 
 
+from rest_framework import generics
+from .models import *
+from .serializers import EnquirySerializer
 
+class EnquiryCreateView(generics.ListCreateAPIView):
+    queryset = enquiry.objects.all().order_by('-created_at')
+    serializer_class = EnquirySerializer

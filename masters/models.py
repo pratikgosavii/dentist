@@ -80,3 +80,18 @@ class slot(models.Model):
     def __str__(self):
         return f"{self.start}‑{self.end}"
 
+    
+
+class enquiry(models.Model):
+  
+    name = models.CharField(max_length=50)
+    age = models.CharField(max_length=50)
+    mobile = models.CharField(max_length=50)
+    treatment = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.mobile}"
+

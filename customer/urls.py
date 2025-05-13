@@ -9,8 +9,8 @@ from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register('customer', customerViewSet, basename='customer')
-router.register('appointment', AppointmentViewSet, basename='appointment')
+router.register(r'customer', customerViewSet, basename='customer')
+router.register(r'appointment', AppointmentViewSet, basename='appointment')
 
 urlpatterns = [
 

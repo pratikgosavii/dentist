@@ -30,6 +30,8 @@ urlpatterns = [
     path('update-slot/<slot_id>', update_slot, name='update_slot'),
     path('delete-slot/<slot_id>', delete_slot, name='delete_slot'),
     path('list-slot/', list_slot, name='list_slot'),
+
+    path('enquiry/', EnquiryCreateView.as_view(), name='enquiry'),
     
 
     ]  + router.urls

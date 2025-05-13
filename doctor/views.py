@@ -83,3 +83,40 @@ class DoctorMedicineViewSet(viewsets.ModelViewSet):
         instance.is_active = True
         instance.save()
         return Response({"detail": "Soft deleted successfully."}, status=status.HTTP_200_OK)
+    
+
+
+class AppointmentMedicineViewSet(viewsets.ModelViewSet):
+
+    queryset = Appoinment_Medicine.objects.all()
+    serializer_class = AppointmentMedicineSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def get_queryset(self):
+        return Appoinment_Medicine.objects.filter(user=self.request.user)
+    
+
+
+class TreatmentViewSet(viewsets.ModelViewSet):
+    queryset = Treatment.objects.all()
+    serializer_class = TreatmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Doctor sees treatments linked to their appointments
+        return Treatment.objects.filter(appointment__doctor__user=self.request.user)
+
+class TreatmentStepViewSet(viewsets.ModelViewSet):
+    queryset = TreatmentStep.objects.all()
+    serializer_class = TreatmentStepSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        # Automatically set the doctor
+        serializer.save(doctor=self.request.user)
+
+    def get_queryset(self):
+        return TreatmentStep.objects.filter(treatment__appointment__doctor__user=self.request.user)

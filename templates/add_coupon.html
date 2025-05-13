@@ -30,7 +30,7 @@
             margin-bottom: 20px;
             font-weight: bold;
             font-size: 2rem;
-            color: #4952FB;;
+            color: #775599;;
         }
 
         .description-box {
@@ -44,8 +44,8 @@
         }
 
         .btn-primary {
-            background-color: #4952FB;;
-            border-color: #4952FB;;
+            background-color: #775599;;
+            border-color: #775599;;
         }
 
         .custom-button {
@@ -73,14 +73,66 @@
                         {% csrf_token %}
                         <!-- Category Title Section -->
                         <div class="mb-4">
-                            <label for="code" class="form-label">Slot Start:</label>
-                            {{ form.start }}
+                            <label for="code" class="form-label">Coupon Code:</label>
+                            {{ form.code }}
                         </div>
                         
                         <div class="mb-4">
-                            <label for="code" class="form-label">Slot End :</label>
-                            {{ form.end }}
+                            <label for="code" class="form-label">Title :</label>
+                            {{ form.title }}
                         </div>
+                        
+                        <div class="mb-4">
+                            <label for="code" class="form-label">Type :</label>
+                            {{ form.type }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="discount_percentage" class="form-label">Discount Percentage:</label>
+                            {{ form.discount_percentage }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="discount_amount" class="form-label">Discount Amount:</label>
+                            {{ form.discount_amount }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="min_purchase" class="form-label">Minimum Purchase:</label>
+                            {{ form.min_purchase }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="max_discount" class="form-label">Maximum Discount:</label>
+                            {{ form.max_discount }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="code" class="form-label">Description:</label>
+                            {{ form.description }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="start_date" class="form-label">Start Date:</label>
+                            {{ form.start_date }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="end_date" class="form-label">End Date:</label>
+                            {{ form.end_date }}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="is_active" class="form-label">Active:</label>
+                            {{ form.is_active }}
+                        </div>
+                        
+                        <div class="mb-5">
+                            <label for="image" class="form-label">Image:</label>
+                            {{ form.image }}
+                        </div>
+                        
+
                         
                                 <!-- Submit Button -->
                         <div class="text-center">

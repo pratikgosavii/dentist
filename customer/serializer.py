@@ -38,20 +38,17 @@ class customer_serializer(serializers.ModelSerializer):
 
 
 
+from doctor.models import *
+
 
 class AppointmentSerializer(serializers.ModelSerializer):
   
-
-    patient = serializers.StringRelatedField(read_only=True)   # shows username / __str__
+    customer = serializers.PrimaryKeyRelatedField(queryset=customer.objects.all())
+    doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
 
     class Meta:
-        model  = Appointment
-        fields = ["id", "doctor", "date", "slot", "patient", "created_at", "updated_at"]
-        read_only_fields = ["patient", "created_at", "updated_at"]
-
+        model = Appointment
+        fields = ["id", "doctor", "date", "slot", "customer", "created_at", "updated_at"]
+        read_only_fields = ["created_at", "updated_at"]
     
-    def create(self, validated_data):
-        # `patient` comes from the request’s authenticated user (token)
-        return super().create({
-            **validated_data,
-        })
+    
