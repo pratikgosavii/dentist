@@ -109,7 +109,7 @@ GENDER_CHOICES = [
 ]
 
 ENQUIRY_TYPE_CHOICES = [
-    ("home _visit", "Home Visit"),
+    ("home_visit", "Home Visit"),
     ("aligners", "Aligners"),
     ("skin_hydrafacial", "Skin/Hydrafacial"),
 ]
