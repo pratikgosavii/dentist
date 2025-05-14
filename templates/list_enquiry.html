@@ -26,14 +26,6 @@
         padding: 20px;
     }
 
-    .card-title {
-        margin: 0;
-    }
-
-    .card-body {
-        padding: 20px;
-    }
-
     .table thead {
         background-color: gray;
         color: white;
@@ -48,6 +40,12 @@
         background-color: #f0d28c;
         color: #4952FB;
     }
+
+    .action-icons i {
+        font-size: 1.2rem;
+        margin-right: 10px;
+        cursor: pointer;
+    }
 </style>
 {% endblock extra_css %}
 
@@ -55,7 +53,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-size-18">List Enquiries</h4>
@@ -63,56 +61,56 @@
                 </div>
             </div>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="datatable" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Age</th>
-                                                <th>Mobile</th>
-                                                <th>Email</th>
-                                                <th>Treatment</th>
-                                                <th>Status</th>
-                                                <th>Address</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tableBody">
-                                            {% if data %}
-                                                {% for enquiry in data %}
-                                                    <tr>
-                                                        <td>{{ forloop.counter }}</td>
-                                                        <td>{{ enquiry.name }}</td>
-                                                        <td>{{ enquiry.age }}</td>
-                                                        <td>{{ enquiry.mobile }}</td>
-                                                        <td>{{ enquiry.email }}</td>
-                                                        <td>{{ enquiry.treatment }}</td>
-                                                        <td>{{ enquiry.status }}</td>
-                                                        <td>{{ enquiry.address }}</td>
-                                                        <td>{{ enquiry.created_at }}</td>
-                                                        <td>
-                                                            <a href="{% url 'update_enquiry' enquiry.id %}"><i class="bi bi-pencil-square text-primary" title="Edit"></i></a>
-                                                            <a href="{% url 'delete_enquiry' enquiry.id %}"><i class="bi bi-trash text-danger" title="Delete"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr>
-                                                    <td colspan="9" class="text-center">No enquiries found.</td>
-                                                </tr>
-                                            {% endif %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Mobile</th>
+                                    <th>Email</th>
+                                    <th>Treatment</th>
+                                    <th>Enquiry Type</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if data %}
+                                    {% for enquiry in data %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ enquiry.name }}</td>
+                                            <td>{{ enquiry.age }}</td>
+                                            <td>{{ enquiry.mobile }}</td>
+                                            <td>{{ enquiry.email }}</td>
+                                            <td>{{ enquiry.treatment }}</td>
+                                            <td>{{ enquiry.enquiry_type }}</td>
+                                            <td>{{ enquiry.status }}</td>
+                                            <td>{{ enquiry.address }}</td>
+                                            <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
+                                            <td class="action-icons">
+                                                <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
+                                                    <i class="bi bi-pencil-square text-primary"></i>
+                                                </a>
+                                                <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
+                                                    <i class="bi bi-trash text-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" class="text-center">No enquiries found.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

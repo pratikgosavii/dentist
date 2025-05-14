@@ -13,11 +13,18 @@ from datetime import datetime
 def current_time():
     return datetime.now().time()
 
+GENDER_CHOICES = (
+    ("Male", "Male"),
+    ("Female", "Female"),
+    ("Other", "Other"),
+)
+
 class doctor(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor")
     name = models.CharField(max_length=120, unique=False)
     image = models.ImageField(upload_to='doctor_images/')
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     
     house_building  = models.CharField(max_length=120,blank=True)
     locality        = models.CharField(max_length=120,blank=True)
@@ -35,14 +42,58 @@ class doctor(models.Model):
     remark = models.CharField(max_length=120, unique=False, null = True, blank = True)
     is_active = models.BooleanField(default = True)
         
-    available_from = models.DateField(null=True, blank=True)
-    available_to = models.DateField(null=True, blank=True)
-
     
     def __str__(self):
         return self.name
     
     
+DAYS_OF_WEEK = (
+    ("Mon", "Monday"),
+    ("Tue", "Tuesday"),
+    ("Wed", "Wednesday"),
+    ("Thu", "Thursday"),
+    ("Fri", "Friday"),
+    ("Sat", "Saturday"),
+    ("Sun", "Sunday"),
+)
+
+# Clinic model
+class Clinic(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.TextField()
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    pincode = models.CharField(max_length=10)
+    consultation_fee = models.DecimalField(max_digits=8, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
+
+# Availability model
+class DoctorAvailability(models.Model):
+    doctor = models.ForeignKey('doctor', on_delete=models.CASCADE, related_name='availabilities')
+    
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday'),
+    ]
+    
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    from_time = models.TimeField()
+    to_time = models.TimeField()
+    
+    is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
+    
+    def __str__(self):
+        return f"{self.doctor.name} - {self.day}: {self.from_time} to {self.to_time}"
+    
+
 
 
 class video_call_history(models.Model):
@@ -124,3 +175,6 @@ class TreatmentStep(models.Model):
 
     class Meta:
         ordering = ['id']
+
+
+

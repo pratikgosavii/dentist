@@ -9,13 +9,13 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = User
 
-    list_display = ('mobile', 'email', 'is_staff', 'is_active', 'is_customer', 'is_doctor', 'is_daycare', 'is_service_provider')
-    list_filter = ('is_staff', 'is_active', 'is_customer', 'is_doctor', 'is_service_provider')
+    list_display = ('mobile', 'email', 'is_staff', 'is_active', 'is_customer', 'is_doctor')
+    list_filter = ('is_staff', 'is_active', 'is_customer', 'is_doctor')
 
     fieldsets = (
         (None, {'fields': ('mobile', 'email', 'password', 'firebase_uid')}),
         ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser')}),
-        ('Roles', {'fields': ('is_customer', 'is_doctor', 'is_daycare', 'is_service_provider')}),
+        ('Roles', {'fields': ('is_customer', 'is_doctor')}),
         ('Groups & Permissions', {'fields': ('groups', 'user_permissions')}),
     )
 

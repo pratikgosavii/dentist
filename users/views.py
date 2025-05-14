@@ -63,8 +63,6 @@ class SignupView(APIView):
             role_flags = {
                 "is_customer": False,
                 "is_doctor": False,
-                "is_daycare": False,
-                "is_service_provider": False
             }
 
             if f"is_{user_type}" not in role_flags:
@@ -78,8 +76,6 @@ class SignupView(APIView):
                 existing_roles = [key for key, value in {
                     "customer": user.is_customer,
                     "doctor": user.is_doctor,
-                    "daycare": user.is_daycare,
-                    "service_provider": user.is_service_provider
                 }.items() if value]
 
                 if existing_roles and user_type not in existing_roles:

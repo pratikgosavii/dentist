@@ -29,8 +29,6 @@ class User(AbstractUser):
    
     is_customer = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
-    is_daycare = models.BooleanField(default=False)
-    is_service_provider = models.BooleanField(default=False)
 
     mobile = models.CharField(max_length=15, unique=True)
     email = models.EmailField(null=True, blank=True)  # Email is optional

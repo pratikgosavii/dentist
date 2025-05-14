@@ -102,17 +102,35 @@ STATUS_CHOICES = [
 ]
 
 
+GENDER_CHOICES = [
+    ("Male", "Male"),
+    ("Female", "Female"),
+    ("Other", "Other"),
+]
+
+ENQUIRY_TYPE_CHOICES = [
+    ("home _visit", "Home Visit"),
+    ("aligners", "Aligners"),
+    ("skin_hydrafacial", "Skin/Hydrafacial"),
+]
+
 class enquiry(models.Model):
   
-    name = models.CharField(max_length=50)
-    age = models.CharField(max_length=50)
-    mobile = models.CharField(max_length=50)
-    treatment = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    address = models.CharField(max_length=50)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
-    created_at = models.DateField(auto_now_add=True)
+    full_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    email = models.EmailField(blank=True, null=True)
+    dob = models.DateField()
+    age = models.PositiveIntegerField()
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
 
-    def __str__(self):
-        return f"{self.name} - {self.mobile}"
+    house = models.CharField("House/Building/Apartment No.", max_length=100)
+    area = models.CharField("Locality/Area/street/Sector", max_length=150)
+    pincode = models.CharField(max_length=10)
+    state = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    enquiry_type = models.CharField(max_length=20, choices=ENQUIRY_TYPE_CHOICES, default='Pending')
+
+    created_at = models.DateTimeField(auto_now_add=True)
 

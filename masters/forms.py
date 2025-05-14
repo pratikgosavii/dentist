@@ -84,16 +84,24 @@ class slot_Form(forms.ModelForm):
 
 
 class enquiry_Form(forms.ModelForm):
-    class Meta:
+     class Meta:
         model = enquiry
-        fields = ['name', 'age', 'mobile', 'treatment', 'email', 'address']
+        fields = [
+            'full_name', 'phone_number', 'email', 'dob', 'age', 'gender',
+            'house', 'area', 'pincode', 'state', 'city', 'status', 'enquiry_type'
+        ]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'age': forms.TextInput(attrs={'class': 'form-control'}),
-            'mobile': forms.TextInput(attrs={'class': 'form-control'}),
-            'treatment': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email ID'}),
+            'dob': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'DD/MM/YYYY', 'type': 'date'}),
+            'age': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Age'}),
+            'gender': forms.Select(attrs={'class': 'form-control'}),
+            'house': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'House/Building/Apartment No.'}),
+            'area': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Locality/Area/street/Sector'}),
+            'pincode': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Pincode'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
-
+            'enquiry_type': forms.Select(attrs={'class': 'form-control'}),
         }
