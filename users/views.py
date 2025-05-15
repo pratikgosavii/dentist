@@ -48,6 +48,9 @@ class SignupView(APIView):
         name = request.data.get("name")
         email = request.data.get("email")
 
+        print(city)
+        print(area)
+
         if not id_token or not user_type or not city or not area:
             return Response({"error": "idToken or user_type of city or area are required"}, status=400)
 
@@ -99,8 +102,8 @@ class SignupView(APIView):
                     firebase_uid=uid,
                     first_name=name or "",
                     email=email or decoded_token.get("email", ""),
-                    city_id=city,
-                    area_id=area,
+                    city__id=city,
+                    area__id=area,
                     **role_flags
                 )
                 created = True
@@ -114,8 +117,8 @@ class SignupView(APIView):
                     "mobile": user.mobile,
                     "email": user.email,
                     "name": user.first_name,
-                    "city": user.city,
-                    "area": user.area,
+                    "city": user.city.name,
+                    "area": user.area.name,
                     "user_type": user_type,
                     "created": created
                 }
