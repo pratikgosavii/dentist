@@ -26,7 +26,10 @@ from masters.models import *
 class User(AbstractUser):
 
     firebase_uid = models.CharField(max_length=128, unique=True, null=True, blank=True)
-   
+    
+    area = models.ForeignKey("masters.area", on_delete=models.CASCADE)
+    city = models.ForeignKey("masters.city", on_delete=models.CASCADE)
+
     is_customer = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
 

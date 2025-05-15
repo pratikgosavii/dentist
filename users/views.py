@@ -99,6 +99,8 @@ class SignupView(APIView):
                     firebase_uid=uid,
                     first_name=name or "",
                     email=email or decoded_token.get("email", ""),
+                    city_id=city,
+                    area_id=area,
                     **role_flags
                 )
                 created = True
@@ -127,10 +129,9 @@ class LoginAPIView(APIView):
 
     def post(self, request):
         id_token = request.data.get("idToken")
-        user_type = request.data.get("user_type")
 
-        if not id_token or not user_type:
-            return Response({"error": "id_token and user_type are required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not id_token :
+            return Response({"error": "id_token are required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             decoded_token = firebase_auth.verify_id_token(id_token)
@@ -147,62 +148,36 @@ class LoginAPIView(APIView):
             created = False
 
             if user:
-                role_map = {
-                    "customer": user.is_customer,
-                    "doctor": user.is_doctor,
-                    "daycare": user.is_daycare,
-                    "service_provider": user.is_service_provider
-                }
-
-                if not role_map.get(user_type, False):
-                    existing_roles = [k for k, v in role_map.items() if v]
-                    return Response({
-                        "error": f"This number is already registered as a {existing_roles[0]}. Cannot login as {user_type}."
-                    }, status=400)
 
                 if user.firebase_uid != uid:
                     user.firebase_uid = uid
                     user.save()
+           
+
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh),
+                    "user": {
+                        "id": user.id,
+                        "mobile": user.mobile,
+                        "email": user.email,
+                        "user_type": (
+                            "doctor" if user.is_doctor else
+                            "customer" if user.is_customer else
+                            "unknown"
+                        ),
+                        "name": f"{user.first_name or ''} {user.last_name or ''}".strip(),
+                        "created": created
+                    }
+                })
+            
             else:
-                role_flags = {
-                    "is_customer": False,
-                    "is_doctor": False,
-                    "is_daycare": False,
-                    "is_service_provider": False
-                }
-
-                if f"is_{user_type}" not in role_flags:
-                    return Response({"error": "Invalid user_type"}, status=400)
-
-                role_flags[f"is_{user_type}"] = True
-
-                if email and User.objects.filter(email=email).exists():
-                    return Response({"error": "This email is already in use."}, status=400)
-
-                user = User.objects.create(
-                    mobile=phone_number,
-                    firebase_uid=uid,
-                    email=email or "",
-                    **role_flags
-                )
-                created = True
-
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                "access": str(refresh.access_token),
-                "refresh": str(refresh),
-                "user": {
-                    "id": user.id,
-                    "mobile": user.mobile,
-                    "email": user.email,
-                    "created": created,
-                    "city": user.city,
-                    "area": user.area,
-                }
-            })
+                return Response({"error": "no user found try to signup"}, status=status.HTTP_401_UNAUTHORIZED)
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 
