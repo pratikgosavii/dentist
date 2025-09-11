@@ -66,50 +66,56 @@
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered table-striped">
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Age</th>
-                                    <th>Mobile</th>
-                                    <th>Email</th>
-                                    <th>Treatment</th>
-                                    <th>Enquiry Type</th>
-                                    <th>Status</th>
-                                    <th>Address</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if data %}
-                                    {% for enquiry in data %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ enquiry.name }}</td>
-                                            <td>{{ enquiry.age }}</td>
-                                            <td>{{ enquiry.mobile }}</td>
-                                            <td>{{ enquiry.email }}</td>
-                                            <td>{{ enquiry.treatment }}</td>
-                                            <td>{{ enquiry.enquiry_type }}</td>
-                                            <td>{{ enquiry.status }}</td>
-                                            <td>{{ enquiry.address }}</td>
-                                            <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
-                                            <td class="action-icons">
-                                                <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
-                                                    <i class="bi bi-pencil-square text-primary"></i>
-                                                </a>
-                                                <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
-                                                    <i class="bi bi-trash text-danger"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        <td colspan="10" class="text-center">No enquiries found.</td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Enquiry Type</th>
+        <th>Status</th>
+        <th>Address</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+</thead>
+<tbody>
+    {% if data %}
+        {% for enquiry in data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ enquiry.full_name }}</td>
+                <td>{{ enquiry.phone_number }}</td>
+                <td>{{ enquiry.gender }}</td>
+                <td>{{ enquiry.age }}</td>
+                <td>{{ enquiry.email }}</td>
+                <td>{{ enquiry.enquiry_type }}</td>
+                <td>{{ enquiry.status }}</td>
+                <td>
+                    {{ enquiry.house }},
+                    {{ enquiry.area }},
+                    {{ enquiry.city }},
+                    {{ enquiry.state }} - {{ enquiry.pincode }}
+                </td>
+                <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
+                <td class="action-icons">
+                    <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
+                        <i class="bi bi-pencil-square text-primary"></i>
+                    </a>
+                    <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
+                        <i class="bi bi-trash text-danger"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="11" class="text-center">No enquiries found.</td>
+        </tr>
+    {% endif %}
+</tbody>
+
                         </table>
                     </div>
                 </div>

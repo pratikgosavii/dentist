@@ -11,5 +11,6 @@ urlpatterns = [
     path('reset-password/', ResetPasswordView.as_view(), name='ResetPasswordView'),
     path('logout/', logout_page, name='logout'),
     
+    path('dentist_list/', dentist_list, name='dentist_list'),
     path('user_list/', user_list, name='user_list'),
 ]

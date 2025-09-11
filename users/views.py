@@ -303,6 +303,12 @@ def logout_page(request):
 
 def user_list(request):
 
-    data = User.objects.all()
+    data = User.objects.filter(is_doctor = True)
+
+    return render(request, 'user_list.html', { 'data' : data})
+
+def dentist_list(request):
+
+    data = User.objects.filter(is_customer = True)
 
     return render(request, 'user_list.html', { 'data' : data})
