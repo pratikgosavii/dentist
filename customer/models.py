@@ -48,9 +48,20 @@ APPOINTMENT_TYPE_CHOICES = [
     ('Over a Call', 'Over a Call'),
 ]
 
+BOOKING_FOR_CHOICES = [
+    ('Book For Your Self', 'Book For Your Self'),
+    ('Booking For Someone Else', 'Booking For Someone Else'),
+]
+
+
+from doctor.models import doctor
+
+
 class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
+    doctor = models.ForeignKey(doctor, on_delete=models.CASCADE, related_name="appointments_doctor")
     appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPE_CHOICES, default="In Person")
+    booking_for = models.CharField(max_length=40, choices=BOOKING_FOR_CHOICES, default="Book For Your Self")
 
     # Appointment details
     date = models.DateField()

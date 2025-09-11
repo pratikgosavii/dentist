@@ -4,8 +4,8 @@ from django.db import models
 
 
 from masters.models import *
-from customer.models import *
 from users.models import User
+
 from .models import *
 
 from datetime import datetime
@@ -21,7 +21,7 @@ GENDER_CHOICES = (
 
 class doctor(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor")
+    user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name="doctor")
 
     # Basic Info
     name = models.CharField(max_length=120)
@@ -115,20 +115,19 @@ class DoctorAvailability(models.Model):
 
 
 class video_call_history(models.Model):
-    doctor = models.ForeignKey(doctor, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctor = models.ForeignKey('doctor', on_delete=models.CASCADE)
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
 
-from customer.models import *
 
 class Appoinment_Medicine(models.Model):
 
-    customer = models.ForeignKey(customer, on_delete=models.CASCADE)
-    medicine = models.ForeignKey(medicine, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(doctor, on_delete=models.CASCADE, related_name='doctor_medicines')
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    customer = models.ForeignKey('customer.customer', on_delete=models.CASCADE, related_name='doctor_wdefredsasmedicines')
+    medicine = models.ForeignKey('masters.medicine', on_delete=models.CASCADE, related_name='swweeq')
+    doctor = models.ForeignKey('doctor', on_delete=models.CASCADE, related_name='doctor_medicines')
+    appointment = models.ForeignKey('customer.Appointment', on_delete=models.CASCADE, related_name='dosdsctor_medicines')
 
     quantity = models.DecimalField(max_digits=4, decimal_places=1)  # Add max_digits also
     
@@ -177,14 +176,14 @@ class Appoinment_Medicine(models.Model):
 
 
 class Treatment(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='treatments')
-    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name='treatment')
+    customer = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='treatments')
+    appointment = models.OneToOneField('customer.Appointment', on_delete=models.CASCADE, related_name='trewreeatment')
     title = models.CharField(max_length=255)  # Example: "Crown Treatment"
 
     
 
 class TreatmentStep(models.Model):
-    treatment = models.ForeignKey(Treatment, on_delete=models.CASCADE, related_name='steps')
+    treatment = models.ForeignKey('Treatment', on_delete=models.CASCADE, related_name='steps')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     date = models.DateField()

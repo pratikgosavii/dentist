@@ -57,13 +57,14 @@ class customerViewSet(viewsets.ModelViewSet):
         return Response({"message": "User reactivated"}, status=status.HTTP_200_OK)
 
 
-class AppointmentViewSet(viewsets.ViewSet):
+class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all().order_by('-created_at')
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
 
 
 class DoctorViewSet(viewsets.ReadOnlyModelViewSet):  

@@ -42,13 +42,26 @@ from doctor.models import *
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-  
-    customer = serializers.PrimaryKeyRelatedField(queryset=customer.objects.all())
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
 
     class Meta:
         model = Appointment
-        fields = ["id", "doctor", "date", "slot", "customer", "created_at", "updated_at"]
-        read_only_fields = ["created_at", "updated_at"]
-    
+        fields = [
+            "id",
+            "doctor",
+            "appointment_type",
+            "booking_for",
+            "date",
+            "time",
+            "full_name",
+            "phone_number",
+            "email",
+            "dob",
+            "age",
+            "gender",
+            "concern",
+            "created_at",
+        ]
+        read_only_fields = ["created_at"]
+
     
