@@ -73,10 +73,10 @@ class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-    from rest_framework import generics, permissions
+from rest_framework import generics, permissions
 from rest_framework.exceptions import PermissionDenied
-from .models import Appoinment_Medicine, Appointment
-from .serializers import AppointmentMedicineSerializer
+from doctor.models import Appoinment_Medicine
+from doctor.serializer import AppointmentMedicineSerializer
 
 
 class AppointmentMedicineListView(generics.ListAPIView):
