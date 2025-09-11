@@ -78,9 +78,9 @@ class DoctorViewSet(viewsets.ModelViewSet):
     def me(self, request):
         """Get logged-in user's doctor profile"""
         try:
-            doc = Doctor.objects.get(user=request.user)
+            doc = doctor.objects.get(user=request.user)
             return Response(self.get_serializer(doc).data, status=status.HTTP_200_OK)
-        except Doctor.DoesNotExist:
+        except doctor.DoesNotExist:
             return Response({"error": "Doctor profile not found"}, status=status.HTTP_404_NOT_FOUND)
         
 

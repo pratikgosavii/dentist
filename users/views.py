@@ -331,3 +331,34 @@ def dentist_list(request):
     data = doctor.objects.all()
 
     return render(request, 'list_doctor.html', { 'data' : data})
+
+
+
+
+from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.decorators import action
+
+
+class UserProfileViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+
+    @action(detail=False, methods=['get', 'put'], url_path='me')
+    def me(self, request):
+        user = request.user
+
+        if request.method == 'GET':
+            serializer = UserProfileSerializer(user)
+            return Response(serializer.data)
+
+        elif request.method == 'PUT':
+
+            serializer = UserProfileSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
