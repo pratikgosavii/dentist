@@ -124,7 +124,7 @@ class video_call_history(models.Model):
 
 class Appoinment_Medicine(models.Model):
 
-    customer = models.ForeignKey('customer.customer', on_delete=models.CASCADE, related_name='doctor_wdefredsasmedicines')
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='doctor_wdefredsasmedicines')
     medicine = models.ForeignKey('masters.medicine', on_delete=models.CASCADE, related_name='swweeq')
     doctor = models.ForeignKey('doctor', on_delete=models.CASCADE, related_name='doctor_medicines')
     appointment = models.ForeignKey('customer.Appointment', on_delete=models.CASCADE, related_name='dosdsctor_medicines')

@@ -13,8 +13,8 @@ router = DefaultRouter()
 router.register('doctors', DoctorViewSet, basename='doctor')
 router.register('doctor-medicine', DoctorMedicineViewSet, basename='pet-test-booking')
 router.register('appointment-medicine', AppointmentMedicineViewSet, basename='AppointmentMedicineViewSet')
-router.register(r'treatments', TreatmentViewSet)
-router.register(r'treatment-steps', TreatmentStepViewSet)
+router.register('treatments', TreatmentViewSet)
+router.register('treatment-steps', TreatmentStepViewSet)
 
 
 urlpatterns = [

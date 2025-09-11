@@ -123,12 +123,17 @@ class AppointmentMedicineViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError("You are not registered as a doctor.")
 
         appointment = serializer.validated_data.get("appointment")
+
         if appointment.doctor != doctor_instance:
             raise serializers.ValidationError(
                 "You cannot prescribe medicines for an appointment that is not booked under you."
             )
 
-        serializer.save(doctor=doctor_instance)
+        # Patient is appointment.user
+        serializer.save(
+            doctor=doctor_instance,
+            user=appointment.user
+        )
 
     def get_queryset(self):
         try:

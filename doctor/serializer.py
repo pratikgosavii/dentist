@@ -29,21 +29,10 @@ class medicine_serializer(serializers.ModelSerializer):
 
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Appoinment_Medicine
-        fields = '__all__'
-        read_only_fields = ['doctor']
-
-    def create(self, validated_data):
-        # Remove any unexpected 'user' field
-        validated_data.pop('user', None)
-
-        # ✅ doctor field expects a Doctor instance, so fetch it from user
-        doctor_instance = doctor.objects.get(user=self.context['request'].user)
-        validated_data['doctor'] = doctor_instance
-
-        return super().create(validated_data)
+        fields = "__all__"
+        read_only_fields = ["user", "doctor"]
     
 
 from customer.serializer import *
