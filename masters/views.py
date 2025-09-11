@@ -522,3 +522,91 @@ def list_apppoinments(request):
         'data': appointment_filter.qs
     }
     return render(request, 'list_apppoinments.html', context)
+
+
+
+
+def add_home_banner(request):
+    
+    if request.method == "POST":
+
+        forms = home_banner_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_home_banner')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+
+            return render(request, 'add_home_banner.html', context)
+    
+    else:
+
+        # create first row using admin then editing only
+
+        
+
+        return render(request, 'add_home_banner.html', { 'form' : home_banner_Form()})
+
+def update_home_banner(request, home_banner_id):
+    
+    instance = home_banner.objects.get(id = home_banner_id)
+
+    if request.method == "POST":
+
+
+        instance = home_banner.objects.get(id=home_banner_id)
+
+        forms = home_banner_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_home_banner')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+
+            return render(request, 'add_home_banner.html', context)
+
+    
+    else:
+
+        # create first row using admin then editing only
+
+        forms = home_banner_Form(instance=instance)
+                
+        context = {
+            'form': forms
+        }
+
+        return render(request, 'add_home_banner.html', context)
+
+
+def list_home_banner(request):
+
+    data = home_banner.objects.all()
+
+    return render(request, 'list_home_banner.html', {'data' : data})
+
+
+def delete_home_banner(request, home_banner_id):
+
+    data = home_banner.objects.get(id = home_banner_id).delete()
+
+    return redirect('list_home_banner')
+
+
+from django.views import View
+
+def get_home_banner(request):
+  
+    data = home_banner.objects.all()  # Assuming home_banner is the model name
+
+
+    serialized_data = HomeBannerSerializer(data, many=True, context={'request': request}).data
+    return JsonResponse({"data": serialized_data}, status=200)
