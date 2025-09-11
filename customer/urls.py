@@ -15,7 +15,11 @@ router.register(r'doctors-list', DoctorViewSet, basename='doctors-list')
 
 urlpatterns = [
 
-
+    path(
+            "appointments/<int:appointment_id>/medicines/",
+            AppointmentMedicineListView.as_view(),
+            name="appointment-medicine-list",
+        ),
 
 ] + router.urls 
 

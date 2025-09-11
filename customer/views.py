@@ -71,3 +71,28 @@ class DoctorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = doctor.objects.all().order_by("id")
     serializer_class = doctor_serializer
     permission_classes = [permissions.AllowAny]
+
+
+    from rest_framework import generics, permissions
+from rest_framework.exceptions import PermissionDenied
+from .models import Appoinment_Medicine, Appointment
+from .serializers import AppointmentMedicineSerializer
+
+
+class AppointmentMedicineListView(generics.ListAPIView):
+    serializer_class = AppointmentMedicineSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        appointment_id = self.kwargs.get("appointment_id")
+
+        # Ensure appointment exists and belongs to the logged-in user
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+        except Appointment.DoesNotExist:
+            raise PermissionDenied("Appointment does not exist.")
+
+        if appointment.user != self.request.user:
+            raise PermissionDenied("You are not allowed to view medicines for this appointment.")
+
+        return Appoinment_Medicine.objects.filter(appointment=appointment)
