@@ -1,7 +1,7 @@
 {% extends "partials/adminBase.html" %}
 {% load static %}
 
-{% block title %}Enquiry List{% endblock title %}
+{% block title %}Appointment List{% endblock title %}
 
 {% block extra_css %}
 <link href="{% static 'libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css"/>
@@ -56,12 +56,13 @@
             <div class="row mb-3">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">List Enquiries</h4>
+                        <h4 class="mb-sm-0 font-size-18">List Appointments</h4>
                     </div>
                 </div>
             </div>
 
-             <form method="get" class="mb-4">
+            <!-- Filter form -->
+           <form method="get" class="mb-4">
     <div class="row g-3">
         {% for field in filter.form %}
             <div class="col-md-3">
@@ -78,9 +79,8 @@
         </div>
     </div>
 </form>
-<hr>
 
-
+            <hr>
 
             <div class="card">
                 <div class="card-body">
@@ -89,42 +89,31 @@
                             <thead>
     <tr>
         <th>#</th>
-        <th>Name</th>
-        <th>Mobile</th>
-        <th>Gender</th>
-        <th>Age</th>
-        <th>Email</th>
-        <th>Enquiry Type</th>
-        <th>Status</th>
-        <th>Address</th>
+        <th>Full Name</th>
+        <th>Phone</th>
+        <th>Appointment Type</th>
         <th>Date</th>
+        <th>Time</th>
+        <th>Created At</th>
         <th>Action</th>
     </tr>
 </thead>
 <tbody>
     {% if data %}
-        {% for enquiry in data %}
+        {% for appointment in data %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ enquiry.full_name }}</td>
-                <td>{{ enquiry.phone_number }}</td>
-                <td>{{ enquiry.gender }}</td>
-                <td>{{ enquiry.age }}</td>
-                <td>{{ enquiry.email }}</td>
-                <td>{{ enquiry.enquiry_type }}</td>
-                <td>{{ enquiry.status }}</td>
-                <td>
-                    {{ enquiry.house }},
-                    {{ enquiry.area }},
-                    {{ enquiry.city }},
-                    {{ enquiry.state }} - {{ enquiry.pincode }}
-                </td>
-                <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
+                <td>{{ appointment.full_name }}</td>
+                <td>{{ appointment.phone_number }}</td>
+                <td>{{ appointment.appointment_type }}</td>
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time }}</td>
+                <td>{{ appointment.created_at|date:"d-m-Y H:i" }}</td>
                 <td class="action-icons">
-                    <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
+                    <a href="{% url 'update_appointment' appointment.id %}" title="Edit">
                         <i class="bi bi-pencil-square text-primary"></i>
                     </a>
-                    <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
+                    <a href="{% url 'delete_appointment' appointment.id %}" title="Delete">
                         <i class="bi bi-trash text-danger"></i>
                     </a>
                 </td>
@@ -132,7 +121,7 @@
         {% endfor %}
     {% else %}
         <tr>
-            <td colspan="11" class="text-center">No enquiries found.</td>
+            <td colspan="8" class="text-center">No appointments found.</td>
         </tr>
     {% endif %}
 </tbody>

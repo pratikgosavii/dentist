@@ -22,29 +22,47 @@ GENDER_CHOICES = (
 class doctor(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="doctor")
-    name = models.CharField(max_length=120, unique=False)
-    image = models.ImageField(upload_to='doctor_images/')
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    
-    house_building  = models.CharField(max_length=120,blank=True)
-    locality        = models.CharField(max_length=120,blank=True)
-    pincode         = models.CharField(max_length=10,blank=True)
-    state           = models.CharField(max_length=120, blank=True)
-    city            = models.CharField(max_length=120, blank=True)
-    country         = models.CharField(max_length=120, blank=True)
 
-    about_doctor = models.CharField(max_length=500, unique=False)
-    mobile_no = models.IntegerField(null = True, blank = True)
-    experience = models.IntegerField(null = True, blank = True)
-    title = models.CharField(max_length=120, unique=False)
-    degree = models.CharField(max_length=120, unique=False)
-    rating = models.DecimalField(max_digits=3, decimal_places=1, null = True, blank = True)
-    remark = models.CharField(max_length=120, unique=False, null = True, blank = True)
-    is_active = models.BooleanField(default = True)
-        
-    
+    # Basic Info
+    name = models.CharField(max_length=120)
+    image = models.ImageField(upload_to="doctor_images/", blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=[
+        ("Male", "Male"), ("Female", "Female"), ("Other", "Other")
+    ], blank=True, null=True)
+
+    # Contact & Clinic Info
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    clinic_name = models.CharField(max_length=150, blank=True, null=True)
+    clinic_phone_number = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+
+    # Address
+    house_building = models.CharField(max_length=120, blank=True, null=True)
+    locality = models.CharField(max_length=120, blank=True, null=True)
+    pincode = models.CharField(max_length=10, blank=True, null=True)
+    state = models.CharField(max_length=120, blank=True, null=True)
+    city = models.CharField(max_length=120, blank=True, null=True)
+    country = models.CharField(max_length=120, blank=True, null=True)
+
+    # Professional Info
+    designation = models.CharField(max_length=200, blank=True, null=True)   # Dentist, Orthodontist, etc.
+    title = models.CharField(max_length=120, blank=True, null=True)         # Dr., Prof., etc.
+    degree = models.CharField(max_length=120, blank=True, null=True)        # MDS, BDS, etc.
+    specializations = models.TextField(blank=True, null=True)               # Store as comma-separated or JSON
+    education = models.TextField(blank=True, null=True)                     # Education history
+    about_doctor = models.TextField(blank=True, null=True)
+
+    # Experience & Ratings
+    experience_years = models.PositiveIntegerField(blank=True, null=True)   # 25+ years
+    rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
+    review_count = models.PositiveIntegerField(default=0)
+
+    remark = models.CharField(max_length=120, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+
     def __str__(self):
         return self.name
+    
     
     
 DAYS_OF_WEEK = (

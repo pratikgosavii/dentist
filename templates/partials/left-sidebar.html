@@ -26,7 +26,7 @@
                                 <span data-key="t-authentication">Users managemnt</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="">Users List</a></li>
+                                <li><a href="{% url 'user_list' %}">Users List</a></li>
                                 <li><a href="{% url 'dentist_list' %}">Dentist List</a></li>
                             </ul>
                             
@@ -99,6 +99,20 @@
                                 </ul>
                             </li>
                         <li>
+
+
+                        <li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="layers"></i>
+                                    <span data-key="t-authentication">Appoinments</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{% url 'list_apppoinments' %}">Appoinments List</a></li>
+                                </ul>
+                            </li>
+                        <li>
+                            
 
                         <li>
                             <li>

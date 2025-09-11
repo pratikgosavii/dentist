@@ -114,8 +114,12 @@ ENQUIRY_TYPE_CHOICES = [
     ("skin_hydrafacial", "Skin/Hydrafacial"),
 ]
 
+from users.models import User
+
+
 class enquiry(models.Model):
-  
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enquiries_user")  
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(blank=True, null=True)

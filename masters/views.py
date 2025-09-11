@@ -10,6 +10,8 @@ from django.http import JsonResponse
 
 from django.shortcuts import render
 
+from customer.models import Appointment
+
 
 # Create your views here.
 
@@ -284,16 +286,25 @@ def list_slot(request):
 
 
 from rest_framework import generics
-from .models import *
+
+
+from rest_framework import viewsets, permissions
+from .models import enquiry
 from .serializers import EnquirySerializer
 
-class EnquiryCreateView(generics.ListCreateAPIView):
+class EnquiryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing Enquiries
+    """
     queryset = enquiry.objects.all().order_by('-created_at')
     serializer_class = EnquirySerializer
+    permission_classes = [permissions.IsAuthenticated]  # only logged-in users
 
-
-
-
+    def perform_create(self, serializer):
+        """
+        Automatically set the logged-in user as the owner of the enquiry
+        """
+        serializer.save(user=self.request.user)
 
 
 @login_required(login_url='login_admin')
@@ -489,12 +500,25 @@ def delete_enquiry(request, enquiry_id):
     return HttpResponseRedirect(reverse('list_enquiry'))
 
 
+from .filters import EnquiryFilter, AppointmentFilter
+
 @login_required(login_url='login_admin')
 def list_enquiry(request):
-
-    data = enquiry.objects.all()
+    enquiry_qs = enquiry.objects.all().order_by('-created_at')
+    enquiry_filter = EnquiryFilter(request.GET, queryset=enquiry_qs)
     context = {
-        'data': data
+        'filter': enquiry_filter,
+        'data': enquiry_filter.qs
     }
     return render(request, 'list_enquiry.html', context)
 
+
+@login_required(login_url='login_admin')
+def list_apppoinments(request):
+    appointment_qs = Appointment.objects.all().order_by('-date')
+    appointment_filter = AppointmentFilter(request.GET, queryset=appointment_qs)
+    context = {
+        'filter': appointment_filter,
+        'data': appointment_filter.qs
+    }
+    return render(request, 'list_apppoinments.html', context)

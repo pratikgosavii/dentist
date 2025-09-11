@@ -37,21 +37,37 @@ class customer(models.Model):
         return self.user.first_name
     
 
+
+GENDER_CHOICES = [
+    ('Male', 'Male'),
+    ('Female', 'Female'),
+]
+
+APPOINTMENT_TYPE_CHOICES = [
+    ('In Person', 'In Person'),
+    ('Over a Call', 'Over a Call'),
+]
+
 class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
+    appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPE_CHOICES, default="In Person")
 
-    doctor   = models.ForeignKey("doctor.doctor", on_delete=models.CASCADE, related_name="appointments")
-    customer  = models.ForeignKey("customer.customer", on_delete=models.CASCADE, related_name="sdsd",)
-    date     = models.DateField()
-    slot     = models.ForeignKey(slot, on_delete=models.PROTECT, related_name="sdssdsdd")
+    # Appointment details
+    date = models.DateField()
+    time = models.TimeField()
 
+    # Patient details
+    full_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    email = models.EmailField(blank=True, null=True)
+    dob = models.DateField()
+    age = models.PositiveIntegerField()
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+
+    concern = models.TextField(blank=True, null=True)
+
+    # Meta info
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ("doctor", "date", "slot")  # no double‑booking
-        ordering        = ["date", "slot__start"]
 
     def __str__(self):
-        return f"{self.customer} with {self.doctor} on {self.date} @ {self.slot.start}"
-
-    
+        return f"Appointment for {self.full_name} on {self.date} at {self.time}"

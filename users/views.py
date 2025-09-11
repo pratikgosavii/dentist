@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+from users.serializer import UserProfileSerializer
+
 
 from .forms import *
 
@@ -128,58 +130,72 @@ class SignupView(APIView):
             return Response({"error": str(e)}, status=400)
 
 
+
 class LoginAPIView(APIView):
 
+    
     def post(self, request):
         id_token = request.data.get("idToken")
+        user_type = request.data.get("user_type")
 
-        if not id_token :
-            return Response({"error": "id_token are required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not id_token:
+            return Response({"error": "idToken is required"}, status=400)
 
         try:
+            # Verify token with Firebase
             decoded_token = firebase_auth.verify_id_token(id_token)
-            uid = decoded_token["uid"]
-            phone_number = decoded_token.get("phone_number")
-            email = decoded_token.get("email")
+            mobile = decoded_token.get("phone_number")
+            uid = decoded_token.get("uid")
 
-            print(phone_number)
-
-            if not phone_number:
+            if not mobile:
                 return Response({"error": "Phone number not found in token"}, status=400)
 
-            user = User.objects.filter(mobile=phone_number).first()
+            user = User.objects.filter(mobile=mobile).first()
             created = False
 
             if user:
-
+                if not user.is_active:
+                    user.is_active = True
                 if user.firebase_uid != uid:
                     user.firebase_uid = uid
-                    user.save()
-           
-
-                refresh = RefreshToken.for_user(user)
-                return Response({
-                    "access": str(refresh.access_token),
-                    "refresh": str(refresh),
-                    "user": {
-                        "id": user.id,
-                        "mobile": user.mobile,
-                        "email": user.email,
-                        "user_type": (
-                            "doctor" if user.is_doctor else
-                            "customer" if user.is_customer else
-                            "unknown"
-                        ),
-                        "name": f"{user.first_name or ''} {user.last_name or ''}".strip(),
-                        "created": created
-                    }
-                })
-            
+                    print('--------------------------------------------')
+                    print(user)
+                user.save()
             else:
-                return Response({"error": "no user found try to signup"}, status=status.HTTP_401_UNAUTHORIZED)
+                user = User.objects.create(
+                    mobile=mobile,
+                    firebase_uid=uid,
+                )
+                created = True
+
+                # Set user type flags based on frontend
+                if user_type == "vendor":
+                    user.is_vendor = True
+                elif user_type == "customer":
+                    user.is_customer = True
+                user.save()
+
+            # Token creation
+            refresh = RefreshToken.for_user(user)
+            user_details = UserProfileSerializer(user).data
+
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "id": user.id,
+                    "mobile": user.mobile,
+                    "doctor" if user.is_doctor else
+                    "customer" if user.is_customer else
+                    "created": created
+                },
+                "user_details": user_details
+            }, status=201 if created else 200)
 
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+            print(f"Login failed: {e}")
+            return Response({"error": "Invalid or expired Firebase token."}, status=400)
+
 
 
 
@@ -307,8 +323,11 @@ def user_list(request):
 
     return render(request, 'user_list.html', { 'data' : data})
 
+
+from doctor.models import doctor
+
 def dentist_list(request):
 
-    data = User.objects.filter(is_customer = True)
+    data = doctor.objects.all()
 
-    return render(request, 'user_list.html', { 'data' : data})
+    return render(request, 'list_doctor.html', { 'data' : data})

@@ -32,32 +32,57 @@ from rest_framework import viewsets, status
 from rest_framework.parsers import MultiPartParser, JSONParser
 
 
-class DoctorViewSet(viewsets.ModelViewSet):
+from rest_framework.exceptions import ValidationError
 
+class DoctorViewSet(viewsets.ModelViewSet):
     queryset = doctor.objects.filter(is_active=True)
     serializer_class = doctor_serializer
-    parser_classes = [MultiPartParser, JSONParser]  # ✅ Allow both JSON and form-data
+    parser_classes = [MultiPartParser, JSONParser]
 
     def perform_create(self, serializer):
-        print(self.request.user)
-        serializer.save(user=self.request.user)
+        if doctor.objects.filter(user=self.request.user).exists():
+            raise ValidationError({"error": "Each user can only have one doctor profile."})
+        self.instance = serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return Response(self.get_serializer(self.instance).data, status=status.HTTP_201_CREATED)
 
     def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+        self.instance = serializer.save(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response(self.get_serializer(self.instance).data, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         doctor_obj = self.get_object()
         doctor_obj.is_active = False
         doctor_obj.save()
-        return Response({"message": "Doctor deactivated"}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Doctor deactivated", "doctor": self.get_serializer(doctor_obj).data},
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=True, methods=["post"])
     def reactivate(self, request, pk=None):
         doc = self.get_object()
         doc.is_active = True
         doc.save()
-        return Response({"message": "Doctor reactivated"}, status=status.HTTP_200_OK)
+        return Response(
+            {"message": "Doctor reactivated", "doctor": self.get_serializer(doc).data},
+            status=status.HTTP_200_OK,
+        )
 
+    @action(detail=False, methods=["get"])
+    def me(self, request):
+        """Get logged-in user's doctor profile"""
+        try:
+            doc = Doctor.objects.get(user=request.user)
+            return Response(self.get_serializer(doc).data, status=status.HTTP_200_OK)
+        except Doctor.DoesNotExist:
+            return Response({"error": "Doctor profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        
 
 
 from rest_framework.generics import ListAPIView

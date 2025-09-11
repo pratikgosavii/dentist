@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register('enquiries', EnquiryViewSet, basename='enquiry')
 
 
 urlpatterns = [
@@ -41,10 +42,11 @@ urlpatterns = [
     path('delete-area/<area_id>', delete_area, name='delete_area'),
     path('list-area/', list_area, name='list_area'),
 
-    path('enquiry/', EnquiryCreateView.as_view(), name='enquiry'),
     path('update-enquiry/<enquiry_id>', update_enquiry, name='update_enquiry'),
     path('delete-enquiry/<enquiry_id>', delete_enquiry, name='delete_enquiry'),
     path('list-enquiry/', list_enquiry, name='list_enquiry'),
+    
+    path('list-apppoinments/', list_apppoinments, name='list_apppoinments'),
     
 
     ]  + router.urls

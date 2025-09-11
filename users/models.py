@@ -20,7 +20,7 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(mobile, password, **extra_fields)
 
 
-from masters.models import *
+
 
 
 class User(AbstractUser):
