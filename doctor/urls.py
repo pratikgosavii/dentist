@@ -20,7 +20,7 @@ router.register(r'treatment-steps', TreatmentStepViewSet)
 urlpatterns = [
 
 
-
+    path("list-customer-appointment/<int:customer_id>/", CustomerAppointmentsListAPIView.as_view(), name="list-customer-appointment"),
     # path('add-doctor/', add_doctor, name='add_doctor'),
     # path('update-doctor/<int:doctor_id>/', update_doctor, name='update_doctor'),
     # path('list-doctor/', list_doctor, name='list_doctor'),

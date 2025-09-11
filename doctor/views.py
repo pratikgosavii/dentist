@@ -145,3 +145,29 @@ class TreatmentStepViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return TreatmentStep.objects.filter(treatment__appointment__doctor__user=self.request.user)
+    
+
+    from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions, status
+
+class CustomerAppointmentsListAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, customer_id):
+        # make sure the logged-in user is a doctor
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response(
+                {"error": "You are not registered as a doctor."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        appointments = Appointment.objects.filter(
+            user_id=customer_id,
+            doctor=doctor_instance
+        ).order_by('-date', '-time')
+
+        serializer = AppointmentSerializer(appointments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
