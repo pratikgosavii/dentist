@@ -23,6 +23,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'gender',
+            'address',
             'is_customer',
             'is_doctor',
             'password',  # Include this for input only

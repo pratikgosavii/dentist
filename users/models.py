@@ -25,10 +25,19 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractUser):
 
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
+     
+
+
     firebase_uid = models.CharField(max_length=128, unique=True, null=True, blank=True)
     
     area = models.ForeignKey("masters.area", on_delete=models.CASCADE, null=True, blank=True)
     city = models.ForeignKey("masters.city", on_delete=models.CASCADE, null=True, blank=True)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
+    address = models.CharField(max_length=225, null=True, blank=True)
 
     is_customer = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
