@@ -112,17 +112,33 @@ class DoctorMedicineViewSet(viewsets.ModelViewSet):
 
 
 class AppointmentMedicineViewSet(viewsets.ModelViewSet):
-
     queryset = Appoinment_Medicine.objects.all()
     serializer_class = AppointmentMedicineSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+
+        appointment = serializer.validated_data.get("appointment")
+        if appointment.doctor != doctor_instance:
+            raise serializers.ValidationError(
+                "You cannot prescribe medicines for an appointment that is not booked under you."
+            )
+
+        serializer.save(doctor=doctor_instance)
 
     def get_queryset(self):
-        return Appoinment_Medicine.objects.filter(user=self.request.user)
-    
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            return Appoinment_Medicine.objects.none()
+
+        return Appoinment_Medicine.objects.filter(doctor=doctor_instance)
+
+
 
 
 class TreatmentViewSet(viewsets.ModelViewSet):
