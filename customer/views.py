@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 
 
+from doctor.serializer import doctor_serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -63,3 +64,9 @@ class AppointmentViewSet(viewsets.ViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class DoctorViewSet(viewsets.ReadOnlyModelViewSet):  
+    queryset = doctor.objects.all().order_by("id")
+    serializer_class = doctor_serializer
+    permission_classes = [permissions.AllowAny]

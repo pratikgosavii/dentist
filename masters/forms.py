@@ -105,3 +105,15 @@ class enquiry_Form(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-control'}),
             'enquiry_type': forms.Select(attrs={'class': 'form-control'}),
         }
+
+        
+class home_banner_Form(forms.ModelForm):
+    class Meta:
+        model = home_banner
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'discription': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+
+        }

@@ -11,15 +11,10 @@ from django.urls import path, include
 router = DefaultRouter()
 router.register(r'customer', customerViewSet, basename='customer')
 router.register(r'appointment', AppointmentViewSet, basename='appointment')
+router.register(r'doctors-list', DoctorViewSet, basename='doctors-list')
 
 urlpatterns = [
 
-
-
-    # path('add-doctor/', add_doctor, name='add_doctor'),
-    # path('update-doctor/<int:doctor_id>/', update_doctor, name='update_doctor'),
-    # path('list-doctor/', list_doctor, name='list_doctor'),
-    # path('delete-doctor/<int:doctor_id>/', delete_doctor, name='delete_doctor'),
 
 
 ] + router.urls 
