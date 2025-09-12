@@ -57,6 +57,30 @@ class medicine_Form(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
+class treatment_Form(forms.ModelForm):
+
+    class Meta:
+        model = treatment
+        fields = ['name', 'description', 'is_active']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Medicine Name'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+
+class TreatmentStepForm(forms.ModelForm):
+    class Meta:
+        model = TreatmentStep
+        fields = ["treatment", "step_number", "title", "default_description"]
+        widgets = {
+            "treatment": forms.Select(attrs={"class": "form-control"}),
+            "step_number": forms.NumberInput(attrs={"class": "form-control"}),
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "default_description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+        }
+
+
 
 class slot_Form(forms.ModelForm):
 

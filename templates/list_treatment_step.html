@@ -1,0 +1,73 @@
+{% extends "partials/adminBase.html" %}
+{% load static %}
+
+{% block title %}Treatment Steps{% endblock title %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <!-- Page Title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">Steps for Treatment: {{ treatment.name }}</h4>
+                        <a href="{% url 'add_treatment_step' treatment.id %}" class="btn btn-primary">
+                            + Add Step
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Step Number</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if steps %}
+                                    {% for step in steps %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ step.step_number }}</td>
+                                            <td>{{ step.title }}</td>
+                                            <td>{{ step.default_description }}</td>
+                                            <td>
+                                                <a href="{% url 'update_treatmen_steps' step.id %}">
+                                                    <i class="bi bi-pencil-square text-primary" title="Edit"></i>
+                                                </a>
+                                                <a href="{% url 'delete_treatmen_steps' step.id %}">
+                                                    <i class="bi bi-trash text-danger" title="Delete"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">No steps found for this treatment.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -42,6 +42,16 @@ urlpatterns = [
     path('delete-area/<area_id>', delete_area, name='delete_area'),
     path('list-area/', list_area, name='list_area'),
 
+    path('add-treatment/', add_treatment, name='add_treatment'),
+    path('update-treatment/<treatment_id>', update_treatment, name='update_treatment'),
+    path('delete-treatment/<treatment_id>', delete_treatment, name='delete_treatment'),
+    path('list-treatment/', list_treatment, name='list_treatment'),
+
+    path('add-treatment-steps/<treatment_step_id>', add_treatment_steps, name='add_treatment_step'),
+    path('update-treatment-steps/<treatment_step_id>', update_treatment_steps, name='update_treatmen_steps'),
+    path('delete-treatment-steps/<treatment_step_id>', delete_treatment_steps, name='delete_treatmen_steps'),
+    path('list-treatment-steps/<int:treatment_id>', list_treatment_steps, name='treatment_step_list'),
+
     path('update-enquiry/<enquiry_id>', update_enquiry, name='update_enquiry'),
     path('delete-enquiry/<enquiry_id>', delete_enquiry, name='delete_enquiry'),
     path('list-enquiry/', list_enquiry, name='list_enquiry'),

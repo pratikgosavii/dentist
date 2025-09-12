@@ -150,5 +150,32 @@ class home_banner(models.Model):
         return self.title
     
 
+class treatment(models.Model):
+    """
+    Master treatment template (e.g., Crown Treatment, Root Canal).
+    """
+    name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
+
+    def __str__(self):
+        return self.name
+
+
+class TreatmentStep(models.Model):
+    """
+    Steps inside a treatment template.
+    """
+    treatment = models.ForeignKey(treatment, on_delete=models.CASCADE, related_name="steps", blank=True, null=True)
+    step_number = models.PositiveIntegerField()
+    title = models.CharField(max_length=255)
+    default_description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ["step_number"]
+        unique_together = ("treatment", "step_number")
+
+    def __str__(self):
+        return f"{self.treatment.name} - Step {self.step_number}: {self.title}"
 

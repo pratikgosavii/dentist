@@ -1,0 +1,53 @@
+{% extends "partials/adminBase.html" %}
+{% load static %}
+
+{% block title %}Add Treatment Step{% endblock title %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">
+                            Add Step for Treatment: {{ treatment.name }}
+                        </h4>
+                        <a href="{% url 'treatment_step_list' treatment.id %}" class="btn btn-secondary">
+                            ← Back to Steps
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="form-container bg-white p-4 rounded shadow">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label">Step Number:</label>
+                            {{ form.step_number }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Title:</label>
+                            {{ form.title }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Description:</label>
+                            {{ form.default_description }}
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Save Step</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

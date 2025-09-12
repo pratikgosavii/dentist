@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 # Create your views here.
 
@@ -459,6 +459,242 @@ def list_area(request):
     }
     return render(request, 'list_city.html', context)
 
+
+
+@login_required(login_url='login_admin')
+def add_treatment(request):
+
+    if request.method == 'POST':
+
+        forms = treatment_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            
+            forms.save()
+            return redirect('list_treatment')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+            return render(request, 'add_treatment.html', context)
+    
+    else:
+
+        forms = treatment_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_treatment.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def update_treatment(request, treatment_id):
+
+    if request.method == 'POST':
+
+        instance = treatment.objects.get(id=treatment_id)
+
+        forms = treatment_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            forms.save()
+
+            return redirect('list_treatment')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = treatment.objects.get(id=treatment_id)
+        forms = treatment_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_treatment.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_treatment(request, treatment_id):
+
+    treatment.objects.get(id=treatment_id).delete()
+
+    return HttpResponseRedirect(reverse('list_treatment'))
+
+
+@login_required(login_url='login_admin')
+def list_treatment(request):
+
+    data = treatment.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'list_city.html', context)
+
+
+
+@login_required(login_url='login_admin')
+def add_treatment(request):
+
+    if request.method == 'POST':
+
+        forms = treatment_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            
+            forms.save()
+            return redirect('list_treatment')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+            return render(request, 'add_treatment.html', context)
+    
+    else:
+
+        forms = treatment_Form()
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_treatment.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def update_treatment(request, treatment_id):
+
+    if request.method == 'POST':
+
+        instance = treatment.objects.get(id=treatment_id)
+
+        forms = treatment_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            forms.save()
+
+            return redirect('list_treatment')
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = treatment.objects.get(id=treatment_id)
+        forms = treatment_Form(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_treatment.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_treatment(request, treatment_id):
+
+    treatment.objects.get(id=treatment_id).delete()
+
+    return HttpResponseRedirect(reverse('list_treatment'))
+
+
+@login_required(login_url='login_admin')
+def list_treatment(request):
+
+    data = treatment.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'list_treatment.html', context)
+
+
+
+@login_required(login_url='login_admin')
+def add_treatment_steps(request, treatment_step_id):
+
+    treatment_instance = get_object_or_404(treatment, id=treatment_step_id)
+
+
+    if request.method == 'POST':
+
+        forms = TreatmentStepForm(request.POST, request.FILES)
+
+        if forms.is_valid():
+            step = forms.save(commit=False)
+            step.treatment = treatment_instance  # auto-assign treatment
+            step.save()
+            forms.save()
+            return redirect('treatment_step_list', treatment_id=treatment_instance.id)
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms,
+            'treatment': treatment_instance,
+
+            }
+            return render(request, 'add_treatment_step.html', context)
+    
+    else:
+
+        forms = TreatmentStepForm()
+
+        context = {
+            'form': forms,
+            'treatment': treatment_instance,
+        }
+        return render(request, 'add_treatment_step.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def update_treatment_steps(request, treatment_step_id):
+
+    if request.method == 'POST':
+
+        instance = TreatmentStep.objects.get(id=treatment_step_id)
+
+        forms = TreatmentStepForm(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+
+            forms.save()
+
+            return redirect('treatment_step_list', treatment_id=instance.treatment.id)
+
+        else:
+            print(forms.errors)
+    
+    else:
+
+        instance = TreatmentStep.objects.get(id=treatment_steps_id)
+        forms = TreatmentStepForm(instance=instance)
+
+        context = {
+            'form': forms
+        }
+        return render(request, 'add_treatment_steps.html', context)
+
+        
+
+@login_required(login_url='login_admin')
+def delete_treatment_steps(request, treatment_step_id):
+    step = get_object_or_404(TreatmentStep, id=treatment_step_id)
+    treatment_id = step.treatment.id   # store treatment id before delete
+    step.delete()
+    return redirect('treatment_step_list', treatment_id=treatment_id)
+
+
+
+def list_treatment_steps(request, treatment_id):
+    treatment_instance = get_object_or_404(treatment, id=treatment_id)
+    steps = treatment_instance.steps.all()
+    return render(request, "list_treatment_step.html", {"treatment": treatment_instance, "steps": steps})
 
 
 
