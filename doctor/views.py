@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 
 
+from masters.serializers import TreatmentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -146,36 +147,39 @@ class AppointmentMedicineViewSet(viewsets.ModelViewSet):
 
 
 
-class TreatmentViewSet(viewsets.ModelViewSet):
-    queryset = Treatment.objects.all()
-    serializer_class = TreatmentSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        # Doctor sees treatments linked to their appointments
-        return Treatment.objects.filter(appointment__doctor__user=self.request.user)
 
-class TreatmentStepViewSet(viewsets.ModelViewSet):
-    queryset = TreatmentStep.objects.all()
-    serializer_class = TreatmentStepSerializer
-    permission_classes = [IsAuthenticated]
+class TreatmentAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        # Automatically set the doctor
-        serializer.save(doctor=self.request.user)
+    def get(self, request, treatment_id=None):
+        """
+        - If `treatment_id` is provided -> return single treatment with steps
+        - If not -> return all active treatments with steps
+        """
+        if treatment_id:
+            try:
+                instance = treatment.objects.get(id=treatment_id, is_active=True)
+            except treatment.DoesNotExist:
+                return Response({"error": "Treatment not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    def get_queryset(self):
-        return TreatmentStep.objects.filter(treatment__appointment__doctor__user=self.request.user)
+            serializer = TreatmentSerializer(instance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # list all active treatments
+        queryset = treatment.objects.filter(is_active=True)
+        serializer = TreatmentSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 
-    from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 
-class CustomerAppointmentsListAPIView(APIView):
+class AppointmentsListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, customer_id):
+    def get(self, request):
         # make sure the logged-in user is a doctor
         try:
             doctor_instance = doctor.objects.get(user=request.user)
@@ -186,9 +190,41 @@ class CustomerAppointmentsListAPIView(APIView):
             )
 
         appointments = Appointment.objects.filter(
-            user_id=customer_id,
             doctor=doctor_instance
         ).order_by('-date', '-time')
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
+
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status, permissions
+from customer.models import Appointment
+from .serializer import AppointmentTreatmentSerializer
+
+
+
+
+class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentTreatmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            return AppointmentTreatment.objects.none()
+        return AppointmentTreatment.objects.filter(doctor=doctor_instance)
+
+    def perform_create(self, serializer):
+        # ensure doctor owns appointment
+        doctor_instance = get_object_or_404(doctor, user=self.request.user)
+        appointment_id = self.kwargs.get("appointment_id")
+        appointment = get_object_or_404(Appointment, id=appointment_id, doctor=doctor_instance)
+
+        serializer.save(doctor=doctor_instance, appointment=appointment)
+        

@@ -174,24 +174,14 @@ class Appoinment_Medicine(models.Model):
     
 
 
+class AppointmentTreatment(models.Model):
+    appointment = models.ForeignKey("customer.Appointment", on_delete=models.CASCADE, related_name="treatments")
+    doctor = models.ForeignKey("doctor", on_delete=models.CASCADE, related_name="appointment_treatments")
+    treatment = models.ForeignKey("masters.treatment", on_delete=models.CASCADE, related_name="appointment_treatments")
+    created_at = models.DateTimeField(auto_now_add=True)
 
-class Treatment(models.Model):
-    customer = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='treatments')
-    appointment = models.OneToOneField('customer.Appointment', on_delete=models.CASCADE, related_name='trewreeatment')
-    title = models.CharField(max_length=255)  # Example: "Crown Treatment"
-
-    
-
-class TreatmentStep(models.Model):
-    treatment = models.ForeignKey('Treatment', on_delete=models.CASCADE, related_name='steps')
+class AppointmentTreatmentStep(models.Model):
+    appointment_treatment = models.ForeignKey(AppointmentTreatment, on_delete=models.CASCADE, related_name="steps")
+    step_number = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    date = models.DateField()
-    status = models.CharField(max_length=50, default='Completed')  # You can later add choices
-    doctor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='treatment_steps')
-
-    class Meta:
-        ordering = ['id']
-
-
-
+    description = models.TextField(blank=True, null=True)

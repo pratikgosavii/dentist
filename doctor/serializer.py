@@ -37,25 +37,38 @@ class AppointmentMedicineSerializer(serializers.ModelSerializer):
 
 from customer.serializer import *
 
-class TreatmentSerializer(serializers.ModelSerializer):
-    appointment = AppointmentSerializer(read_only=True)
-    appointment_id = serializers.PrimaryKeyRelatedField(
-        queryset=Appointment.objects.all(), source='appointment', write_only=True
-    )
+
+
+from rest_framework import serializers
+from .models import AppointmentTreatment, AppointmentTreatmentStep
+
+class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppointmentTreatmentStep
+        fields = ["id", "step_number", "title", "description"]
+
+class AppointmentTreatmentSerializer(serializers.ModelSerializer):
+    steps = AppointmentTreatmentStepSerializer(many=True)
 
     class Meta:
-        model = Treatment
-        fields = ['id', 'customer', 'appointment', 'appointment_id', 'title', 'steps']
+        model = AppointmentTreatment
+        fields = ["id", "appointment", "doctor", "treatment", "created_at", "steps"]
+        read_only_fields = ["doctor", "appointment"]
 
+    def create(self, validated_data):
+        steps_data = validated_data.pop("steps", [])
+        appointment_treatment = AppointmentTreatment.objects.create(**validated_data)
+        for step in steps_data:
+            AppointmentTreatmentStep.objects.create(appointment_treatment=appointment_treatment, **step)
+        return appointment_treatment
 
+    def update(self, instance, validated_data):
+        steps_data = validated_data.pop("steps", [])
+        instance.treatment = validated_data.get("treatment", instance.treatment)
+        instance.save()
 
-
-class TreatmentStepSerializer(serializers.ModelSerializer):
-    doctor_name = serializers.CharField(source='doctor.username', read_only=True)
-    treatment = TreatmentSerializer(read_only=True)
-    treatment_id = serializers.PrimaryKeyRelatedField(
-        queryset=Treatment.objects.all(), source='treatment', write_only=True
-    )
-    class Meta:
-        model = TreatmentStep
-        fields = ['id', 'treatment', 'treatment_id',  'title', 'description', 'date', 'status', 'doctor_name']
+        # clear old steps & recreate (simple way)
+        instance.steps.all().delete()
+        for step in steps_data:
+            AppointmentTreatmentStep.objects.create(appointment_treatment=instance, **step)
+        return instance

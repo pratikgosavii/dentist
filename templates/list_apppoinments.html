@@ -95,7 +95,7 @@
         <th>Date</th>
         <th>Time</th>
         <th>Created At</th>
-        <th>Action</th>
+        {% comment %} <th>Action</th> {% endcomment %}
     </tr>
 </thead>
 <tbody>
@@ -109,14 +109,14 @@
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
                 <td>{{ appointment.created_at|date:"d-m-Y H:i" }}</td>
-                <td class="action-icons">
+                {% comment %} <td class="action-icons">
                     <a href="{% url 'update_appointment' appointment.id %}" title="Edit">
                         <i class="bi bi-pencil-square text-primary"></i>
                     </a>
                     <a href="{% url 'delete_appointment' appointment.id %}" title="Delete">
                         <i class="bi bi-trash text-danger"></i>
                     </a>
-                </td>
+                </td> {% endcomment %}
             </tr>
         {% endfor %}
     {% else %}
