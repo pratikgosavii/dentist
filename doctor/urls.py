@@ -13,11 +13,20 @@ router = DefaultRouter()
 router.register('doctors', DoctorViewSet, basename='doctor')
 router.register('doctor-medicine', DoctorMedicineViewSet, basename='pet-test-booking')
 router.register('appointment-medicine', AppointmentMedicineViewSet, basename='AppointmentMedicineViewSet')
-router.register(
-    r"appointments/(?P<appointment_id>\d+)/treatments",
-    AppointmentTreatmentViewSet,
-    basename="appointment-treatments"
-)
+
+
+appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
+    'get': 'list',
+    'post': 'create',
+})
+
+appointment_treatment_detail = AppointmentTreatmentViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy',
+})
+
 
 
 urlpatterns = [
@@ -26,7 +35,16 @@ urlpatterns = [
     path("list-treatments/", TreatmentAPIView.as_view(), name="list_treatement"),
     path("list-appointment/", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
 
-
+    path(
+            "appointments/<int:appointment_id>/treatments/",
+            appointment_treatment_list,
+            name="appointment-treatment-list"
+        ),
+    path(
+        "appointments/<int:appointment_id>/treatments/<int:pk>/",
+        appointment_treatment_detail,
+        name="appointment-treatment-detail"
+    ),
     # path(
     #     "appointments/<int:appointment_id>/add-treatment/<int:treatment_id>/",
     #     AppointmentTreatmentCreateAPIView.as_view(),

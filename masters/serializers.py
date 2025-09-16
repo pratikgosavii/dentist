@@ -30,13 +30,15 @@ class HomeBannerSerializer(serializers.ModelSerializer):
         return obj.image.url
 
 
-
-class TreatmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = treatment
-        fields = ['id', 'name', 'description', 'is_active']
-
 class TreatmentStepSerializer(serializers.ModelSerializer):
     class Meta:
         model = TreatmentStep
         fields = ["id", "step_number", "title", "default_description"]
+
+
+class TreatmentSerializer(serializers.ModelSerializer):
+    steps = TreatmentStepSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = treatment
+        fields = ['id', 'name', 'description', 'is_active', 'steps']
