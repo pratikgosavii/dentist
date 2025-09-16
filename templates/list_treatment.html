@@ -88,7 +88,7 @@
                                                         <td>{{ treatment.description }}</td>
                                                         <td>{{ treatment.is_active }}</td>
                                                         <td>
-                                                            <a href="{% url 'list_treatmen_steps' treatment.id %}"><i class="bi bi-list text-primary" title="Edit"></i></a>
+                                                            <a href="{% url 'list_treatment_steps' treatment.id %}"><i class="bi bi-list text-primary" title="Edit"></i></a>
                                                             <a href="{% url 'update_treatment' treatment.id %}"><i class="bi bi-pencil-square text-primary" title="Edit"></i></a>
                                                             <a href="{% url 'delete_treatment' treatment.id %}"><i class="bi bi-trash text-danger" title="Delete"></i></a>
                                                         </td>
