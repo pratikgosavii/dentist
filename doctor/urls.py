@@ -23,8 +23,8 @@ router.register(
 urlpatterns = [
 
 
-    path("list-treatments", TreatmentAPIView.as_view(), name="list_treatement"),
-    path("list-appointment", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
+    path("list-treatments/", TreatmentAPIView.as_view(), name="list_treatement"),
+    path("list-appointment/", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
 
 
     # path(
