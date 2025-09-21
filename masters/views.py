@@ -205,6 +205,13 @@ def list_medicine(request):
 
 
 
+class get_medicine(ListAPIView):
+    queryset = medicine.objects.all()
+    serializer_class = medicine_serializer
+    filter_backends = [DjangoFilterBackend]
+    
+
+
 
 @login_required(login_url='login_admin')
 def add_slot(request):
@@ -846,3 +853,39 @@ def get_home_banner(request):
 
     serialized_data = HomeBannerSerializer(data, many=True, context={'request': request}).data
     return JsonResponse({"data": serialized_data}, status=200)
+
+
+
+
+def view_appointment_detail(request, appointment_id):
+    
+    appointment = Appointment.objects.get(id=appointment_id)
+    context = {'appointment': appointment}
+    return render(request, 'view_appointment.html', context)
+
+
+@login_required(login_url='login_admin')
+def list_support_tickets(request):
+    data = SupportTicket.objects.all().order_by('-created_at')
+    return render(request, 'support_chat.html', {'data': data})
+
+
+
+@login_required(login_url='login_admin')
+def ticket_detail(request, ticket_id):
+    ticket = get_object_or_404(SupportTicket, id=ticket_id)
+    messages = ticket.messages.all().order_by('created_at')
+    data = SupportTicket.objects.all().order_by('-created_at')
+
+    if request.method == "POST":
+        msg = request.POST.get('message')
+        if msg:
+            TicketMessage.objects.create(ticket=ticket, sender=request.user, message=msg)
+            return redirect('ticket_detail', ticket_id=ticket_id)
+
+    return render(request, 'support_chat.html', {
+        'ticket': ticket,
+        'messages': messages,
+        'data': data,
+        'active_id': ticket.id  # ✅ This enables active highlighting in template
+    })

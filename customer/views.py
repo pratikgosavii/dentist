@@ -96,3 +96,38 @@ class AppointmentMedicineListView(generics.ListAPIView):
             raise PermissionDenied("You are not allowed to view medicines for this appointment.")
 
         return Appoinment_Medicine.objects.filter(appointment=appointment)
+    
+
+
+    
+
+class SupportTicketViewSet(viewsets.ModelViewSet):
+    serializer_class = SupportTicketSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:  # Admin can see all tickets
+            return SupportTicket.objects.all().order_by("-created_at")
+        return SupportTicket.objects.filter(user=user).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    
+
+    @action(detail=True, methods=["get", "post"], url_path="messages")
+    def messages(self, request, pk=None):
+        """Handle GET (list) and POST (send) messages for a ticket"""
+        ticket = self.get_object()
+
+        if request.method == "GET":
+            msgs = ticket.messages.all().order_by("created_at")
+            serializer = TicketMessageSerializer(msgs, many=True)
+            return Response(serializer.data)
+
+        if request.method == "POST":
+            serializer = TicketMessageSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(ticket=ticket, sender=request.user)
+            return Response(serializer.data, status=201)

@@ -43,7 +43,7 @@ from doctor.models import *
 
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
-
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
     class Meta:
         model = Appointment
         fields = [
@@ -51,6 +51,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "doctor",
             "appointment_type",
             "booking_for",
+            "status", 
+            "status_display",
             "date",
             "time",
             "full_name",
@@ -65,3 +67,24 @@ class AppointmentSerializer(serializers.ModelSerializer):
         read_only_fields = ["created_at"]
 
     
+
+
+from .models import SupportTicket, TicketMessage
+
+class TicketMessageSerializer(serializers.ModelSerializer):
+    sender = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = TicketMessage
+        fields = "__all__"
+        read_only_fields = ["id", "sender", "created_at"]
+
+
+class SupportTicketSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    messages = TicketMessageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = SupportTicket
+        fields = "__all__"
+        read_only_fields = ["id", "is_admin", "user", "status", "created_at", "updated_at"]

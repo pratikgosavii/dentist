@@ -26,6 +26,7 @@ urlpatterns = [
     path('update-medicine/<medicine_id>', update_medicine, name='update_medicine'),
     path('delete-medicine/<medicine_id>', delete_medicine, name='delete_medicine'),
     path('list-medicine/', list_medicine, name='list_medicine'),
+    path('get-medicine/', get_medicine.as_view(), name='get_medicine'),
 
     path('add-slot/', add_slot, name='add_slot'),
     path('update-slot/<slot_id>', update_slot, name='update_slot'),
@@ -63,7 +64,12 @@ urlpatterns = [
     path('list-home-banner/', list_home_banner, name='list_home_banner'),  # create or fetch list of admins
     path('delete-home-banner/<home_banner_id>', delete_home_banner, name='delete_home_banner'),  # create or fetch list of admins
     path('get-home-banner/', get_home_banner, name='get_home_banner'), 
-    
+
+    path('view-appointment-detail/<appointment_id>', view_appointment_detail, name='view_appointment_detail'),
+
+        # urls.py
+    path('admin/support-tickets/', list_support_tickets, name='list_support_tickets'),
+    path('admin/support-tickets/<int:ticket_id>/', ticket_detail, name='ticket_detail'),
 
     ]  + router.urls
 

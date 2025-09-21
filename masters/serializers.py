@@ -8,6 +8,12 @@ class coupon_serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class medicine_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = medicine
+        fields = '__all__'
+
+
 
 class EnquirySerializer(serializers.ModelSerializer):
     class Meta:

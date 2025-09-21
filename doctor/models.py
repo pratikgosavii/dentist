@@ -185,3 +185,88 @@ class AppointmentTreatmentStep(models.Model):
     step_number = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+
+
+
+class AppointmentDocument(models.Model):
+    appointment = models.ForeignKey(
+        "customer.appointment", 
+        on_delete=models.CASCADE, 
+        related_name="documents"
+    )
+    uploaded_by = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE
+    )
+    file = models.FileField(upload_to="appointment_documents/")
+    title = models.CharField(max_length=255, blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title or self.file.name} - {self.appointment.id}"
+    
+
+    
+class Lab(models.Model):
+    name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+   
+
+    def __str__(self):
+        return self.name
+
+
+class LabWork(models.Model):
+    STATUS_CHOICES = [
+        ("impression", "Impression"),
+        ("trial", "Trial"),
+        ("delivered", "Delivered"),
+    ]
+
+    lab = models.ForeignKey(Lab, on_delete=models.CASCADE, related_name="lab_works")
+    appointment = models.ForeignKey("customer.Appointment", on_delete=models.CASCADE, related_name="lab_works", null = True, blank = True)
+    
+    type_of_work = models.CharField(max_length=150)
+    tooth_number = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="impression")
+    note = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Lab Work for Appointment {self.appointment.id} - {self.type_of_work}"
+    
+
+
+
+    
+class Offer(models.Model):
+    DISCOUNT_TYPE_CHOICES = [
+        ("percentage", "Percentage"),
+        ("flat", "Flat"),
+    ]
+
+    ELIGIBILITY_CHOICES = [
+        ("existing", "For Existing Patients"),
+        ("new", "For New Patients"),
+        ("everyone", "For Everyone"),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")  
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    discount_type = models.CharField(max_length=20, choices=DISCOUNT_TYPE_CHOICES)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    valid_from = models.DateField()
+    valid_to = models.DateField()
+    applicable_treatments = models.CharField(max_length=255, blank=True, null=True)  # or FK/M2M if you have Treatment model
+    eligibility = models.CharField(max_length=20, choices=ELIGIBILITY_CHOICES, default="everyone")
+    banner = models.ImageField(upload_to="offers/banners/", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.title

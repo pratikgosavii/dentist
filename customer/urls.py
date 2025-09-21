@@ -13,6 +13,8 @@ router.register(r'customer', customerViewSet, basename='customer')
 router.register(r'appointment', AppointmentViewSet, basename='appointment')
 router.register(r'doctors-list', DoctorViewSet, basename='doctors-list')
 
+router.register(r'support/tickets', SupportTicketViewSet, basename='support-ticket')
+
 urlpatterns = [
 
     path(

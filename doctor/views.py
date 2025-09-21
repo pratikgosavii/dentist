@@ -97,8 +97,11 @@ class DoctorMedicineViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return medicine.objects.filter(is_deleted=False).filter(is_active=True).filter(
-            Q(created_by=self.request.user) | Q(created_by__isnull=True)  # Include superadmin and current user
+        qs = medicine.objects.filter(is_active=True)
+
+            # Doctor can see their own medicines + superadmin medicines
+        return qs.filter(
+            Q(created_by=self.request.user) | Q(created_by__is_superuser=True)
         )
 
     def perform_create(self, serializer):
@@ -172,14 +175,11 @@ class TreatmentAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import permissions, status
 
 class AppointmentsListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, appointment_id=None):
         # make sure the logged-in user is a doctor
         try:
             doctor_instance = doctor.objects.get(user=request.user)
@@ -189,14 +189,22 @@ class AppointmentsListAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
+        if appointment_id:  # fetch single appointment
+            appointment = get_object_or_404(
+                Appointment,
+                id=appointment_id,
+                doctor=doctor_instance
+            )
+            serializer = AppointmentSerializer(appointment)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        # fetch all appointments
         appointments = Appointment.objects.filter(
             doctor=doctor_instance
         ).order_by('-date', '-time')
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
 
 
 from django.shortcuts import get_object_or_404
@@ -228,3 +236,129 @@ class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
 
         serializer.save(doctor=doctor_instance, appointment=appointment)
         
+
+
+        
+class AppointmentDocumentViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentDocumentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only documents of appointments this user is related to
+        appointment_id = self.request.query_params.get("appointment_id")  # ?appointment_id=123
+        qs = AppointmentDocument.objects.filter(uploaded_by=self.request.user)
+
+        if appointment_id:
+            qs = qs.filter(appointment_id=appointment_id)
+
+        return qs
+
+
+    def perform_create(self, serializer):
+        serializer.save(uploaded_by=self.request.user)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.file.delete(save=False)  # delete file from storage
+        instance.delete()
+        return Response({"detail": "Document deleted successfully."}, status=status.HTTP_200_OK)
+    
+
+class DoctorAppointmentViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        # Doctor sees only their own appointments
+        qs = Appointment.objects.filter(doctor__user=self.request.user)
+
+        # Optional filter by date (?date=YYYY-MM-DD)
+        date = self.request.query_params.get("date")
+        print(date)
+        if date:
+            qs = qs.filter(date=date)
+
+        return qs
+    
+    
+
+    def _check_doctor_permission(self, appointment, user):
+        """Ensure only assigned doctor can change status."""
+        if appointment.doctor.user != user:
+            return False
+        return True
+
+    @action(detail=True, methods=["post"])
+    def accept(self, request, pk=None):
+        appointment = self.get_object()
+        if not self._check_doctor_permission(appointment, request.user):
+            return Response({"error": "You are not assigned to this appointment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        appointment.status = "accepted"
+        appointment.save()
+        return Response({"detail": "Appointment accepted."}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"])
+    def reject(self, request, pk=None):
+        appointment = self.get_object()
+        if not self._check_doctor_permission(appointment, request.user):
+            return Response({"error": "You are not assigned to this appointment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        appointment.status = "rejected"
+        appointment.save()
+        return Response({"detail": "Appointment rejected."}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"])
+    def reschedule(self, request, pk=None):
+        appointment = self.get_object()
+        if not self._check_doctor_permission(appointment, request.user):
+            return Response({"error": "You are not assigned to this appointment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        new_date = request.data.get("date")
+        new_time = request.data.get("time")
+
+        if not new_date or not new_time:
+            return Response({"error": "date and time are required to reschedule."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        appointment.date = new_date
+        appointment.time = new_time
+        appointment.status = "waiting"  # back to waiting for confirmation
+        appointment.save()
+        return Response({"detail": "Appointment rescheduled."}, status=status.HTTP_200_OK)
+    
+
+
+    
+class LabViewSet(viewsets.ModelViewSet):
+    queryset = Lab.objects.all()
+    serializer_class = LabSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class LabWorkViewSet(viewsets.ModelViewSet):
+    serializer_class = LabWorkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return LabWork.objects.all().order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+
+
+class OfferViewSet(viewsets.ModelViewSet):
+    serializer_class = OfferSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return offers created by logged-in user
+        return Offer.objects.filter(user=self.request.user).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)  # store logged-in user

@@ -13,7 +13,13 @@ router = DefaultRouter()
 router.register('doctors', DoctorViewSet, basename='doctor')
 router.register('doctor-medicine', DoctorMedicineViewSet, basename='pet-test-booking')
 router.register('appointment-medicine', AppointmentMedicineViewSet, basename='AppointmentMedicineViewSet')
+router.register("appointment-documents", AppointmentDocumentViewSet, basename="appointment-document")
+router.register('appointments', DoctorAppointmentViewSet, basename="doctor-appointments")
 
+router.register('labs', LabViewSet, basename="lab")
+router.register('lab-works', LabWorkViewSet, basename="labwork")
+
+router.register(r'offers', OfferViewSet, basename='offer')
 
 appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
     'get': 'list',
@@ -33,28 +39,14 @@ urlpatterns = [
 
 
     path("list-treatments/", TreatmentAPIView.as_view(), name="list_treatement"),
+    
     path("list-appointment/", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
+    path("list-appointment/<int:appointment_id>/", AppointmentsListAPIView.as_view(), name="detail-customer-appointment"),
 
-    path(
-            "appointments/<int:appointment_id>/treatments/",
-            appointment_treatment_list,
-            name="appointment-treatment-list"
-        ),
-    path(
-        "appointments/<int:appointment_id>/treatments/<int:pk>/",
-        appointment_treatment_detail,
-        name="appointment-treatment-detail"
-    ),
-    # path(
-    #     "appointments/<int:appointment_id>/add-treatment/<int:treatment_id>/",
-    #     AppointmentTreatmentCreateAPIView.as_view(),
-    #     name="appointment-add-treatment",
-    # ),
+    path("appointments/<int:appointment_id>/treatments/", appointment_treatment_list, name="appointment-treatment-list"),
+    path("appointments/<int:appointment_id>/treatments/<int:pk>/", appointment_treatment_detail, name="appointment-treatment-detail" ),
 
-    # path('add-doctor/', add_doctor, name='add_doctor'),
-    # path('update-doctor/<int:doctor_id>/', update_doctor, name='update_doctor'),
-    # path('list-doctor/', list_doctor, name='list_doctor'),
-    # path('delete-doctor/<int:doctor_id>/', delete_doctor, name='delete_doctor'),
+
 
 
 ] + router.urls 
