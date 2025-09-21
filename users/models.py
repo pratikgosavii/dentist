@@ -21,7 +21,7 @@ class CustomUserManager(BaseUserManager):
 
 
 
-
+from datetime import date
 
 class User(AbstractUser):
 
@@ -34,8 +34,7 @@ class User(AbstractUser):
 
     firebase_uid = models.CharField(max_length=128, unique=True, null=True, blank=True)
     
-    area = models.ForeignKey("masters.area", on_delete=models.CASCADE, null=True, blank=True)
-    city = models.ForeignKey("masters.city", on_delete=models.CASCADE, null=True, blank=True)
+    dob = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     address = models.CharField(max_length=225, null=True, blank=True)
 
@@ -51,3 +50,13 @@ class User(AbstractUser):
     REQUIRED_FIELDS = [] 
 
     objects = CustomUserManager()
+
+    @property
+    def age(self):
+        if not self.dob:
+            return None
+        today = date.today()
+        return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+
+    def __str__(self):
+        return self.first_name or self.last_name

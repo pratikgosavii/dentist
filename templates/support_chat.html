@@ -201,13 +201,23 @@ img{ max-width:100%;}
                             </h5>
 
                              {% if ticket.last_msg_time %}
-                    <small><i class="fa fa-clock"></i> Last msg: {{ ticket.last_msg_time|date:"M d, H:i A" }}</small><br>
-                {% endif %}
+                                <small><i class="fa fa-clock"></i> Last msg: {{ ticket.last_msg_time|date:"M d, H:i A" }}</small><br>
+                            {% endif %}
 
-                
-                            <p>{{ ticket.description|truncatewords:10 }}</p>
-                            <a href="{% url 'ticket_detail' ticket.id %}" style="color:green; margin-right:20px;"> View Chat</a>
-                            <a href="{% url 'view_appointment_detail' ticket.appointment.id %}"> View Appointment</a>
+                            <div class="d-flex flex-column">
+                              <p>{{ ticket.description|truncatewords:10 }}</p>
+                              <div class="d-flex align-items-center gap-2">
+                                  <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-sm btn-success">View Chat</a>
+                                  {% if ticket.appointment %}
+                                      <a href="{% url 'view_appointment_detail' ticket.appointment.id %}" class="btn btn-sm btn-primary">View Appointment</a>
+                                      <span class="badge bg-info text-dark">Customer Ticket</span>
+                                  {% else %}
+                                      <span class="badge bg-warning text-dark">Doctor Ticket</span>
+                                  {% endif %}
+                              </div>
+                          </div>
+
+
                         </div>
                     </div>
                 </div>

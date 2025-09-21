@@ -65,6 +65,12 @@ urlpatterns = [
     path('delete-home-banner/<home_banner_id>', delete_home_banner, name='delete_home_banner'),  # create or fetch list of admins
     path('get-home-banner/', get_home_banner, name='get_home_banner'), 
 
+    path('add-faq/', add_faq, name='add_faq'),  # create or fetch list of admins
+    path('update-faq/<faq_id>', update_faq, name='update_faq'),  # create or fetch list of admins
+    path('list-faq/', list_faq, name='list_faq'),  # create or fetch list of admins
+    path('delete-faq/<faq_id>', delete_faq, name='delete_faq'),  # create or fetch list of admins
+    path('get-faq/', get_faq.as_view(), name='get_home_banner'), 
+
     path('view-appointment-detail/<appointment_id>', view_appointment_detail, name='view_appointment_detail'),
 
         # urls.py

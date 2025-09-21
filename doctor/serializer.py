@@ -4,16 +4,46 @@ from django.contrib.auth.hashers import make_password
 
 
 from .models import *
-from customer.serializer import AppointmentSerializer
+from customer.serializer import *
+from rest_framework import serializers
+
 
 class doctor_serializer(serializers.ModelSerializer):
+    # User fields — readable & writable
+    first_name = serializers.CharField(source='user.first_name')
+    last_name = serializers.CharField(source='user.last_name')
+    email = serializers.EmailField(source='user.email', allow_blank=True, required=False)
+    dob = serializers.DateField(source='user.dob', required=False, allow_null=True)
+    gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
 
     class Meta:
         model = doctor
-        fields = '__all__'
+        fields = [
+            "user",
+            "first_name", "last_name", "email", "dob", "gender",
+            "image",
+            "phone_number", "clinic_name", "clinic_phone_number",
+            "house_building", "locality", "pincode", "state", "city", "country",
+            "designation", "title", "degree", "specializations", "education", "about_doctor",
+            "experience_years", "rating", "review_count", "remark", "is_active"
+        ]
         read_only_fields = ['user']
 
-    image = serializers.ImageField(required=False, allow_null=True)
+    def create(self, validated_data):
+        user_data = validated_data.pop('user', {})
+        user = self.context['request'].user
+        for field, value in user_data.items():
+            setattr(user, field, value)
+        user.save()
+        return doctor.objects.create(user=user, **validated_data)
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {})
+        user = instance.user
+        for field, value in user_data.items():
+            setattr(user, field, value)
+        user.save()
+        return super().update(instance, validated_data)
     
 
 
@@ -37,32 +67,59 @@ class AppointmentMedicineSerializer(serializers.ModelSerializer):
         read_only_fields = ["user", "doctor", "Appointment_details"]
     depth =1
 
-from customer.serializer import *
-
-
-
-from rest_framework import serializers
-from .models import AppointmentTreatment, AppointmentTreatmentStep
 
 class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppointmentTreatmentStep
-        fields = ["id", "step_number", "title", "description"]
+        fields = [
+            "id",
+            "step_number",
+            "title",
+            "description",
+            "status",
+            "price",
+        ]
 
 class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
-    Appointment_details = AppointmentSerializer(source = "appointment",  read_only=True)
+    Appointment_details = AppointmentSerializer(source="appointment", read_only=True)
+    total_price = serializers.SerializerMethodField()
+    remaining_amount = serializers.SerializerMethodField()
 
     class Meta:
         model = AppointmentTreatment
-        fields = ["id", "appointment", "doctor", "treatment", "created_at", "steps", "Appointment_details"]
+        fields = [
+            "id",
+            "appointment",
+            "doctor",
+            "treatment",
+            "created_at",
+            "steps",
+            "Appointment_details",
+            "total_price",
+            "remaining_amount",
+        ]
         read_only_fields = ["doctor", "appointment"]
+
+    def get_total_price(self, obj):
+        # sum of all step prices (change filter if you only want completed steps)
+        return sum(step.price for step in obj.steps.all())
+    
+    def get_remaining_amount(self, obj):
+        # sum of all step prices (change filter if you only want completed steps)
+        total_price = sum(step.price for step in obj.steps.all())
+        ledger_total = obj.appointment.ledgers.aggregate(
+            total=models.Sum("amount")
+        )["total"] or 0
+        return total_price - ledger_total
 
     def create(self, validated_data):
         steps_data = validated_data.pop("steps", [])
         appointment_treatment = AppointmentTreatment.objects.create(**validated_data)
         for step in steps_data:
-            AppointmentTreatmentStep.objects.create(appointment_treatment=appointment_treatment, **step)
+            AppointmentTreatmentStep.objects.create(
+                appointment_treatment=appointment_treatment, **step
+            )
         return appointment_treatment
 
     def update(self, instance, validated_data):
@@ -73,7 +130,9 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
         # clear old steps & recreate (simple way)
         instance.steps.all().delete()
         for step in steps_data:
-            AppointmentTreatmentStep.objects.create(appointment_treatment=instance, **step)
+            AppointmentTreatmentStep.objects.create(
+                appointment_treatment=instance, **step
+            )
         return instance
     
     
@@ -106,3 +165,30 @@ class OfferSerializer(serializers.ModelSerializer):
         model = Offer
         fields = "__all__"
         read_only_fields = ["user", "created_at", "updated_at"]
+
+
+
+class InventoryProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InventoryProduct
+        fields = "__all__"
+        read_only_fields = ["created_at", "updated_at"]
+
+
+        
+class AppointmentLedgerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppointmentLedger
+        fields = ["id", "appointment", "title", "amount", "date"]
+
+
+
+
+class DoctorEarningSerializer(serializers.Serializer):
+    appointment_id = serializers.IntegerField()
+    patient = serializers.CharField()
+    doctor = serializers.CharField()
+    date = serializers.DateTimeField()
+    total_price = serializers.DecimalField(max_digits=12, decimal_places=2)
+    received_amount = serializers.DecimalField(max_digits=12, decimal_places=2)
+    pending_amount = serializers.DecimalField(max_digits=12, decimal_places=2)

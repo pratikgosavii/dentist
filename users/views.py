@@ -130,6 +130,7 @@ class SignupView(APIView):
             return Response({"error": str(e)}, status=400)
 
 
+from customer.models import customer
 
 class LoginAPIView(APIView):
 
@@ -167,13 +168,23 @@ class LoginAPIView(APIView):
                     firebase_uid=uid,
                 )
                 created = True
-
+                print('--------------------')
+                print(user_type)
                 # Set user type flags based on frontend
                 if user_type == "vendor":
-                    user.is_vendor = True
+                    print('-----1---------------')
+
+                    user.is_doctor = True
+                    doctor.objects.create(user=user)  
+
                 elif user_type == "customer":
+                    print('--------2------------')
+                
                     user.is_customer = True
+                    customer.objects.create(user=user)  
+
                 user.save()
+
 
             # Token creation
             refresh = RefreshToken.for_user(user)

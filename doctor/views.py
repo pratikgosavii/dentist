@@ -16,10 +16,6 @@ from rest_framework.generics import CreateAPIView, ListAPIView
 
 
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import action
-
-from rest_framework.permissions import IsAuthenticated
 
 from doctor.filters import *
 
@@ -27,6 +23,7 @@ from doctor.filters import *
 
 from .serializer import *
 from users.permissions import *
+from rest_framework.decorators import action
 
 from rest_framework import generics, permissions
 from rest_framework import viewsets, status
@@ -35,57 +32,25 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 
 from rest_framework.exceptions import ValidationError
 
-class DoctorViewSet(viewsets.ModelViewSet):
-    queryset = doctor.objects.filter(is_active=True)
+from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, JSONParser
+from .models import doctor
+
+class DoctorViewSet(mixins.RetrieveModelMixin,
+                             mixins.UpdateModelMixin,
+                             viewsets.GenericViewSet):
     serializer_class = doctor_serializer
     parser_classes = [MultiPartParser, JSONParser]
-
-    def perform_create(self, serializer):
-        if doctor.objects.filter(user=self.request.user).exists():
-            raise ValidationError({"error": "Each user can only have one doctor profile."})
-        self.instance = serializer.save(user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        return Response(self.get_serializer(self.instance).data, status=status.HTTP_201_CREATED)
-
-    def perform_update(self, serializer):
-        self.instance = serializer.save(user=self.request.user)
-
-    def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
-        return Response(self.get_serializer(self.instance).data, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        doctor_obj = self.get_object()
-        doctor_obj.is_active = False
-        doctor_obj.save()
-        return Response(
-            {"message": "Doctor deactivated", "doctor": self.get_serializer(doctor_obj).data},
-            status=status.HTTP_200_OK,
-        )
-
-    @action(detail=True, methods=["post"])
-    def reactivate(self, request, pk=None):
-        doc = self.get_object()
-        doc.is_active = True
-        doc.save()
-        return Response(
-            {"message": "Doctor reactivated", "doctor": self.get_serializer(doc).data},
-            status=status.HTTP_200_OK,
-        )
-
-    @action(detail=False, methods=["get"])
-    def me(self, request):
-        """Get logged-in user's doctor profile"""
-        try:
-            doc = doctor.objects.get(user=request.user)
-            return Response(self.get_serializer(doc).data, status=status.HTTP_200_OK)
-        except doctor.DoesNotExist:
-            return Response({"error": "Doctor profile not found"}, status=status.HTTP_404_NOT_FOUND)
-        
+    permission_classes = [IsAuthenticated]
 
 
+    def get_object(self):
+        return doctor.objects.get(user=self.request.user, is_active=True)
+
+    
+    
+    
 from rest_framework.generics import ListAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -264,6 +229,11 @@ class AppointmentDocumentViewSet(viewsets.ModelViewSet):
         return Response({"detail": "Document deleted successfully."}, status=status.HTTP_200_OK)
     
 
+
+from rest_framework.decorators import action
+
+
+
 class DoctorAppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -362,3 +332,152 @@ class OfferViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)  # store logged-in user
+
+
+        
+class InventoryProductViewSet(viewsets.ModelViewSet):
+    queryset = InventoryProduct.objects.all().order_by("expiry_date")
+    serializer_class = InventoryProductSerializer
+    permission_classes = [permissions.IsAuthenticated]  # only logged-in users
+
+    # You can override create/update if you want custom logic later
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from firebase_admin import auth as firebase_auth
+
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+
+class DoctorVerifyCustomerOTP(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        print(request.user)
+        if not request.user.is_doctor:
+            return Response({"error": "Only doctors can verify customers."}, status=403)
+
+        id_token = request.data.get("idToken")
+        if not id_token:
+            return Response({"error": "idToken is required."}, status=400)
+
+        # Optional fields
+        first_name = request.data.get("first_name", "")
+        last_name = request.data.get("last_name", "")
+        dob = request.data.get("dob")           # "YYYY-MM-DD" string
+        gender = request.data.get("gender")     # 'male' or 'female'
+
+        try:
+            decoded_token = firebase_auth.verify_id_token(id_token)
+            mobile = decoded_token.get("phone_number")
+            uid = decoded_token.get("uid")
+
+            if User.objects.filter(mobile=mobile).exists():
+                return Response({"error": "User already exists."}, status=400)
+
+            # 1️⃣ Create User
+            user = User.objects.create(
+                mobile=mobile,
+                firebase_uid=uid,
+                is_customer=True,
+                first_name=first_name,
+                last_name=last_name,
+                dob=dob,
+                gender=gender
+            )
+
+            # 2️⃣ Create Customer profile and link to doctor
+            cust = customer.objects.create(
+                user=user,
+                created_by=request.user.doctor
+            )
+
+            # 3️⃣ Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                "access": str(refresh.access_token),
+                "refresh": str(refresh),
+                "user": {
+                    "id": user.id,
+                    "mobile": user.mobile,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "dob": user.dob,
+                    "gender": user.gender,
+                    "customer_id": cust.id,
+                    "created_by_doctor": request.user.doctor.id
+                }
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class AppointmentLedgerViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentLedgerSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # show ledgers only for appointments belonging to this doctor
+        user = self.request.user
+        if hasattr(user, "is_doctor"):
+
+            # if appointment id is passed, filter further
+            appointment_id = self.request.query_params.get("appointment_id")
+            print()
+            if appointment_id:
+                return AppointmentLedger.objects.filter(appointment_id=appointment_id, appointment__doctor=user.doctor)
+
+
+    def perform_create(self, serializer):
+        # ensure ledger belongs to a doctor’s appointment
+        appointment = serializer.validated_data["appointment"]
+        if appointment.doctor != self.request.user.doctor:
+            return Response({"error": "ou cannot add a ledger to this appointment."},
+                            status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+
+
+
+from django.db.models import Sum
+
+class DoctorEarningAPIView(APIView):
+    """
+    API view to return earnings report for the logged-in doctor.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response({"detail": "Doctor profile not found."}, status=404)
+
+        appointments = Appointment.objects.filter(doctor=doctor_instance).prefetch_related(
+            'treatments__steps', 'ledgers'
+        )
+
+        report = []
+        for appt in appointments:
+            total_price = sum(
+                step.price for treatment in appt.treatments.all() for step in treatment.steps.all()
+            )
+            received_amount = appt.ledgers.aggregate(total=Sum('amount'))['total'] or 0
+            pending_amount = total_price - received_amount
+
+            report.append({
+                "appointment_id": appt.id,
+                "patient": f"{getattr(appt.user, 'first_name', '')} {getattr(appt.user, 'last_name', '')}".strip(),
+                "doctor": doctor_instance.user.get_full_name(),
+                "date": appt.created_at,
+                "total_price": total_price,
+                "received_amount": received_amount,
+                "pending_amount": pending_amount
+            })
+
+        return Response(report)

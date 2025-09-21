@@ -21,6 +21,10 @@ router.register('lab-works', LabWorkViewSet, basename="labwork")
 
 router.register(r'offers', OfferViewSet, basename='offer')
 
+router.register(r'inventory', InventoryProductViewSet, basename='inventory')
+
+router.register(r'appointment-ledgers', AppointmentLedgerViewSet, basename='appointment-ledger')
+
 appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
     'get': 'list',
     'post': 'create',
@@ -34,7 +38,6 @@ appointment_treatment_detail = AppointmentTreatmentViewSet.as_view({
 })
 
 
-
 urlpatterns = [
 
 
@@ -42,10 +45,13 @@ urlpatterns = [
     
     path("list-appointment/", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
     path("list-appointment/<int:appointment_id>/", AppointmentsListAPIView.as_view(), name="detail-customer-appointment"),
+    
+    path("create-customer/", DoctorVerifyCustomerOTP.as_view(), name="DoctorVerifyCustomerOTP"),
 
     path("appointments/<int:appointment_id>/treatments/", appointment_treatment_list, name="appointment-treatment-list"),
     path("appointments/<int:appointment_id>/treatments/<int:pk>/", appointment_treatment_detail, name="appointment-treatment-detail" ),
-
+    
+    path('earnings/', DoctorEarningAPIView.as_view(), name='doctor-earning-api'),
 
 
 

@@ -16,26 +16,32 @@ from users.models import User
 def current_time():
     return datetime.now().time()
 
-class customer(models.Model):
 
+import uuid
+
+class customer(models.Model):
     GENDER_CHOICES = [
         ('male', 'Male'),
         ('female', 'Female'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="customer")
-    dob = models.DateField()
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
+    
+    patient_id = models.CharField(max_length=50, unique=True, editable=False, null=True, blank=True)  # auto, read-only
+
+    created_by = models.ForeignKey('doctor.doctor', on_delete=models.SET_NULL, null=True, blank=True, related_name='patients')
+
     is_active = models.BooleanField(default=True)
 
-    @property
-    def age(self):
-        today = date.today()
-        return today.year - self.dob.year - ((today.month, today.day) < (self.dob.month, self.dob.day))
+    def save(self, *args, **kwargs):
+        if not self.patient_id:
+            self.patient_id = f"PAT-{uuid.uuid4().hex[:8].upper()}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.user.first_name
+        return f"{self.user.first_name} {self.user.last_name}"
     
+
 
 
 GENDER_CHOICES = [
@@ -65,6 +71,18 @@ STATUS_CHOICES = [
 ]
 
 class Appointment(models.Model):
+
+    SERVICE_CHOICES = [
+            ("aligners", "Book Aligners"),
+            ("skin", "Book Skin/Hydrafacial"),
+    ]
+    service = models.CharField(
+        max_length=50,
+        choices=SERVICE_CHOICES,
+        default="aligners",
+    )
+
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
     doctor = models.ForeignKey(doctor, on_delete=models.CASCADE, related_name="appointments_doctor")
     appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPE_CHOICES, default="In Person")
@@ -105,7 +123,7 @@ class SupportTicket(models.Model):
         ("customer", "Customer"),
         ("admin", "Admin"),
     ]
-
+   
     STATUS_CHOICES = [
         ("open", "Open"),
         ("in_progress", "In Progress"),
@@ -114,6 +132,7 @@ class SupportTicket(models.Model):
     ]
 
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="support_tickets")
+    
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)  # who created ticket
     subject = models.CharField(max_length=255)
     appointment = models.ForeignKey(

@@ -141,3 +141,20 @@ class home_banner_Form(forms.ModelForm):
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
 
         }
+
+
+        
+class HelpQuestion_Form(forms.ModelForm):
+    class Meta:
+        model = HelpQuestion
+        fields = ["question", "answer"]
+        widgets = {
+            "question": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Enter question"}
+            ),
+            # keep textarea hidden, only used for submitting
+            "answer": forms.Textarea(attrs={"class": "form-control", "id": "summernote"}),  # hook for summernote
+        }
+
+
+        

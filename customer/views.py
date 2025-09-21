@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 # Create your views here.
 
@@ -29,33 +29,49 @@ from rest_framework import generics, permissions
 from rest_framework import viewsets, status
 from rest_framework.parsers import MultiPartParser, JSONParser
 
+from rest_framework import viewsets, mixins
 
-class customerViewSet(viewsets.ModelViewSet):
 
-    queryset = customer.objects.filter(is_active=True)
+from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, JSONParser
+from django.shortcuts import get_object_or_404
+from .models import customer
+from rest_framework.decorators import action
+
+class customerViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
+):
     serializer_class = customer_serializer
     parser_classes = [MultiPartParser, JSONParser]
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_object(self):
+        # Default retrieve/update still works with PK if needed
+        return get_object_or_404(customer, user=self.request.user, is_active=True)
 
-    def perform_update(self, serializer):
-        serializer.save(user=self.request.user)
+    @action(detail=False, methods=['get', 'put', 'patch'], url_path='me')
+    def me(self, request):
+        """
+        Retrieve or update the logged-in customer's profile.
+        """
+        customer_obj = get_object_or_404(customer, user=request.user, is_active=True)
 
-    def destroy(self, request, *args, **kwargs):
-        customer_obj = self.get_object()
-        customer_obj.is_active = False
-        customer_obj.save()
-        return Response({"message": "User deactivated"}, status=status.HTTP_200_OK)
+        if request.method in ['PUT', 'PATCH']:
+            serializer = self.get_serializer(customer_obj, data=request.data, partial=(request.method=='PATCH'))
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:  # GET
+            serializer = self.get_serializer(customer_obj)
 
-    @action(detail=True, methods=["post"])
-    def reactivate(self, request, pk=None):
-        customer_obj = self.get_object()
-        customer_obj.is_active = True
-        customer_obj.save()
-        return Response({"message": "User reactivated"}, status=status.HTTP_200_OK)
+        return Response(serializer.data)
+    
 
+    
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all().order_by('-created_at')

@@ -856,6 +856,90 @@ def get_home_banner(request):
 
 
 
+def add_faq(request):
+    
+    if request.method == "POST":
+
+        forms = HelpQuestion_Form(request.POST, request.FILES)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_faq')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+
+            return render(request, 'add_faq.html', context)
+    
+    else:
+
+        # create first row using admin then editing only
+
+        
+
+        return render(request, 'add_faq.html', { 'form' : HelpQuestion_Form()})
+
+def update_faq(request, faq_id):
+    
+    instance = HelpQuestion.objects.get(id = faq_id)
+
+    if request.method == "POST":
+
+
+        instance = HelpQuestion.objects.get(id=faq_id)
+
+        forms = HelpQuestion_Form(request.POST, request.FILES, instance=instance)
+
+        if forms.is_valid():
+            forms.save()
+            return redirect('list_faq')
+        else:
+            print(forms.errors)
+            context = {
+                'form': forms
+            }
+
+            return render(request, 'add_faq.html', context)
+
+    
+    else:
+
+        # create first row using admin then editing only
+
+        forms = HelpQuestion_Form(instance=instance)
+                
+        context = {
+            'form': forms
+        }
+
+        return render(request, 'add_faq.html', context)
+
+
+def list_faq(request):
+
+    data = HelpQuestion.objects.all()
+
+    return render(request, 'list_faq.html', {'data' : data})
+
+
+def delete_faq(request, faq_id):
+
+    data = HelpQuestion.objects.get(id = faq_id).delete()
+
+    return redirect('list_faq')
+
+
+from django.views import View
+
+
+class get_faq(ListAPIView):
+    queryset = HelpQuestion.objects.all()
+    serializer_class = HelpQuestionSerializer
+    filter_backends = [DjangoFilterBackend]
+
+
 
 def view_appointment_detail(request, appointment_id):
     
@@ -889,3 +973,5 @@ def ticket_detail(request, ticket_id):
         'data': data,
         'active_id': ticket.id  # ✅ This enables active highlighting in template
     })
+
+

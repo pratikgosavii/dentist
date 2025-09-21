@@ -24,7 +24,6 @@ class doctor(models.Model):
     user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name="doctor")
 
     # Basic Info
-    name = models.CharField(max_length=120)
     image = models.ImageField(upload_to="doctor_images/", blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[
         ("Male", "Male"), ("Female", "Female"), ("Other", "Other")
@@ -61,7 +60,7 @@ class doctor(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return self.user.first_name
     
     
     
@@ -170,7 +169,7 @@ class Appoinment_Medicine(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.medicine.name} ({self.medicine.strength})"
+        return f"{self.medicine.name} "
     
 
 
@@ -181,10 +180,47 @@ class AppointmentTreatment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class AppointmentTreatmentStep(models.Model):
-    appointment_treatment = models.ForeignKey(AppointmentTreatment, on_delete=models.CASCADE, related_name="steps")
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("active", "Active"),
+        ("completed", "Completed"),
+        ("canceled", "Canceled"),
+    ]
+
+    appointment_treatment = models.ForeignKey(
+        AppointmentTreatment,
+        on_delete=models.CASCADE,
+        related_name="steps"
+    )
     step_number = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending"
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0.00
+    )
+
+    def __str__(self):
+        return f"Step {self.step_number} - {self.title} ({self.status})"
+
+
+
+class AppointmentLedger(models.Model):
+    appointment = models.ForeignKey(
+        "customer.Appointment", on_delete=models.CASCADE, related_name="ledgers"
+    )
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField(auto_now_add=True)  # default today if not provided
+
+    def __str__(self):
+        return f"{self.title} - {self.amount} ({self.date})"
 
 
 
@@ -270,3 +306,20 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+
+        
+class InventoryProduct(models.Model):
+    name = models.CharField(max_length=255)
+    quantity = models.PositiveIntegerField(default=0)
+    expiry_date = models.DateField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.quantity})"
+    
+

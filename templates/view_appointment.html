@@ -54,6 +54,7 @@
                     </div>
                     <div class="card-body">
                         <p><span class="label">Doctor:</span> {{ appointment.doctor.name }}</p>
+                        <p><span class="label">Service:</span> {{ appointment.service }}</p>
                         <p><span class="label">Type:</span> {{ appointment.appointment_type }}</p>
                         <p><span class="label">Booking For:</span> {{ appointment.booking_for }}</p>
                         <p><span class="label">Status:</span> {{ appointment.get_status_display }}</p>

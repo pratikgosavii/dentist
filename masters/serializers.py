@@ -22,6 +22,13 @@ class EnquirySerializer(serializers.ModelSerializer):
 
 
 
+class HelpQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HelpQuestion
+        fields = '__all__'
+
+
+
 
 
 class HomeBannerSerializer(serializers.ModelSerializer):

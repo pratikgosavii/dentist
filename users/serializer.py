@@ -23,6 +23,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'dob',
             'gender',
             'address',
             'is_customer',

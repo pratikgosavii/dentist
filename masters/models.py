@@ -179,3 +179,15 @@ class TreatmentStep(models.Model):
     def __str__(self):
         return f"{self.treatment.name} - Step {self.step_number}: {self.title}"
 
+
+
+
+
+class HelpQuestion(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()  # stores HTML content
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.question
