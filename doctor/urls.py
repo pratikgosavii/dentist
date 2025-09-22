@@ -52,6 +52,8 @@ urlpatterns = [
     path("appointments/<int:appointment_id>/treatments/<int:pk>/", appointment_treatment_detail, name="appointment-treatment-detail" ),
     
     path('earnings/', DoctorEarningAPIView.as_view(), name='doctor-earning-api'),
+    
+    path('list-patient/', list_patient.as_view(), name='list_patient'),
 
 
 

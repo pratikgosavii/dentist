@@ -18,6 +18,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
 
 from doctor.filters import *
+from users.serializer import UserProfileSerializer
 
 
 
@@ -301,7 +302,13 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         return Response({"detail": "Appointment rescheduled."}, status=status.HTTP_200_OK)
     
 
-
+    @action(detail=False, methods=['get'], url_path='patients')
+    def list_patients(self, request):
+        users = User.objects.filter(
+            appointments__doctor__user=request.user
+        ).distinct()
+        data = UserProfileSerializer(users, many=True).data
+        return Response(data)
     
 class LabViewSet(viewsets.ModelViewSet):
     queryset = Lab.objects.all()
@@ -481,3 +488,16 @@ class DoctorEarningAPIView(APIView):
             })
 
         return Response(report)
+
+
+
+   
+class list_patient(generics.ListAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # fetch distinct users who have appointments with this doctor
+        return User.objects.filter(
+            appointments__doctor__user=self.request.user
+        ).distinct()
