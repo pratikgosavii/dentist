@@ -71,17 +71,7 @@ STATUS_CHOICES = [
 ]
 
 class Appointment(models.Model):
-
-    SERVICE_CHOICES = [
-            ("aligners", "Book Aligners"),
-            ("skin", "Book Skin/Hydrafacial"),
-    ]
-    service = models.CharField(
-        max_length=50,
-        choices=SERVICE_CHOICES,
-        default="aligners",
-    )
-
+    
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
     doctor = models.ForeignKey(doctor, on_delete=models.CASCADE, related_name="appointments_doctor")

@@ -49,7 +49,6 @@ from doctor.models import *
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
-    service_display = serializers.CharField(source="get_service_display", read_only=True)
     class Meta:
         model = Appointment
         fields = [
@@ -59,8 +58,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "booking_for",
             "status", 
             "status_display",
-            "service", 
-            "service_display",
             "date",
             "time",
             "full_name",
