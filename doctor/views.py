@@ -289,14 +289,14 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_403_FORBIDDEN)
 
         new_date = request.data.get("date")
-        new_time = request.data.get("time")
+        slot = request.data.get("slot")
 
-        if not new_date or not new_time:
+        if not new_date or not slot:
             return Response({"error": "date and time are required to reschedule."},
                             status=status.HTTP_400_BAD_REQUEST)
 
         appointment.date = new_date
-        appointment.time = new_time
+        appointment.slot = slot
         appointment.status = "waiting"  # back to waiting for confirmation
         appointment.save()
         return Response({"detail": "Appointment rescheduled."}, status=status.HTTP_200_OK)
