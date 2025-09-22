@@ -63,7 +63,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "status", 
             "status_display",
             "date",
-            "time",
+            "slot",
             "full_name",
             "phone_number",
             "email",
