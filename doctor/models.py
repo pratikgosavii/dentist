@@ -205,6 +205,8 @@ class AppointmentTreatmentStep(models.Model):
         decimal_places=2,
         default=0.00
     )
+    date = models.DateField(auto_now_add=True)  # default today if not provided
+
 
     def __str__(self):
         return f"Step {self.step_number} - {self.title} ({self.status})"

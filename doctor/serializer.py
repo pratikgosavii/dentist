@@ -19,6 +19,7 @@ class doctor_serializer(serializers.ModelSerializer):
     class Meta:
         model = doctor
         fields = [
+            "id",
             "user",
             "first_name", "last_name", "email", "dob", "gender",
             "image",
@@ -61,10 +62,11 @@ class medicine_serializer(serializers.ModelSerializer):
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
     Appointment_details = AppointmentSerializer(source = "appointment",  read_only=True)
+    medicine_details = medicine_serializer(source="medicine", read_only=True)
     class Meta:
         model = Appoinment_Medicine
         fields = "__all__"
-        read_only_fields = ["user", "doctor", "Appointment_details"]
+        read_only_fields = ["user", "doctor", "Appointment_details", "medicine_details"]
     depth =1
 
 
@@ -75,10 +77,14 @@ class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
             "id",
             "step_number",
             "title",
+            "date",
+
             "description",
             "status",
             "price",
         ]
+        read_only_fields = ["date"]
+
 
 class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
