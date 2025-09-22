@@ -71,7 +71,7 @@ STATUS_CHOICES = [
 ]
 
 class Appointment(models.Model):
-    
+
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointments")
     doctor = models.ForeignKey(doctor, on_delete=models.CASCADE, related_name="appointments_doctor")
@@ -86,7 +86,8 @@ class Appointment(models.Model):
     
     # Appointment details
     date = models.DateField()
-    time = models.TimeField()
+    slot = models.ForeignKey(slot, on_delete=models.CASCADE, related_name="slot", null = True, blank=True)
+
 
     # Patient details
     full_name = models.CharField(max_length=100)

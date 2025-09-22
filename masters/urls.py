@@ -32,6 +32,7 @@ urlpatterns = [
     path('update-slot/<slot_id>', update_slot, name='update_slot'),
     path('delete-slot/<slot_id>', delete_slot, name='delete_slot'),
     path('list-slot/', list_slot, name='list_slot'),
+    path('get-slot/', get_slot.as_view(), name='get_slot'),
 
     path('add-city/', add_city, name='add_city'),
     path('update-city/<city_id>', update_city, name='update_city'),

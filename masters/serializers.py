@@ -14,6 +14,12 @@ class medicine_serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class slot_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = slot
+        fields = '__all__'
+
+
 
 class EnquirySerializer(serializers.ModelSerializer):
     class Meta:

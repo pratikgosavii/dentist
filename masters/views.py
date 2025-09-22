@@ -292,6 +292,15 @@ def list_slot(request):
     return render(request, 'list_slot.html', context)
 
 
+
+class get_slot(ListAPIView):
+    queryset = slot.objects.all()
+    serializer_class = slot_serializer
+    filter_backends = [DjangoFilterBackend]
+    
+
+
+
 from rest_framework import generics
 
 
