@@ -215,16 +215,22 @@ class DoctorLeaveSerializer(serializers.ModelSerializer):
             doctor_instance = doctor.objects.get(user=request_user)
         except doctor.DoesNotExist:
             raise serializers.ValidationError("You are not registered as a doctor.")
-        
+
         leave_date = data['leave_date']
-        
+
+        # 1️⃣ Check if leave already exists
         if DoctorLeave.objects.filter(doctor=doctor_instance, leave_date=leave_date).exists():
             raise serializers.ValidationError({
                 "leave_date": "You already marked this date as leave."
             })
-        
-        return data
 
+        # 2️⃣ Check if any appointment exists on this date
+        if Appointment.objects.filter(doctor=doctor_instance, date=leave_date).exists():
+            raise serializers.ValidationError({
+                "leave_date": "You cannot mark leave on this date because there are existing appointments."
+            })
+
+        return data
 
 
 from masters.serializers import slot_serializer
@@ -249,7 +255,7 @@ class DoctorAvailabilityBulkSerializer(serializers.Serializer):
         slots_data = validated_data['slots']
 
         request = self.context.get("request")
-        
+
         try:
             doctor_instance = doctor.objects.get(user=request.user)
         except doctor.DoesNotExist:
