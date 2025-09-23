@@ -110,9 +110,16 @@ class AppointmentMedicineViewSet(viewsets.ModelViewSet):
             doctor_instance = doctor.objects.get(user=self.request.user)
         except doctor.DoesNotExist:
             return Appoinment_Medicine.objects.none()
+        
+        appointment_id = self.request.query_params.get("appointment_id")
 
-        return Appoinment_Medicine.objects.filter(doctor=doctor_instance)
+        if appointment_id:
 
+            return Appoinment_Medicine.objects.filter(appointment_id = appointment_id, doctor=doctor_instance)
+
+        raise serializers.ValidationError(
+                "Need to pass appointment_id parameter"
+            )
 
 
 
@@ -321,6 +328,10 @@ class LabWorkViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+
+        appointment_id = self.request.query_params.get("appointment_id")
+        if appointment_id:
+            return LabWork.objects.filter(appointment__id = appointment_id).order_by("-created_at")
         return LabWork.objects.all().order_by("-created_at")
 
     def perform_create(self, serializer):
