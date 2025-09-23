@@ -325,3 +325,15 @@ class InventoryProduct(models.Model):
         return f"{self.name} ({self.quantity})"
     
 
+
+
+
+class DoctorLeave(models.Model):
+    doctor = models.ForeignKey("doctor", on_delete=models.CASCADE)  # assuming doctor is a User
+    leave_date = models.DateField()
+
+    class Meta:
+        unique_together = ('doctor', 'leave_date')  # prevent duplicate leaves
+
+    def __str__(self):
+        return f"{self.doctor.username} - {self.leave_date}"

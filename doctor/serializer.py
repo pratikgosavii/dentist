@@ -20,7 +20,6 @@ class doctor_serializer(serializers.ModelSerializer):
         model = doctor
         fields = [
             "id",
-            "user",
             "first_name", "last_name", "email", "dob", "gender",
             "image",
             "phone_number", "clinic_name", "clinic_phone_number",
@@ -28,7 +27,6 @@ class doctor_serializer(serializers.ModelSerializer):
             "designation", "title", "degree", "specializations", "education", "about_doctor",
             "experience_years", "rating", "review_count", "remark", "is_active"
         ]
-        read_only_fields = ['user']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})
@@ -198,3 +196,31 @@ class DoctorEarningSerializer(serializers.Serializer):
     total_price = serializers.DecimalField(max_digits=12, decimal_places=2)
     received_amount = serializers.DecimalField(max_digits=12, decimal_places=2)
     pending_amount = serializers.DecimalField(max_digits=12, decimal_places=2)
+
+
+
+    
+class DoctorLeaveSerializer(serializers.ModelSerializer):
+    doctor_details = doctor_serializer(source = "doctor", read_only = True)
+    class Meta:
+        model = DoctorLeave
+        fields = ['id', 'doctor', 'leave_date', 'doctor_details']
+        read_only_fields = ['doctor']  
+    
+    
+    
+    def validate(self, data):
+        request_user = self.context['request'].user
+        try:
+            doctor_instance = doctor.objects.get(user=request_user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+        
+        leave_date = data['leave_date']
+        
+        if DoctorLeave.objects.filter(doctor=doctor_instance, leave_date=leave_date).exists():
+            raise serializers.ValidationError({
+                "leave_date": "You already marked this date as leave."
+            })
+        
+        return data

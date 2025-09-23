@@ -501,3 +501,27 @@ class list_patient(generics.ListAPIView):
         return User.objects.filter(
             appointments__doctor__user=self.request.user
         ).distinct()
+    
+
+
+    
+class DoctorLeaveViewSet(viewsets.ModelViewSet):
+    serializer_class = DoctorLeaveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+        # Only get leaves for logged-in doctor
+        return DoctorLeave.objects.filter(doctor=doctor_instance)
+
+    def perform_create(self, serializer):
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+        serializer.save(doctor=doctor_instance)
+
+   

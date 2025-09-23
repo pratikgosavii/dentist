@@ -25,6 +25,8 @@ router.register(r'inventory', InventoryProductViewSet, basename='inventory')
 
 router.register(r'appointment-ledgers', AppointmentLedgerViewSet, basename='appointment-ledger')
 
+router.register(r'doctor-leaves', DoctorLeaveViewSet, basename='doctor-leaves')
+
 appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
     'get': 'list',
     'post': 'create',
