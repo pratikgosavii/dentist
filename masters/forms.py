@@ -147,7 +147,7 @@ class home_banner_Form(forms.ModelForm):
 class HelpQuestion_Form(forms.ModelForm):
     class Meta:
         model = HelpQuestion
-        fields = ["question", "answer"]
+        fields = ["question", "answer", "for_doctor"]
         widgets = {
             "question": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Enter question"}

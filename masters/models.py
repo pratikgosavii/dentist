@@ -186,6 +186,7 @@ class TreatmentStep(models.Model):
 class HelpQuestion(models.Model):
     question = models.CharField(max_length=255)
     answer = models.TextField()  # stores HTML content
+    for_doctor = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

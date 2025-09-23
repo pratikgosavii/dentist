@@ -947,6 +947,7 @@ class get_faq(ListAPIView):
     queryset = HelpQuestion.objects.all()
     serializer_class = HelpQuestionSerializer
     filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['for_doctor'] 
 
 
 
