@@ -102,8 +102,7 @@ class DoctorAvailability(models.Model):
     ]
     
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
-    from_time = models.TimeField()
-    to_time = models.TimeField()
+    slot = models.ForeignKey("masters.slot", on_delete=models.CASCADE, related_name='doctor_slots')
     
     is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
     

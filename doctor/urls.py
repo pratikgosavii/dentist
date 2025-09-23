@@ -56,6 +56,8 @@ urlpatterns = [
     path('earnings/', DoctorEarningAPIView.as_view(), name='doctor-earning-api'),
     
     path('list-patient/', list_patient.as_view(), name='list_patient'),
+    
+    path('availability/', DoctorAvailabilityView.as_view()),   # POST
 
 
 

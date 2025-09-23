@@ -224,3 +224,58 @@ class DoctorLeaveSerializer(serializers.ModelSerializer):
             })
         
         return data
+
+
+
+from masters.serializers import slot_serializer
+
+class DoctorAvailabilitySerializer(serializers.ModelSerializer):
+    slot = slot_serializer()
+
+    class Meta:
+        model = DoctorAvailability
+        fields = ['id', 'day', 'slot', 'is_active']
+
+
+
+class DoctorAvailabilityBulkSerializer(serializers.Serializer):
+    doctor_id = serializers.IntegerField()
+    slots = serializers.ListField(
+        child=serializers.DictField()  
+    )
+
+    def create(self, validated_data):
+        doctor_id = validated_data['doctor_id']
+        slots_data = validated_data['slots']
+
+        # validate doctor exists
+        from doctor.models import doctor
+        if not doctor.objects.filter(id=doctor_id).exists():
+            raise serializers.ValidationError({"doctor_id": "Invalid doctor_id"})
+
+        objs = []
+        for day_slots in slots_data:
+            day = day_slots['day']
+            slot_ids = day_slots['slot_ids']
+
+            # validate slots exist
+            from masters.models import slot  # adjust import
+            valid_slots = set(slot.objects.filter(id__in=slot_ids).values_list("id", flat=True))
+            missing = set(slot_ids) - valid_slots
+            if missing:
+                raise serializers.ValidationError({"slot_ids": f"Invalid slot_ids: {list(missing)}"})
+
+            for slot_id in slot_ids:
+                objs.append(
+                    DoctorAvailability(
+                        doctor_id=doctor_id,
+                        day=day,
+                        slot_id=slot_id,
+                        is_active=True
+                    )
+                )
+
+        # Remove old slots for this doctor
+        DoctorAvailability.objects.filter(doctor_id=doctor_id).delete()
+
+        return DoctorAvailability.objects.bulk_create(objs)

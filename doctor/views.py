@@ -525,3 +525,23 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
         serializer.save(doctor=doctor_instance)
 
    
+
+
+   
+class DoctorAvailabilityView(APIView):
+    def post(self, request):
+        serializer = DoctorAvailabilityBulkSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Availability updated successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+        
+        slots = DoctorAvailability.objects.filter(doctor = doctor_instance)
+        serializer = DoctorAvailabilitySerializer(slots, many=True)
+        return Response(serializer.data)
