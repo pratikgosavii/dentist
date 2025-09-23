@@ -239,7 +239,6 @@ class DoctorAvailabilitySerializer(serializers.ModelSerializer):
 
 
 class DoctorAvailabilityBulkSerializer(serializers.Serializer):
-    doctor_id = serializers.IntegerField()
     slots = serializers.ListField(
         child=serializers.DictField()  
     )
