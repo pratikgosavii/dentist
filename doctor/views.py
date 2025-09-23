@@ -153,7 +153,7 @@ class AppointmentsListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, appointment_id=None):
-        # make sure the logged-in user is a doctor
+        # Ensure logged-in user is a doctor
         try:
             doctor_instance = doctor.objects.get(user=request.user)
         except doctor.DoesNotExist:
@@ -162,7 +162,8 @@ class AppointmentsListAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        if appointment_id:  # fetch single appointment
+        # Fetch single appointment by ID
+        if appointment_id:
             appointment = get_object_or_404(
                 Appointment,
                 id=appointment_id,
@@ -171,11 +172,19 @@ class AppointmentsListAPIView(APIView):
             serializer = AppointmentSerializer(appointment)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        # fetch all appointments
-        appointments = Appointment.objects.filter(
-            doctor=doctor_instance
-        ).order_by('-date')
+        # Fetch all appointments or filter by date
+        date_param = request.query_params.get('date')  # e.g., ?date=2025-09-24
+        appointments = Appointment.objects.filter(doctor=doctor_instance)
 
+        if date_param:
+            try:
+                filter_date = datetime.strptime(date_param, "%Y-%m-%d").date()
+                appointments = appointments.filter(date=filter_date)
+            except ValueError:
+                return Response({"error": "Invalid date format. Use YYYY-MM-DD."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+        appointments = appointments.order_by('-date')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -520,13 +529,48 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorLeaveSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    from datetime import date
+
+class DoctorLeaveViewSet(viewsets.ModelViewSet):
+    serializer_class = DoctorLeaveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
         try:
             doctor_instance = doctor.objects.get(user=self.request.user)
         except doctor.DoesNotExist:
-            raise serializers.ValidationError("You are not registered as a doctor.")
-        # Only get leaves for logged-in doctor
-        return DoctorLeave.objects.filter(doctor=doctor_instance)
+            return DoctorLeave.objects.none()
+        # Only future or today leaves for internal queryset
+        return DoctorLeave.objects.filter(doctor=doctor_instance, leave_date__gte=date.today())
+
+    def list(self, request, *args, **kwargs):
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response({"error": "You are not registered as a doctor."}, status=400)
+
+        # Only today and future leaves
+        leave_dates = list(
+            DoctorLeave.objects.filter(doctor=doctor_instance, leave_date__gte=date.today())
+            .values_list('leave_date', flat=True)
+        )
+        print(date.today())
+        # Only today and future appointments
+        appointment_dates = list(
+            Appointment.objects.filter(
+                doctor=doctor_instance,
+                date__gte=date.today()
+            )
+            .values_list('date', flat=True)
+            .distinct()
+        )
+
+        return Response({
+            "leave_dates": leave_dates,
+            "appointment_dates": appointment_dates
+        })
+    
+
 
     def perform_create(self, serializer):
         try:

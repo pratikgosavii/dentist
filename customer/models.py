@@ -89,8 +89,7 @@ class Appointment(models.Model):
     # Meta info
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Appointment for {self.full_name} on {self.date} at {self.time}"
+    
 
 
 
