@@ -167,7 +167,7 @@ class AppointmentsListAPIView(APIView):
         # fetch all appointments
         appointments = Appointment.objects.filter(
             doctor=doctor_instance
-        ).order_by('-date', '-time')
+        ).order_by('-date')
 
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
