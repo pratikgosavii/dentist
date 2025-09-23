@@ -83,13 +83,6 @@ class Appointment(models.Model):
     slot = models.ForeignKey(slot, on_delete=models.CASCADE, related_name="slot", null = True, blank=True)
 
 
-    # Patient details
-    full_name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
-    email = models.EmailField(blank=True, null=True)
-    dob = models.DateField()
-    age = models.PositiveIntegerField()
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
 
     concern = models.TextField(blank=True, null=True)
 

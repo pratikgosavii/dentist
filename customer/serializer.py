@@ -1,8 +1,10 @@
 
+from numpy import source
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
 from masters.serializers import slot_serializer
+from users.serializer import UserProfileSerializer
 
 
 from .models import *
@@ -52,6 +54,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
     slot_details = slot_serializer(source="slot", read_only= True)
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
+    customer_details = UserProfileSerializer(source="user", read_only=True)
     class Meta:
         model = Appointment
         fields = [
@@ -63,16 +66,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "status_display",
             "date",
             "slot",
-            "full_name",
-            "phone_number",
-            "email",
-            "dob",
-            "age",
-            "gender",
+            "customer_details",
+          
             "concern",
             "created_at",
         ]
-        read_only_fields = ["created_at"]
+        read_only_fields = ["created_at", "customer_details"]
 
     
 
