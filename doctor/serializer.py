@@ -247,8 +247,11 @@ class DoctorAvailabilityBulkSerializer(serializers.Serializer):
         
         from doctor.models import doctor
         slots_data = validated_data['slots']
+
+        request = self.context.get("request")
+        
         try:
-            doctor_instance = doctor.objects.get(user=self.request.user)
+            doctor_instance = doctor.objects.get(user=request.user)
         except doctor.DoesNotExist:
             raise serializers.ValidationError("You are not registered as a doctor.")
      

@@ -59,7 +59,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "doctor",
             "slot_details",
             "appointment_type",
-            "booking_for",
             "status", 
             "status_display",
             "date",

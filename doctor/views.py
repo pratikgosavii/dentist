@@ -530,7 +530,7 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
    
 class DoctorAvailabilityView(APIView):
     def post(self, request):
-        serializer = DoctorAvailabilityBulkSerializer(data=request.data)
+        serializer = DoctorAvailabilityBulkSerializer( data=request.data, context={"request": request}  )
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Availability updated successfully"}, status=status.HTTP_201_CREATED)
