@@ -245,14 +245,14 @@ class DoctorAvailabilityBulkSerializer(serializers.Serializer):
     )
 
     def create(self, validated_data):
-        doctor_id = validated_data['doctor_id']
-        slots_data = validated_data['slots']
-
-        # validate doctor exists
+        
         from doctor.models import doctor
-        if not doctor.objects.filter(id=doctor_id).exists():
-            raise serializers.ValidationError({"doctor_id": "Invalid doctor_id"})
-
+        slots_data = validated_data['slots']
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            raise serializers.ValidationError("You are not registered as a doctor.")
+     
         objs = []
         for day_slots in slots_data:
             day = day_slots['day']
@@ -268,7 +268,7 @@ class DoctorAvailabilityBulkSerializer(serializers.Serializer):
             for slot_id in slot_ids:
                 objs.append(
                     DoctorAvailability(
-                        doctor_id=doctor_id,
+                        doctor=doctor_instance,
                         day=day,
                         slot_id=slot_id,
                         is_active=True
@@ -276,6 +276,6 @@ class DoctorAvailabilityBulkSerializer(serializers.Serializer):
                 )
 
         # Remove old slots for this doctor
-        DoctorAvailability.objects.filter(doctor_id=doctor_id).delete()
+        DoctorAvailability.objects.filter(doctor=doctor_instance).delete()
 
         return DoctorAvailability.objects.bulk_create(objs)
