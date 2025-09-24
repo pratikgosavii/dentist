@@ -469,11 +469,33 @@ class AppointmentLedgerViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 
+class ExpenseViewSet(viewsets.ModelViewSet):
+    serializer_class = ExpenseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # show ledgers only for expenses belonging to this doctor
+        user = self.request.user
+        if hasattr(user, "is_doctor"):
+
+            # if expense id is passed, filter further
+           
+            return Expense.objects.filter(user=user)
+        else:
+
+            return Response({"error": "You are not a doctor."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def perform_create(self, serializer):
+        # ensure ledger belongs to a doctor’s appointment
+        serializer.save(user=self.request.user)
+
+
 
 
 from django.db.models import Sum
 
-class DoctorEarningAPIView(APIView):
+class DoctorReportAPIView(APIView):
     """
     API view to return earnings report for the logged-in doctor.
     """
@@ -485,6 +507,7 @@ class DoctorEarningAPIView(APIView):
         except doctor.DoesNotExist:
             return Response({"detail": "Doctor profile not found."}, status=404)
 
+        # Appointments
         appointments = Appointment.objects.filter(doctor=doctor_instance).prefetch_related(
             'treatments__steps', 'ledgers'
         )
@@ -507,8 +530,13 @@ class DoctorEarningAPIView(APIView):
                 "pending_amount": pending_amount
             })
 
-        return Response(report)
+        # Expenses
+        expenses = Expense.objects.filter(user=request.user).values("id", "title", "amount", "date")
 
+        return Response({
+            "appointments": report,
+            "expenses": list(expenses)   # serialize queryset to list of dicts
+        })
 
 
    

@@ -25,6 +25,8 @@ router.register(r'inventory', InventoryProductViewSet, basename='inventory')
 
 router.register(r'appointment-ledgers', AppointmentLedgerViewSet, basename='appointment-ledger')
 
+router.register(r'expense', ExpenseViewSet, basename='expense')
+
 router.register(r'doctor-leaves', DoctorLeaveViewSet, basename='doctor-leaves')
 
 appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
@@ -53,7 +55,7 @@ urlpatterns = [
     path("appointments/<int:appointment_id>/treatments/", appointment_treatment_list, name="appointment-treatment-list"),
     path("appointments/<int:appointment_id>/treatments/<int:pk>/", appointment_treatment_detail, name="appointment-treatment-detail" ),
     
-    path('earnings/', DoctorEarningAPIView.as_view(), name='doctor-earning-api'),
+    path('report/', DoctorReportAPIView.as_view(), name='doctor-report-api'),
     
     path('list-patient/', list_patient.as_view(), name='list_patient'),
     

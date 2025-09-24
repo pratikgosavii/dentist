@@ -224,6 +224,17 @@ class AppointmentLedger(models.Model):
         return f"{self.title} - {self.amount} ({self.date})"
 
 
+class Expense(models.Model):
+    
+    user = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField(auto_now_add=True)  # default today if not provided
+
+    def __str__(self):
+        return f"{self.title} - {self.amount} ({self.date})"
+
+
 
 class AppointmentDocument(models.Model):
     appointment = models.ForeignKey(

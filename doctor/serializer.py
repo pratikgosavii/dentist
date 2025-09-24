@@ -180,6 +180,14 @@ class AppointmentLedgerSerializer(serializers.ModelSerializer):
 
 
 
+        
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = ["id", "title", "amount", "date"]
+
+
+
 
 class DoctorEarningSerializer(serializers.Serializer):
     appointment_id = serializers.IntegerField()
