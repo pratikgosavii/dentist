@@ -109,13 +109,6 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
         # sum of all step prices (change filter if you only want completed steps)
         return sum(step.price for step in obj.steps.all())
     
-    def get_remaining_amount(self, obj):
-        # sum of all step prices (change filter if you only want completed steps)
-        total_price = sum(step.price for step in obj.steps.all())
-        ledger_total = obj.appointment.ledgers.aggregate(
-            total=models.Sum("amount")
-        )["total"] or 0
-        return total_price - ledger_total
 
     def create(self, validated_data):
         steps_data = validated_data.pop("steps", [])

@@ -49,11 +49,22 @@ class customer_serializer(serializers.ModelSerializer):
 from doctor.models import *
 
 
+from django.db.models import Sum
+
+
+
 class AppointmentSerializer(serializers.ModelSerializer):
-    slot_details = slot_serializer(source="slot", read_only= True)
+    
+    slot_details = slot_serializer(source="slot", read_only=True)
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     customer_details = UserProfileSerializer(source="user", read_only=True)
+
+    # ✅ add SerializerMethodFields here
+    total_amount = serializers.SerializerMethodField()
+    ledger_paid = serializers.SerializerMethodField()
+    remaining_amount = serializers.SerializerMethodField()
+
     class Meta:
         model = Appointment
         fields = [
@@ -66,12 +77,28 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "date",
             "slot",
             "customer_details",
-          
             "concern",
             "created_at",
+
+            # ✅ include new fields in output
+            "total_amount",
+            "ledger_paid",
+            "remaining_amount",
         ]
         read_only_fields = ["created_at", "customer_details"]
 
+    def get_total_amount(self, obj):
+        return AppointmentTreatmentStep.objects.filter(
+            appointment_treatment__appointment=obj
+        ).aggregate(total=Sum("price"))["total"] or 0
+
+    def get_ledger_paid(self, obj):
+        return obj.ledgers.aggregate(total=Sum("amount"))["total"] or 0
+
+    def get_remaining_amount(self, obj):
+        total = self.get_total_amount(obj)
+        paid = self.get_ledger_paid(obj)
+        return total - paid
     
 
 
