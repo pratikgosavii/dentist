@@ -147,3 +147,53 @@ class SupportTicketViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save(ticket=ticket, sender=request.user)
             return Response(serializer.data, status=201)
+
+
+
+from datetime import date, timedelta
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+
+from doctor.models import doctor, DoctorAvailability, DoctorLeave
+
+
+
+class DoctorWeeklyAvailabilityAPIView(APIView):
+    permission_classes = [IsAuthenticated]   # if patients also call, you can remove/adjust
+
+    def get(self, request, doctor_id, *args, **kwargs):
+        # find doctor by id
+        doctor_instance = get_object_or_404(doctor, id=doctor_id)
+
+        today = date.today()
+        next_7_days = [today + timedelta(days=i) for i in range(7)]
+
+        # doctor leaves
+        leave_dates = set(
+            DoctorLeave.objects.filter(
+                doctor=doctor_instance,
+                leave_date__in=next_7_days
+            ).values_list("leave_date", flat=True)
+        )
+
+        availability_response = []
+
+        for d in next_7_days:
+            if d in leave_dates:
+                continue  # skip leave date
+
+            weekday = d.strftime("%A")  # "Monday", "Tuesday", etc.
+            slots = DoctorAvailability.objects.filter(
+                doctor=doctor_instance,
+                day=weekday,
+                is_active=True
+            ).values("slot__id", "slot__start", "slot__end")
+
+            availability_response.append({
+                "date": d,
+                "slots": list(slots)
+            })
+
+        return Response(availability_response)

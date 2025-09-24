@@ -88,7 +88,6 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
     Appointment_details = AppointmentSerializer(source="appointment", read_only=True)
     total_price = serializers.SerializerMethodField()
-    remaining_amount = serializers.SerializerMethodField()
 
     class Meta:
         model = AppointmentTreatment
@@ -101,7 +100,6 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
             "steps",
             "Appointment_details",
             "total_price",
-            "remaining_amount",
         ]
         read_only_fields = ["doctor", "appointment"]
 

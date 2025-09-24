@@ -88,27 +88,7 @@ class Clinic(models.Model):
 
 
 # Availability model
-class DoctorAvailability(models.Model):
-    doctor = models.ForeignKey('doctor', on_delete=models.CASCADE, related_name='availabilities')
-    
-    DAY_CHOICES = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    ]
-    
-    day = models.CharField(max_length=10, choices=DAY_CHOICES)
-    slot = models.ForeignKey("masters.slot", on_delete=models.CASCADE, related_name='doctor_slots')
-    
-    is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
-    
-    def __str__(self):
-        return f"{self.doctor.name} - {self.day}: {self.from_time} to {self.to_time}"
-    
+
 
 
 
@@ -336,7 +316,27 @@ class InventoryProduct(models.Model):
     
 
 
-
+class DoctorAvailability(models.Model):
+    doctor = models.ForeignKey('doctor', on_delete=models.CASCADE, related_name='availabilities')
+    
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+        ('Sunday', 'Sunday'),
+    ]
+    
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    slot = models.ForeignKey("masters.slot", on_delete=models.CASCADE, related_name='doctor_slots')
+    
+    is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
+    
+    def __str__(self):
+        return f"{self.doctor.name} - {self.day}: {self.from_time} to {self.to_time}"
+    
 
 class DoctorLeave(models.Model):
     doctor = models.ForeignKey("doctor", on_delete=models.CASCADE)  # assuming doctor is a User
@@ -347,3 +347,4 @@ class DoctorLeave(models.Model):
 
     def __str__(self):
         return f"{self.doctor.username} - {self.leave_date}"
+    

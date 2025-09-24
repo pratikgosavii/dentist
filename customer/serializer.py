@@ -87,6 +87,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["created_at", "customer_details"]
 
+    def validate_date(self, value):
+        if value < date.today():
+            raise serializers.ValidationError("Appointment date cannot be in the past.")
+        return value
+    
+
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
             appointment_treatment__appointment=obj

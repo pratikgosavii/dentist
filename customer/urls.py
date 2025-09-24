@@ -23,6 +23,8 @@ urlpatterns = [
             name="appointment-medicine-list",
         ),
 
+    path("doctors/<int:doctor_id>/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
+
 ] + router.urls 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

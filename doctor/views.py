@@ -110,18 +110,20 @@ class AppointmentMedicineViewSet(viewsets.ModelViewSet):
             doctor_instance = doctor.objects.get(user=self.request.user)
         except doctor.DoesNotExist:
             return Appoinment_Medicine.objects.none()
-        
+
+        # if accessing a single object (detail view)
+        if self.action in ["retrieve", "update", "partial_update", "destroy"]:
+            return Appoinment_Medicine.objects.filter(doctor=doctor_instance)
+
+        # if listing, require appointment_id
         appointment_id = self.request.query_params.get("appointment_id")
-
         if appointment_id:
-
-            return Appoinment_Medicine.objects.filter(appointment_id = appointment_id, doctor=doctor_instance)
-
-        raise serializers.ValidationError(
-                "Need to pass appointment_id parameter"
+            return Appoinment_Medicine.objects.filter(
+                appointment_id=appointment_id,
+                doctor=doctor_instance
             )
 
-
+        raise serializers.ValidationError("Need to pass appointment_id parameter for list view")
 
 
 
@@ -628,3 +630,7 @@ class DoctorAvailabilityView(APIView):
         slots = DoctorAvailability.objects.filter(doctor = doctor_instance)
         serializer = DoctorAvailabilitySerializer(slots, many=True)
         return Response(serializer.data)
+    
+
+
+    
