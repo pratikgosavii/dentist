@@ -254,8 +254,36 @@ from rest_framework.decorators import action
 
 
 class DoctorAppointmentViewSet(viewsets.ModelViewSet):
-    serializer_class = AppointmentSerializer
+    serializer_class = DoctorAppointmentSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+    def perform_create(self, serializer):
+        """
+        Doctor is always taken from request.user (must be a doctor).
+        User (patient) is passed in request body as 'user'.
+        """
+        # ✅ fetch doctor from logged-in user
+        try:
+            doctor_instance = self.request.user.doctor
+        except doctor.DoesNotExist:
+            return Response(
+                {"error": "Only doctors can create appointments."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # ✅ fetch patient user
+        user_id = self.request.data.get("user")
+        if not user_id:
+            return Response(
+                {"error": "User (patient) is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        patient_user = get_object_or_404(User, id=user_id)
+
+        # ✅ save appointment with doctor + patient
+        serializer.save(user=patient_user, doctor=doctor_instance)
     
     def get_queryset(self):
         # Doctor sees only their own appointments
