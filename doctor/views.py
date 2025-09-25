@@ -451,8 +451,10 @@ class DoctorVerifyCustomerOTP(APIView):
         if not request.user.is_doctor:
             return Response({"error": "Only doctors can view their customers."}, status=403)
 
-        return customer.objects.all().select_related("user")
-
+        customers = customer.objects.all()
+        serializer = customer_serializer(customers, many=True)  # ✅ use serializer
+        return Response(serializer.data, status=200)
+    
 
 
 class AppointmentLedgerViewSet(viewsets.ModelViewSet):
