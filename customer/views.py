@@ -164,13 +164,11 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
     permission_classes = [IsAuthenticated]   # if patients also call, you can remove/adjust
 
     def get(self, request, doctor_id, *args, **kwargs):
-        # find doctor by id
         doctor_instance = get_object_or_404(doctor, id=doctor_id)
 
         today = date.today()
         next_7_days = [today + timedelta(days=i) for i in range(7)]
 
-        # doctor leaves
         leave_dates = set(
             DoctorLeave.objects.filter(
                 doctor=doctor_instance,
@@ -182,18 +180,24 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
 
         for d in next_7_days:
             if d in leave_dates:
-                continue  # skip leave date
+                continue
 
-            weekday = d.strftime("%A")  # "Monday", "Tuesday", etc.
-            slots = DoctorAvailability.objects.filter(
+            weekday = d.strftime("%A")
+
+            # get active availability for that doctor and weekday
+            availabilities = DoctorAvailability.objects.filter(
                 doctor=doctor_instance,
                 day=weekday,
                 is_active=True
-            ).values("slot__id", "slot__start", "slot__end")
+            ).select_related("slot")
+
+            # use your SlotSerializer
+            slots = [availability.slot for availability in availabilities]
+            serialized_slots = slot_serializer(slots, many=True).data
 
             availability_response.append({
                 "date": d,
-                "slots": list(slots)
+                "slots": serialized_slots
             })
 
         return Response(availability_response)
