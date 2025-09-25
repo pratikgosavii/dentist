@@ -328,6 +328,9 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         data = UserProfileSerializer(users, many=True).data
         return Response(data)
     
+
+
+    
 class LabViewSet(viewsets.ModelViewSet):
     queryset = Lab.objects.all()
     serializer_class = LabSerializer
@@ -443,6 +446,12 @@ class DoctorVerifyCustomerOTP(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request):
+        """Return all customers created by this doctor"""
+        if not request.user.is_doctor:
+            return Response({"error": "Only doctors can view their customers."}, status=403)
+
+        customers = customer.objects.all().select_related("user")
 
 
 
