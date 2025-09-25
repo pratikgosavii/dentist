@@ -451,7 +451,7 @@ class DoctorVerifyCustomerOTP(APIView):
         if not request.user.is_doctor:
             return Response({"error": "Only doctors can view their customers."}, status=403)
 
-        customers = customer.objects.all().select_related("user")
+        return customer.objects.all().select_related("user")
 
 
 
