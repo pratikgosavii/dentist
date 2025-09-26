@@ -212,13 +212,24 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
 
     
 
-class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
+class customer_treatment_list(viewsets.ReadOnlyModelViewSet):
     serializer_class = AppointmentTreatmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        try:
-            doctor_instance = doctor.objects.get(user=self.request.user)
-        except doctor.DoesNotExist:
-            return AppointmentTreatment.objects.none()
-        return AppointmentTreatment.objects.filter(doctor=doctor_instance)
+        user = self.request.user
+        appointment_id = self.request.query_params.get("appointment_id")
+
+        # ✅ Only treatments for this customer's appointments
+        qs = AppointmentTreatment.objects.filter(appointment__user=user)
+
+        if appointment_id:
+            qs = qs.filter(appointment_id=appointment_id)
+
+        return qs
+
+    def retrieve(self, request, *args, **kwargs):
+        # ❌ disable detail view
+        from rest_framework.response import Response
+        from rest_framework import status
+        return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)

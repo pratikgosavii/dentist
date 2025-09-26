@@ -15,9 +15,7 @@ router.register(r'doctors-list', DoctorViewSet, basename='doctors-list')
 
 router.register(r'support/tickets', SupportTicketViewSet, basename='support-ticket')
 
-appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
-    'get': 'list',
-})
+router.register(r"treatments", customer_treatment_list, basename="customer-treatments")
 
 
 urlpatterns = [
@@ -29,11 +27,6 @@ urlpatterns = [
         ),
 
     path("doctors/<int:doctor_id>/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
-
-
-
-    path("appointments/<int:appointment_id>/treatments/", appointment_treatment_list, name="appointment-treatment-list"),
-
 
 
 ] + router.urls 

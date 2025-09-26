@@ -29,22 +29,12 @@ router.register(r'expense', ExpenseViewSet, basename='expense')
 
 router.register(r'doctor-leaves', DoctorLeaveViewSet, basename='doctor-leaves')
 
-appointment_treatment_list = AppointmentTreatmentViewSet.as_view({
-    'get': 'list',
-    'post': 'create',
-})
-
-appointment_treatment_detail = AppointmentTreatmentViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy',
-})
+router.register(r'appointment/treatments', AppointmentTreatmentViewSet, basename='appointment-treatment')
 
 
 urlpatterns = [
 
-
+  
     path("list-treatments/", TreatmentAPIView.as_view(), name="list_treatement"),
     
     path("list-appointment/", AppointmentsListAPIView.as_view(), name="list-customer-appointment"),
@@ -52,8 +42,6 @@ urlpatterns = [
     
     path("create-customer/", DoctorVerifyCustomerOTP.as_view(), name="DoctorVerifyCustomerOTP"),
 
-    path("appointments/<int:appointment_id>/treatments/", appointment_treatment_list, name="appointment-treatment-list"),
-    path("appointments/<int:appointment_id>/treatments/<int:pk>/", appointment_treatment_detail, name="appointment-treatment-detail" ),
     
     path('report/', DoctorReportAPIView.as_view(), name='doctor-report-api'),
     

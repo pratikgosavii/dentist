@@ -207,20 +207,51 @@ class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        try:
-            doctor_instance = doctor.objects.get(user=self.request.user)
-        except doctor.DoesNotExist:
+        """
+        Return treatments for the logged-in doctor,
+        optionally filtered by ?appointment_id=.
+        """
+        doctor_instance = doctor.objects.filter(user=self.request.user).first()
+        if not doctor_instance:
             return AppointmentTreatment.objects.none()
-        return AppointmentTreatment.objects.filter(doctor=doctor_instance)
+
+        qs = AppointmentTreatment.objects.filter(doctor=doctor_instance)
+
+        appointment_id = self.request.query_params.get("appointment_id")
+        if appointment_id:
+            qs = qs.filter(appointment_id=appointment_id)
+
+        return qs
 
     def perform_create(self, serializer):
-        # ensure doctor owns appointment
+        """
+        Create a treatment for the given appointment_id (passed in query params).
+        """
         doctor_instance = get_object_or_404(doctor, user=self.request.user)
-        appointment_id = self.kwargs.get("appointment_id")
+
+        appointment_id = self.request.query_params.get("appointment_id")
+        if not appointment_id:
+            raise ValidationError({"appointment_id": "This query param is required."})
+
         appointment = get_object_or_404(Appointment, id=appointment_id, doctor=doctor_instance)
 
         serializer.save(doctor=doctor_instance, appointment=appointment)
-        
+
+    def perform_update(self, serializer):
+        """
+        Update a treatment, ensuring appointment_id in params still matches.
+        """
+        doctor_instance = get_object_or_404(doctor, user=self.request.user)
+
+        appointment_id = self.request.query_params.get("appointment_id")
+        if not appointment_id:
+            raise ValidationError({"appointment_id": "This query param is required."})
+
+        appointment = get_object_or_404(Appointment, id=appointment_id, doctor=doctor_instance)
+
+        serializer.save(doctor=doctor_instance, appointment=appointment)
+
+
 
 
         
