@@ -35,14 +35,14 @@ from rest_framework.exceptions import ValidationError
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from .models import doctor
 
 class DoctorViewSet(mixins.RetrieveModelMixin,
                              mixins.UpdateModelMixin,
                              viewsets.GenericViewSet):
     serializer_class = doctor_serializer
-    parser_classes = [MultiPartParser, JSONParser]
+    parser_classes = [MultiPartParser, JSONParser, FormParser]
     permission_classes = [IsAuthenticated]
 
 

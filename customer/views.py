@@ -36,7 +36,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, JSONParser
+from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from django.shortcuts import get_object_or_404
 from .models import customer
 from rest_framework.decorators import action
@@ -47,7 +47,7 @@ class customerViewSet(
     viewsets.GenericViewSet
 ):
     serializer_class = customer_serializer
-    parser_classes = [MultiPartParser, JSONParser]
+    parser_classes = [MultiPartParser, JSONParser, FormParser]
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
@@ -83,10 +83,16 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
 
 
-class DoctorViewSet(viewsets.ReadOnlyModelViewSet):  
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
+class DoctorViewSet(viewsets.ModelViewSet):
     queryset = doctor.objects.all().order_by("id")
     serializer_class = doctor_serializer
     permission_classes = [permissions.AllowAny]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    # ✅ Allow only GET methods
+    http_method_names = ['get']
 
 
 from rest_framework import generics, permissions
