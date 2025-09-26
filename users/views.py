@@ -171,7 +171,7 @@ class LoginAPIView(APIView):
                 print('--------------------')
                 print(user_type)
                 # Set user type flags based on frontend
-                if user_type == "vendor":
+                if user_type == "doctor":
                     print('-----1---------------')
 
                     user.is_doctor = True
