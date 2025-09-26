@@ -114,8 +114,7 @@ class AppointmentMedicineListView(generics.ListAPIView):
         except Appointment.DoesNotExist:
             raise PermissionDenied("Appointment does not exist.")
 
-        if appointment.user != self.request.user:
-            raise PermissionDenied("You are not allowed to view medicines for this appointment.")
+       
 
         return Appoinment_Medicine.objects.filter(appointment=appointment)
     
