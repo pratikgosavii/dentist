@@ -16,13 +16,13 @@ class doctor_serializer(serializers.ModelSerializer):
     dob = serializers.DateField(source='user.dob', required=False, allow_null=True)
     profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
     gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
-
+    users_details = UserProfileSerializer(source = 'user', read_only = True)
     class Meta:
         model = doctor
         fields = [
             "id",
             "first_name", "last_name", "email", "dob", "gender", "profile_photo",
-            "image",
+            "image", "users_details",
             "phone_number", "clinic_name", "clinic_phone_number",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
