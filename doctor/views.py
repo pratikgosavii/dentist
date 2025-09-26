@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 
 
+from customer.serializer import AppointmentSerializer
 from masters.serializers import TreatmentSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -675,12 +676,13 @@ class DoctorAvailabilityView(APIView):
     
 
 
+from datetime import date, timedelta
     
 class DoctorWeeklyAvailabilityAPIView(APIView):
     permission_classes = [IsAuthenticated]   # if patients also call, you can remove/adjust
 
     def get(self, request, doctor_id, *args, **kwargs):
-        doctor_instance = get_object_or_404(doctor, id=doctor_id)
+        doctor_instance = get_object_or_404(doctor, user=request.user)
 
         today = date.today()
         next_7_days = [today + timedelta(days=i) for i in range(7)]
