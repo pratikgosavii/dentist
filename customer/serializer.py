@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
+from doctor.serializer import AppointmentMedicineSerializer
 from masters.serializers import slot_serializer
 from users.serializer import UserProfileSerializer
 
@@ -54,17 +55,20 @@ from django.db.models import Sum
 
 
 
+
 class AppointmentSerializer(serializers.ModelSerializer):
+    
     
     slot_details = slot_serializer(source="slot", read_only=True)
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     customer_details = UserProfileSerializer(source="user", read_only=True)
 
-    # ✅ add SerializerMethodFields here
     total_amount = serializers.SerializerMethodField()
     ledger_paid = serializers.SerializerMethodField()
     remaining_amount = serializers.SerializerMethodField()
+    medicines = serializers.SerializerMethodField()
+    documents = serializers.SerializerMethodField()  # add documents field
 
     class Meta:
         model = Appointment
@@ -80,11 +84,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "customer_details",
             "concern",
             "created_at",
-
-            # ✅ include new fields in output
             "total_amount",
             "ledger_paid",
             "remaining_amount",
+            "medicines",
+            "documents",  # include documents in output
         ]
         read_only_fields = ["created_at", "customer_details"]
 
@@ -92,7 +96,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
         if value < date.today():
             raise serializers.ValidationError("Appointment date cannot be in the past.")
         return value
-    
 
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
@@ -106,7 +109,17 @@ class AppointmentSerializer(serializers.ModelSerializer):
         total = self.get_total_amount(obj)
         paid = self.get_ledger_paid(obj)
         return total - paid
-    
+
+    def get_medicines(self, obj):
+        medicines_qs = Appoinment_Medicine.objects.filter(appointment=obj)
+        return AppointmentMedicineSerializer(medicines_qs, many=True).data
+
+    def get_documents(self, obj):
+        from doctor.serializer import AppointmentDocumentSerializer
+        docs_qs = AppointmentDocument.objects.filter(appointment=obj)
+        return AppointmentDocumentSerializer(docs_qs, many=True).data
+
+
 
 
 from .models import SupportTicket, TicketMessage

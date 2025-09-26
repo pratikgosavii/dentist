@@ -1,10 +1,12 @@
 
+from datetime import date
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
+from users.serializer import UserProfileSerializer
+
 
 from .models import *
-from customer.serializer import *
 from rest_framework import serializers
 
 
@@ -60,13 +62,11 @@ class medicine_serializer(serializers.ModelSerializer):
 
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
-    Appointment_details = AppointmentSerializer(source = "appointment",  read_only=True)
     medicine_details = medicine_serializer(source="medicine", read_only=True)
     class Meta:
         model = Appoinment_Medicine
         fields = "__all__"
-        read_only_fields = ["user", "doctor", "Appointment_details", "medicine_details"]
-    depth =1
+        read_only_fields = ["user", "doctor", "medicine_details"]
 
 
 class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
@@ -85,7 +85,14 @@ class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
         read_only_fields = ["date"]
 
 
+from django.db.models import Sum
+
+
 class AppointmentTreatmentSerializer(serializers.ModelSerializer):
+
+    from customer.serializer import AppointmentSerializer
+
+
     steps = AppointmentTreatmentStepSerializer(many=True)
     Appointment_details = AppointmentSerializer(source="appointment", read_only=True)
     total_price = serializers.SerializerMethodField()
@@ -199,8 +206,11 @@ class DoctorEarningSerializer(serializers.Serializer):
 
 
 
+from customer.models import Appointment
     
 class DoctorLeaveSerializer(serializers.ModelSerializer):
+
+
     doctor_details = doctor_serializer(source = "doctor", read_only = True)
     class Meta:
         model = DoctorLeave

@@ -61,6 +61,7 @@ urlpatterns = [
     
     path('availability/', DoctorAvailabilityView.as_view()),   # POST
 
+    path("doctors/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
 
 
 ] + router.urls 
