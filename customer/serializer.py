@@ -15,6 +15,7 @@ class customer_serializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', allow_blank=True, required=False)
     dob = serializers.DateField(source='user.dob', required=False, allow_null=True)
     gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
+    profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
 
     # Read-only fields
     age = serializers.ReadOnlyField(source="user.age")
@@ -23,7 +24,7 @@ class customer_serializer(serializers.ModelSerializer):
     class Meta:
         model = customer
         fields = [
-            'id', 'patient_id', 'is_active',
+            'id', 'patient_id', 'is_active', 'profile_photo',
             'first_name', 'last_name', 'email', 'dob', 'gender', 'age'
         ]
 
