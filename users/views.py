@@ -175,13 +175,13 @@ class LoginAPIView(APIView):
                     print('-----1---------------')
 
                     user.is_doctor = True
-                    doctor.objects.create(user=user)  
+                    doctor.objects.create(user=user, is_active = True)  
 
                 elif user_type == "customer":
                     print('--------2------------')
                 
                     user.is_customer = True
-                    customer.objects.create(user=user)  
+                    customer.objects.create(user=user, is_active = True)  
 
                 user.save()
 
