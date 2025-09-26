@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 
 
 
-from doctor.serializer import doctor_serializer
+from doctor.serializer import AppointmentTreatmentSerializer, doctor_serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -207,3 +207,18 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
             })
 
         return Response(availability_response)
+    
+
+
+    
+
+class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
+    serializer_class = AppointmentTreatmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        try:
+            doctor_instance = doctor.objects.get(user=self.request.user)
+        except doctor.DoesNotExist:
+            return AppointmentTreatment.objects.none()
+        return AppointmentTreatment.objects.filter(doctor=doctor_instance)
