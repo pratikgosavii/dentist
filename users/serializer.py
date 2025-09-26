@@ -20,6 +20,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'id',
             'firebase_uid',
             'mobile',
+            'profile_photo',
             'first_name',
             'last_name',
             'email',

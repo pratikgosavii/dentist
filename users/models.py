@@ -37,7 +37,7 @@ class User(AbstractUser):
     dob = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True, blank=True)
     address = models.CharField(max_length=225, null=True, blank=True)
-
+    profile_photo = models.ImageField(upload_to="user_image/", blank=True, null=True)
     is_customer = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
 

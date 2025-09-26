@@ -478,7 +478,7 @@ class DoctorVerifyCustomerOTP(APIView):
         """Return all customers created by this doctor"""
         if not request.user.is_doctor:
             return Response({"error": "Only doctors can view their customers."}, status=403)
-
+        print(customer.objects.count())
         customers = customer.objects.all()
         serializer = customer_serializer(customers, many=True)  # ✅ use serializer
         return Response(serializer.data, status=200)
