@@ -29,8 +29,7 @@ class doctor(models.Model):
         ("Male", "Male"), ("Female", "Female"), ("Other", "Other")
     ], blank=True, null=True)
 
-    # Contact & Clinic Info
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    
     clinic_name = models.CharField(max_length=150, blank=True, null=True)
     clinic_phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)

@@ -23,7 +23,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "id",
             "first_name", "last_name", "email", "dob", "gender", "profile_photo",
             "image", "users_details",
-            "phone_number", "clinic_name", "clinic_phone_number",
+            "clinic_name", "clinic_phone_number",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
             "experience_years", "rating", "review_count", "remark", "is_active"
