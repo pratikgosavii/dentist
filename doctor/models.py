@@ -59,8 +59,7 @@ class doctor(models.Model):
     remark = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
-    def __str__(self):
-        return self.user.first_name
+    
     
     
     
@@ -334,8 +333,7 @@ class DoctorAvailability(models.Model):
     
     is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
     
-    def __str__(self):
-        return f"{self.doctor.name} - {self.day}: {self.from_time} to {self.to_time}"
+    
     
 
 class DoctorLeave(models.Model):
@@ -345,6 +343,5 @@ class DoctorLeave(models.Model):
     class Meta:
         unique_together = ('doctor', 'leave_date')  # prevent duplicate leaves
 
-    def __str__(self):
-        return f"{self.doctor.username} - {self.leave_date}"
+   
     
