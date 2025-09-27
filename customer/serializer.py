@@ -1,4 +1,5 @@
 
+from numpy import source
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
@@ -218,9 +219,10 @@ class SupportTicketSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    appointment_details = AppointmentSerializer(source="appointment")
     class Meta:
         model = Review
-        fields = ["id", "appointment", "rating", "comment", "created_at"]
+        fields = ["id", "appointment", "rating", "comment", "appointment", "created_at"]
         read_only_fields = ["created_at"]
 
     def validate(self, data):
