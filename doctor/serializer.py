@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from .models import *
 from customer.serializer import *
 from rest_framework import serializers
-
+from users.serializer import UserProfileSerializer
 
 class doctor_serializer(serializers.ModelSerializer):
     # User fields — readable & writable
@@ -58,6 +58,7 @@ class medicine_serializer(serializers.ModelSerializer):
         return medicine.objects.create(**validated_data)
     
 
+from customer.serializer import AppointmentSerializer
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
     Appointment_details = AppointmentSerializer(source = "appointment",  read_only=True)

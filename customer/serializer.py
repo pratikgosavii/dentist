@@ -60,8 +60,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     customer_details = UserProfileSerializer(source="user", read_only=True)
+    
+    doctor_details = serializers.SerializerMethodField()
 
-    # ✅ add SerializerMethodFields here
     total_amount = serializers.SerializerMethodField()
     ledger_paid = serializers.SerializerMethodField()
     remaining_amount = serializers.SerializerMethodField()
@@ -71,6 +72,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "doctor",
+            "doctor_details",  
             "slot_details",
             "appointment_type",
             "status", 
@@ -93,6 +95,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Appointment date cannot be in the past.")
         return value
     
+    def get_doctor_details(self, obj):
+        # 👇 Lazy import to avoid circular import
+        from doctor.serializer import DoctorSerializer  
+        return DoctorSerializer(obj.doctor).data if obj.doctor else None
 
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
