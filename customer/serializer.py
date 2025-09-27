@@ -206,3 +206,6 @@ class SupportTicketSerializer(serializers.ModelSerializer):
         model = SupportTicket
         fields = "__all__"
         read_only_fields = ["id", "is_admin", "user", "status", "created_at", "updated_at"]
+
+
+

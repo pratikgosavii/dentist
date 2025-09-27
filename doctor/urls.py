@@ -32,6 +32,9 @@ router.register(r'doctor-leaves', DoctorLeaveViewSet, basename='doctor-leaves')
 router.register(r'appointment/treatments', AppointmentTreatmentViewSet, basename='appointment-treatment')
 
 
+router.register(r"teeth", ToothViewSet, basename="tooth")
+
+
 urlpatterns = [
 
   

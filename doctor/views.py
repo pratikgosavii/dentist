@@ -762,3 +762,27 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
             })
 
         return Response(availability_response)
+    
+
+
+    
+class ToothViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
+):
+    """
+    List, retrieve, and update teeth.
+    POST is disabled because teeth are auto-created.
+    """
+    serializer_class = ToothSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Filter by user
+        user_id = self.request.query_params.get("user_id")
+        if user_id:
+            return Tooth.objects.filter(user_id=user_id, user__is_customer=True)
+        # Default: only show teeth for the logged-in user if they are customer
+        return Tooth.objects.filter(user=self.request.user, user__is_customer=True)

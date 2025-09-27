@@ -18,6 +18,7 @@ router.register(r'support/tickets', SupportTicketViewSet, basename='support-tick
 router.register(r"treatments", customer_treatment_list, basename="customer-treatments")
 
 
+
 urlpatterns = [
 
     path(

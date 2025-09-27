@@ -23,7 +23,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "id",
             "first_name", "last_name", "email", "dob", "gender", "profile_photo",
             "image", "users_details",
-            "clinic_name", "clinic_phone_number", "clinic_consultation_fees",
+            "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
             "experience_years", "rating", "review_count", "remark", "is_active"
@@ -369,3 +369,10 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
         paid = self.get_ledger_paid(obj)
         return total - paid
     
+
+
+
+class ToothSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tooth
+        fields = ["id", "number", "status"]

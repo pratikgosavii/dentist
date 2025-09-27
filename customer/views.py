@@ -259,3 +259,7 @@ class AppointmentDocumentListAPIView(ListAPIView):
             qs = qs.filter(appointment_id=appointment_id)
         
         return qs
+    
+
+
+    

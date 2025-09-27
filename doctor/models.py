@@ -29,9 +29,10 @@ class doctor(models.Model):
         ("Male", "Male"), ("Female", "Female"), ("Other", "Other")
     ], blank=True, null=True)
 
+    clinic_image = models.ImageField(upload_to="clinics", blank=True, null=True)
     
     clinic_name = models.CharField(max_length=150, blank=True, null=True)
-    clinic_consultation_fees = models.IntegerField()
+    clinic_consultation_fees = models.IntegerField(blank=True, null=True)
     clinic_phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
@@ -345,3 +346,22 @@ class DoctorLeave(models.Model):
 
    
     
+    
+class Tooth(models.Model):
+    STATUS_CHOICES = [
+        ("healthy", "Healthy"),
+        ("decayed", "Decayed"),
+        ("filled", "Filled"),
+        ("missing", "Missing"),
+        ("extracted", "Extracted"),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="teeth")
+    number = models.CharField(max_length=3)  # "11", "12", ..., "48"
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="healthy")
+
+    class Meta:
+        unique_together = ("user", "number")
+
+    def __str__(self):
+        return f"{self.user.username} - Tooth {self.number} : {self.status}"
