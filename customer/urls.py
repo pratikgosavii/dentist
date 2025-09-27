@@ -27,6 +27,8 @@ urlpatterns = [
         ),
 
     path("doctors/<int:doctor_id>/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
+    
+    path("appointment/document-list/", AppointmentDocumentListAPIView.as_view(), name="appointment-document-list"),
 
 
 ] + router.urls 

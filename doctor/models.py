@@ -161,7 +161,7 @@ class AppointmentTreatmentStep(models.Model):
         ("pending", "Pending"),
         ("active", "Active"),
         ("completed", "Completed"),
-        ("canceled", "Canceled"),
+        ("cancelled", "Cancelled"),
     ]
 
     appointment_treatment = models.ForeignKey(

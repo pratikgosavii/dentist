@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 
 
 
-from doctor.serializer import AppointmentTreatmentSerializer, doctor_serializer
+from doctor.serializer import AppointmentDocumentSerializer, AppointmentTreatmentSerializer, doctor_serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -232,3 +232,20 @@ class customer_treatment_list(viewsets.ReadOnlyModelViewSet):
         from rest_framework.response import Response
         from rest_framework import status
         return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+        
+class AppointmentDocumentListAPIView(ListAPIView):
+    serializer_class = AppointmentDocumentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        appointment_id = self.request.query_params.get("appointment_id")
+        
+        qs = AppointmentDocument.objects.filter(uploaded_by=user)
+        
+        if appointment_id:
+            qs = qs.filter(appointment_id=appointment_id)
+        
+        return qs
