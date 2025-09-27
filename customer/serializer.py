@@ -108,6 +108,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
     ledger_paid = serializers.SerializerMethodField()
     remaining_amount = serializers.SerializerMethodField()
+    
+    # ⭐ Review flag
+    is_reviewed = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
@@ -136,6 +139,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "total_amount",
             "ledger_paid",
             "remaining_amount",
+            "is_reviewed",
         ]
         read_only_fields = ["created_at", "customer_details"]
 
@@ -184,7 +188,9 @@ class AppointmentSerializer(serializers.ModelSerializer):
         paid = self.get_ledger_paid(obj)
         return total - paid
     
-
+     # ⭐ Review logic
+    def get_is_reviewed(self, obj):
+        return hasattr(obj, "review")
 
 
 from .models import SupportTicket, TicketMessage
