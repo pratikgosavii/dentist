@@ -17,6 +17,17 @@ class customer_serializer(serializers.ModelSerializer):
     gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
     profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
 
+    appointments = serializers.SerializerMethodField()
+
+    # ✅ Extra: All treatments of this customer
+    treatments = serializers.SerializerMethodField()
+
+    # ✅ Extra: All medicines prescribed to this customer
+    medicines = serializers.SerializerMethodField()
+
+    # ✅ Extra: All documents uploaded for this customer
+    documents = serializers.SerializerMethodField()
+
     # Read-only fields
     age = serializers.ReadOnlyField(source="user.age")
     patient_id = serializers.ReadOnlyField()
@@ -25,7 +36,8 @@ class customer_serializer(serializers.ModelSerializer):
         model = customer
         fields = [
             'id', 'patient_id', 'is_active', 'profile_photo',
-            'first_name', 'last_name', 'email', 'dob', 'gender', 'age'
+            'first_name', 'last_name', 'email', 'dob', 'gender', 'age',
+            "appointments", "treatments", "medicines", "documents"
         ]
 
     def create(self, validated_data):
@@ -43,6 +55,29 @@ class customer_serializer(serializers.ModelSerializer):
             setattr(user, field, value)
         user.save()
         return super().update(instance, validated_data)
+
+
+    # ------------------------------
+    # ✅ Lazy imports to avoid circular import
+    # ------------------------------
+    def get_appointments(self, obj):
+        from customer.serializer import AppointmentSerializer  
+        return AppointmentSerializer(Appointment.objects.filter(user=obj.user), many=True).data
+
+    def get_treatments(self, obj):
+        from doctor.serializer import AppointmentTreatmentSerializer
+        treatments = AppointmentTreatment.objects.filter(appointment__user=obj.user)
+        return AppointmentTreatmentSerializer(treatments, many=True).data
+
+    def get_medicines(self, obj):
+        from doctor.serializer import AppointmentMedicineSerializer
+        medicines = Appoinment_Medicine.objects.filter(appointment__user=obj.user)
+        return AppointmentMedicineSerializer(medicines, many=True).data
+
+    def get_documents(self, obj):
+        from doctor.serializer import AppointmentDocumentSerializer
+        documents = AppointmentDocument.objects.filter(appointment__user=obj.user)
+        return AppointmentDocumentSerializer(documents, many=True).data
 
 
 

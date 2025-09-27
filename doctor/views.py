@@ -506,13 +506,19 @@ class DoctorVerifyCustomerOTP(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request):
-        """Return all customers created by this doctor"""
+    def get(self, request, pk=None):
+        """Return one or all customers created by this doctor"""
         if not request.user.is_doctor:
             return Response({"error": "Only doctors can view their customers."}, status=403)
-        print(customer.objects.count())
+
+        if pk:  # ✅ Detail view
+            cust = get_object_or_404(customer, pk=pk)
+            serializer = customer_serializer(cust)
+            return Response(serializer.data)
+
+        # ✅ List view
         customers = customer.objects.all()
-        serializer = customer_serializer(customers, many=True)  # ✅ use serializer
+        serializer = customer_serializer(customers, many=True)
         return Response(serializer.data, status=200)
     
 

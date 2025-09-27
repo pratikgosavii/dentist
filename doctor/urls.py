@@ -41,7 +41,7 @@ urlpatterns = [
     path("list-appointment/<int:appointment_id>/", AppointmentsListAPIView.as_view(), name="detail-customer-appointment"),
     
     path("create-customer/", DoctorVerifyCustomerOTP.as_view(), name="DoctorVerifyCustomerOTP"),
-
+    path("customers/<int:pk>/", DoctorVerifyCustomerOTP.as_view(), name="doctor-customer-detail"),
     
     path('report/', DoctorReportAPIView.as_view(), name='doctor-report-api'),
     
