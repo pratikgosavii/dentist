@@ -50,7 +50,13 @@ class DoctorViewSet(mixins.RetrieveModelMixin,
     def get_object(self):
         return doctor.objects.get(user=self.request.user, is_active=True)
 
-    
+     # 👇 handle PATCH (partial update)
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
     
     
 from rest_framework.generics import ListAPIView
