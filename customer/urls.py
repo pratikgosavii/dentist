@@ -32,6 +32,7 @@ urlpatterns = [
     
     path("appointment/document-list/", AppointmentDocumentListAPIView.as_view(), name="appointment-document-list"),
 
+    path("my-doctors/", MyDoctorsAPIView.as_view(), name="my-doctors"),
 
 ] + router.urls 
 

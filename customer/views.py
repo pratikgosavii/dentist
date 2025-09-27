@@ -297,3 +297,26 @@ class ReviewViewSet(
         serializer = self.get_serializer(reviews, many=True)
         return Response(serializer.data)
 
+
+
+
+class MyDoctorsAPIView(APIView):
+    """
+    List all doctors for which the logged-in customer has had appointments.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        if not getattr(user, "is_customer", False):
+            return Response({"error": "Only customers can access this."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Get all appointments for this customer
+        appointments = Appointment.objects.filter(user=user).select_related('doctor')
+
+        # Get unique doctors from these appointments
+        doctor_set = {appt.doctor for appt in appointments}
+
+        serializer = doctor_serializer(doctor_set, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
