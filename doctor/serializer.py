@@ -28,6 +28,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "designation", "title", "degree", "specializations", "education", "about_doctor",
             "experience_years", "rating", "review_count", "remark", "is_active"
         ]
+        read_only_fields = ["is_active"]
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})
