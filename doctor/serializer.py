@@ -297,6 +297,14 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
     ledger_paid = serializers.SerializerMethodField()
     remaining_amount = serializers.SerializerMethodField()
 
+    # 💊 Related fields
+    treatments = serializers.SerializerMethodField()
+    medicines = serializers.SerializerMethodField()
+    documents = serializers.SerializerMethodField()
+    lab_works = serializers.SerializerMethodField()
+    ledgers = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Appointment
         fields = [
@@ -322,6 +330,31 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Appointment date cannot be in the past.")
         return value
     
+    # ✅ Lazy imports to avoid circular dependencies
+    def get_doctor_details(self, obj):
+        from doctor.serializer import doctor_serializer
+        return doctor_serializer(obj.doctor).data if obj.doctor else None
+
+    def get_treatments(self, obj):
+        from doctor.serializer import AppointmentTreatmentSerializer
+        return AppointmentTreatmentSerializer(obj.treatments.all(), many=True).data
+
+    def get_medicines(self, obj):
+        from doctor.serializer import AppointmentMedicineSerializer
+        return AppointmentMedicineSerializer(obj.dosdsctor_medicines.all(), many=True).data
+
+    def get_documents(self, obj):
+        from doctor.serializer import AppointmentDocumentSerializer
+        return AppointmentDocumentSerializer(obj.documents.all(), many=True).data
+
+    def get_lab_works(self, obj):
+        from doctor.serializer import LabWorkSerializer
+        return LabWorkSerializer(obj.lab_works.all(), many=True).data
+
+    def get_ledgers(self, obj):
+        from doctor.serializer import AppointmentLedgerSerializer
+
+        return AppointmentLedgerSerializer(obj.ledgers.all(), many=True).data
 
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
