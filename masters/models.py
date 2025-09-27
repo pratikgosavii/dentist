@@ -109,7 +109,6 @@ GENDER_CHOICES = [
 ]
 
 ENQUIRY_TYPE_CHOICES = [
-    ("home_visit", "Home Visit"),
     ("aligners", "Aligners"),
     ("skin_hydrafacial", "Skin/Hydrafacial"),
 ]
@@ -119,7 +118,7 @@ from users.models import User
 
 class enquiry(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enquiries_user")  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enquiries_user", blank=True, null=True)  
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(blank=True, null=True)
