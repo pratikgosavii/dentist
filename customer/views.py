@@ -90,7 +90,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "cancelled"
         appointment.save()
-        return Response({"detail": "Appointment rejected."}, status=status.HTTP_200_OK)
+        return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
