@@ -31,6 +31,7 @@ class doctor(models.Model):
 
     
     clinic_name = models.CharField(max_length=150, blank=True, null=True)
+    clinic_consultation_fees = models.IntegerField()
     clinic_phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
