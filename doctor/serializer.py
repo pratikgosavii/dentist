@@ -90,12 +90,14 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
     total_price = serializers.SerializerMethodField()
     treatment_details = TreatmentSerializer(source="treatment", read_only=True)
+    doctor_details = doctor_serializer(source = "doctor", read_only=True)
     class Meta:
         model = AppointmentTreatment
         fields = [
             "id",
             "appointment",
             "doctor",
+            "doctor_details",
             "treatment",
             "treatment_details",
             "created_at",
