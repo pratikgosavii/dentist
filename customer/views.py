@@ -81,6 +81,16 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @action(detail=True, methods=["post"])
+    def cancelled(self, request, pk=None):
+        appointment = self.get_object()
+        if not appointment.user == request.user:
+            return Response({"error": "This appointment does not belong to you."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        appointment.status = "cancelled"
+        appointment.save()
+        return Response({"detail": "Appointment rejected."}, status=status.HTTP_200_OK)
 
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser

@@ -62,7 +62,7 @@ STATUS_CHOICES = [
     ("accepted", "Accepted"),
     ("completed", "Completed"),
     ("rejected", "Rejected"),
-    ("canceled", "Canceled"),
+    ("cancelled", "Cancelled"),
 ]
 
 class Appointment(models.Model):
