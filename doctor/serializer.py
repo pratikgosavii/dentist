@@ -84,6 +84,7 @@ class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["date"]
 
+from masters.serializers import TreatmentSerializer
 
 class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
