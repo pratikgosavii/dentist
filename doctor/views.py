@@ -788,3 +788,37 @@ class ToothViewSet(
             return Tooth.objects.filter(user=user)
 
         return Tooth.objects.none()
+
+
+
+
+
+
+class MyReviewsAPIView(APIView):
+    """
+    Retrieve all reviews for appointments of the logged-in doctor.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        if not getattr(user, "is_doctor", False):
+            return Response({"error": "Only doctors can access this."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Get all reviews where appointment.doctor.user == logged-in user
+        reviews = Review.objects.filter(appointment__doctor__user=user)
+
+        data = [
+            {
+                "id": r.id,
+                "appointment_id": r.appointment.id,
+                "user_id": r.appointment.user.id,
+                "rating": r.rating,
+                "comment": r.comment,
+                "created_at": r.created_at
+            }
+            for r in reviews
+        ]
+
+        return Response(data)

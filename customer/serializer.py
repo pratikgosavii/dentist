@@ -209,3 +209,23 @@ class SupportTicketSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ["id", "appointment", "rating", "comment", "created_at"]
+        read_only_fields = ["created_at"]
+
+    def validate(self, data):
+        request = self.context["request"]
+        user = request.user
+        appointment = data.get("appointment")
+
+        # check if appointment belongs to the customer
+        if appointment.user != user:
+            raise serializers.ValidationError("You can only review your own appointments.")
+
+        # check if doctor is assigned from appointment
+
+        return data

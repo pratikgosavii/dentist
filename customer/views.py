@@ -263,3 +263,37 @@ class AppointmentDocumentListAPIView(ListAPIView):
 
 
     
+
+    
+class ReviewViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if getattr(user, "is_customer", False):
+            return Review.objects.filter(user=user)
+        return Review.objects.none()  # doctors shouldn’t list reviews from here
+    
+
+    @action(detail=False, methods=["get"], url_path="doctor/(?P<doctor_id>[^/.]+)")
+    def by_doctor(self, request, doctor_id=None):
+        """
+        Retrieve all reviews for a specific doctor by ID
+        """
+        from .models import Review  # lazy import if needed
+
+        try:
+            doctor_instance = doctor.objects.get(id=doctor_id)
+        except doctor.DoesNotExist:
+            return Response({"error": "Doctor not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        reviews = Review.objects.filter(appointment__doctor=doctor_instance)
+        serializer = self.get_serializer(reviews, many=True)
+        return Response(serializer.data)
+

@@ -53,6 +53,8 @@ urlpatterns = [
     path('availability/', DoctorAvailabilityView.as_view()),   # POST
 
     path("doctors/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
+    
+    path("myreviews/", MyReviewsAPIView.as_view(), name="MyReviewsAPIView"),
 
 
 ] + router.urls 
