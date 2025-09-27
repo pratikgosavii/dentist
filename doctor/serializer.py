@@ -62,12 +62,11 @@ class medicine_serializer(serializers.ModelSerializer):
 from customer.serializer import AppointmentSerializer
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
-    Appointment_details = AppointmentSerializer(source = "appointment",  read_only=True)
     medicine_details = medicine_serializer(source="medicine", read_only=True)
     class Meta:
         model = Appoinment_Medicine
         fields = "__all__"
-        read_only_fields = ["user", "doctor", "Appointment_details", "medicine_details"]
+        read_only_fields = ["user", "doctor", "medicine_details"]
 
 
 class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
