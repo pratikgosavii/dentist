@@ -55,14 +55,21 @@ from django.db.models import Sum
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    
     slot_details = slot_serializer(source="slot", read_only=True)
     doctor = serializers.PrimaryKeyRelatedField(queryset=doctor.objects.all())
     status_display = serializers.CharField(source="get_status_display", read_only=True)
     customer_details = UserProfileSerializer(source="user", read_only=True)
-    
+
     doctor_details = serializers.SerializerMethodField()
 
+    # 💊 Related fields
+    treatments = serializers.SerializerMethodField()
+    medicines = serializers.SerializerMethodField()
+    documents = serializers.SerializerMethodField()
+    lab_works = serializers.SerializerMethodField()
+    ledgers = serializers.SerializerMethodField()
+
+    # 💰 Amounts
     total_amount = serializers.SerializerMethodField()
     ledger_paid = serializers.SerializerMethodField()
     remaining_amount = serializers.SerializerMethodField()
@@ -72,10 +79,10 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "doctor",
-            "doctor_details",  
+            "doctor_details",
             "slot_details",
             "appointment_type",
-            "status", 
+            "status",
             "status_display",
             "date",
             "slot",
@@ -83,7 +90,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "concern",
             "created_at",
 
-            # ✅ include new fields in output
+            # 👇 nested related data
+            "treatments",
+            "medicines",
+            "documents",
+            "lab_works",
+            "ledgers",
+
+            # 👇 computed amounts
             "total_amount",
             "ledger_paid",
             "remaining_amount",
@@ -94,12 +108,34 @@ class AppointmentSerializer(serializers.ModelSerializer):
         if value < date.today():
             raise serializers.ValidationError("Appointment date cannot be in the past.")
         return value
-    
+
+    # ✅ Lazy imports to avoid circular dependencies
     def get_doctor_details(self, obj):
-        # 👇 Lazy import to avoid circular import
-        from doctor.serializer import doctor_serializer  
+        from doctor.serializer import doctor_serializer
         return doctor_serializer(obj.doctor).data if obj.doctor else None
 
+    def get_treatments(self, obj):
+        from doctor.serializer import AppointmentTreatmentSerializer
+        return AppointmentTreatmentSerializer(obj.treatments.all(), many=True).data
+
+    def get_medicines(self, obj):
+        from doctor.serializer import AppointmentMedicineSerializer
+        return AppointmentMedicineSerializer(obj.dosdsctor_medicines.all(), many=True).data
+
+    def get_documents(self, obj):
+        from doctor.serializer import AppointmentDocumentSerializer
+        return AppointmentDocumentSerializer(obj.documents.all(), many=True).data
+
+    def get_lab_works(self, obj):
+        from doctor.serializer import LabWorkSerializer
+        return LabWorkSerializer(obj.lab_works.all(), many=True).data
+
+    def get_ledgers(self, obj):
+        from doctor.serializer import AppointmentLedgerSerializer
+
+        return AppointmentLedgerSerializer(obj.ledgers.all(), many=True).data
+
+    # 💰 Amount logic
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
             appointment_treatment__appointment=obj
@@ -113,6 +149,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         paid = self.get_ledger_paid(obj)
         return total - paid
     
+
 
 
 from .models import SupportTicket, TicketMessage

@@ -712,7 +712,7 @@ from datetime import date, timedelta
 class DoctorWeeklyAvailabilityAPIView(APIView):
     permission_classes = [IsAuthenticated]   # if patients also call, you can remove/adjust
 
-    def get(self, request, doctor_id, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         doctor_instance = get_object_or_404(doctor, user=request.user)
 
         today = date.today()
