@@ -364,6 +364,17 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         appointment.status = "rejected"
         appointment.save()
         return Response({"detail": "Appointment rejected."}, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=["post"])
+    def completed(self, request, pk=None):
+        appointment = self.get_object()
+        if not self._check_doctor_permission(appointment, request.user):
+            return Response({"error": "You are not assigned to this appointment."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        appointment.status = "completed"
+        appointment.save()
+        return Response({"detail": "Appointment marked as completed."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def reschedule(self, request, pk=None):
