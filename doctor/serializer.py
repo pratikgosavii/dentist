@@ -88,7 +88,7 @@ class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
 class AppointmentTreatmentSerializer(serializers.ModelSerializer):
     steps = AppointmentTreatmentStepSerializer(many=True)
     total_price = serializers.SerializerMethodField()
-
+    treatment_details = TreatmentSerializer(source="treatment", read_only=True)
     class Meta:
         model = AppointmentTreatment
         fields = [
@@ -96,11 +96,12 @@ class AppointmentTreatmentSerializer(serializers.ModelSerializer):
             "appointment",
             "doctor",
             "treatment",
+            "treatment_details",
             "created_at",
             "steps",
             "total_price",
         ]
-        read_only_fields = ["doctor", "appointment"]
+        read_only_fields = ["doctor", "appointment", "treatment_details"]
 
     def get_total_price(self, obj):
         # sum of all step prices (change filter if you only want completed steps)

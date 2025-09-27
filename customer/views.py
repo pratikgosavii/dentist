@@ -92,6 +92,18 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment.save()
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
+    def get_queryset(self):
+        user = self.request.user
+
+        # Base queryset: only appointments of logged-in user
+        qs = Appointment.objects.filter(user=user).order_by('-created_at')
+
+        # Optional doctor_id filter via query params: ?doctor_id=4
+        doctor_id = self.request.query_params.get('doctor_id')
+        if doctor_id:
+            qs = qs.filter(doctor_id=doctor_id)
+
+        return qs
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
