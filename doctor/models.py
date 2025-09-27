@@ -30,6 +30,7 @@ class doctor(models.Model):
     ], blank=True, null=True)
 
     clinic_image = models.ImageField(upload_to="clinics", blank=True, null=True)
+    clinic_logo = models.ImageField(upload_to="clinic_logo", blank=True, null=True)
     
     clinic_name = models.CharField(max_length=150, blank=True, null=True)
     clinic_consultation_fees = models.IntegerField(blank=True, null=True)
