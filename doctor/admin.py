@@ -8,3 +8,4 @@ from .models import *
 admin.site.register(doctor)
 # admin.site.register(Treatment)
 admin.site.register(TreatmentStep)
+admin.site.register(Tooth)

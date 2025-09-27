@@ -140,3 +140,21 @@ class TicketMessage(models.Model):
 
 
 
+
+
+class Review(models.Model):
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name="review")
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 stars
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Review for Appointment {self.appointment.id} - {self.rating}⭐"
+
+    @property
+    def customer(self):
+        return self.appointment.user
+
+    @property
+    def doctor(self):
+        return self.appointment.doctor

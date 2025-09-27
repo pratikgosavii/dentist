@@ -772,17 +772,19 @@ class ToothViewSet(
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet
 ):
-    """
-    List, retrieve, and update teeth.
-    POST is disabled because teeth are auto-created.
-    """
     serializer_class = ToothSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Filter by user
+        user = self.request.user
+
+        # Doctors must provide a user_id to work with customer's teeth
         user_id = self.request.query_params.get("user_id")
-        if user_id:
+        if user.is_doctor and user_id:
             return Tooth.objects.filter(user_id=user_id, user__is_customer=True)
-        # Default: only show teeth for the logged-in user if they are customer
-        return Tooth.objects.filter(user=self.request.user, user__is_customer=True)
+
+        # Customers can only see their own teeth
+        if user.is_customer:
+            return Tooth.objects.filter(user=user)
+
+        return Tooth.objects.none()
