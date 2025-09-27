@@ -97,8 +97,8 @@ class AppointmentSerializer(serializers.ModelSerializer):
     
     def get_doctor_details(self, obj):
         # 👇 Lazy import to avoid circular import
-        from doctor.serializer import DoctorSerializer  
-        return DoctorSerializer(obj.doctor).data if obj.doctor else None
+        from doctor.serializer import doctor_serializer  
+        return doctor_serializer(obj.doctor).data if obj.doctor else None
 
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
