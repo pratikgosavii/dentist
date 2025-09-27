@@ -17,6 +17,8 @@ class customer_serializer(serializers.ModelSerializer):
     gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
     profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
 
+    user_details = UserProfileSerializer(source="user", read_only = True)
+
     appointments = serializers.SerializerMethodField()
 
     # ✅ Extra: All treatments of this customer
@@ -36,7 +38,7 @@ class customer_serializer(serializers.ModelSerializer):
         model = customer
         fields = [
             'id', 'patient_id', 'is_active', 'profile_photo',
-            'first_name', 'last_name', 'email', 'dob', 'gender', 'age',
+            'first_name', 'last_name', 'email', 'dob', 'gender', 'age', 'user_details',
             "appointments", "treatments", "medicines", "documents"
         ]
 
