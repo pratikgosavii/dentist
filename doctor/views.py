@@ -626,13 +626,13 @@ class DoctorReportAPIView(APIView):
 
    
 class list_patient(generics.ListAPIView):
-    serializer_class = UserProfileSerializer
+    serializer_class = customer_serializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         # fetch distinct users who have appointments with this doctor
-        return User.objects.filter(
-            appointments__doctor__user=self.request.user
+        return customer.objects.filter(
+            user__appointments__doctor__user=self.request.user
         ).distinct()
     
 
