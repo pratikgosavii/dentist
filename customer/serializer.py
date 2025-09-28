@@ -220,7 +220,7 @@ class SupportTicketSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    appointment_details = AppointmentSerializer(source="appointment")
+    appointment_details = AppointmentSerializer(source="appointment", read_only = True)
     class Meta:
         model = Review
         fields = ["id", "appointment", "rating", "comment", "appointment", "appointment_details", "created_at"]
