@@ -223,7 +223,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     appointment_details = AppointmentSerializer(source="appointment")
     class Meta:
         model = Review
-        fields = ["id", "appointment", "rating", "comment", "appointment", "created_at"]
+        fields = ["id", "appointment", "rating", "comment", "appointment", "appointment_details", "created_at"]
         read_only_fields = ["created_at"]
 
     def validate(self, data):

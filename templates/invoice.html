@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f9fa; }
+    .invoice-box { max-width: 900px; margin: auto; background: #fff; padding: 20px; border: 1px solid #eee; }
+    .header { display: flex; justify-content: space-between; align-items: center; }
+    .header img { height: 60px; }
+    .company { font-size: 14px; }
+    .invoice-title { text-align: center; font-size: 22px; font-weight: bold; margin: 20px 0; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    table th, table td { border: 1px solid #ddd; padding: 8px; font-size: 14px; }
+    table th { background: #f2f2f2; }
+    .total-summary td { font-weight: bold; }
+    .grand-total { font-size: 18px; font-weight: bold; }
+    .note { background: #f9f9f9; padding: 10px; border-left: 4px solid #007bff; margin-bottom: 20px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="invoice-box">
+    <div class="header">
+      <div>
+        <img src="{{ appointment.doctor.clinic_logo.url }}" alt="Logo">
+        <div class="company">
+          <p><b>{{ clinic_name }}</b></p>
+          <p> {{ clinic_address}} </p>
+          <p>Phone: {{ doctor_mobile }}</p>
+          <p>Email: {{ doctor_email }}</p>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <p><b>Invoice #: {{ invoice_number }}</b></p>
+        <p><b>Date:</b> {{ issue_date }}</p>
+      </div>
+    </div>
+
+    <div class="invoice-title">Invoice</div>
+    <p><b>Doctor:</b> {{ doctor_name }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Treatment</th>
+          <th>Step</th>
+          <th>Price (Rs)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for treatment in treatments %}
+          <tr>
+            <td rowspan="{{ treatment.steps.count }}">
+              {{ treatment.treatment.name }}
+            </td>
+            {% for step in treatment.steps.all %}
+              {% if not forloop.first %}<tr>{% endif %}
+                <td>{{ step.title }}</td>
+                <td>{{ step.price }}</td>
+              </tr>
+            {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="note">
+      Please review the details of your treatment and payment summary below.
+    </div>
+
+    <table class="total-summary">
+      <tr>
+        <td style="text-align:right;">Sub Total</td>
+        <td style="text-align:right;">Rs {{ subtotal }}</td>
+      </tr>
+      <tr>
+        <td style="text-align:right;">GST (18%)</td>
+        <td style="text-align:right;">Rs {{ gst }}</td>
+      </tr>
+      <tr class="grand-total">
+        <td style="text-align:right;">Grand Total</td>
+        <td style="text-align:right;">Rs {{ grand_total }}</td>
+      </tr>
+    </table>
+
+    <p style="text-align:center; color:green; font-weight:bold;">Paid</p>
+  </div>
+</body>
+</html>

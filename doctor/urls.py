@@ -55,6 +55,9 @@ urlpatterns = [
     path("doctors/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
     
     path("myreviews/", MyReviewsAPIView.as_view(), name="MyReviewsAPIView"),
+    
+    path("generate-invoice/<appointment_id>/", invoice_view, name="invoice_view"),
+    path("prescription-invoice/<appointment_id>/", prescription_invoice_view, name="prescription_invoice_view"),
 
 
 ] + router.urls 

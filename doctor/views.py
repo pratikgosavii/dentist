@@ -833,3 +833,60 @@ class MyReviewsAPIView(APIView):
         ]
 
         return Response(data)
+    
+
+
+
+from decimal import Decimal
+
+    
+def invoice_view(request, appointment_id):
+    appointment = Appointment.objects.get(id=appointment_id)
+    treatments = appointment.treatments.prefetch_related("steps")
+
+    subtotal = Decimal(0)
+    for t in treatments:
+        for step in t.steps.all():
+            subtotal += step.price
+
+    gst = subtotal * Decimal("0.18")
+    grand_total = subtotal + gst
+
+    doctor_instance = appointment.doctor
+
+    context = {
+        "invoice_number": f"INV-{appointment.id}",
+        "issue_date": appointment.created_at.date(),
+        "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
+        "doctor_email": doctor_instance.user.email,
+        "doctor_mobile": doctor_instance.user.mobile,
+        "clinic_name": doctor_instance.clinic_name,
+        "clinic_address":  doctor_instance.locality + doctor_instance.house_building +  doctor_instance.state +  doctor_instance.city +  doctor_instance.pincode,
+        "treatments": treatments,
+        "subtotal": subtotal,
+        "gst": gst,
+        "grand_total": grand_total,
+        "appointment" : appointment
+    }
+    return render(request, "invoice.html", context)
+
+
+
+def prescription_invoice_view(request, appointment_id):
+
+    appointment = Appointment.objects.get(id=appointment_id)
+    medicines = appointment.dosdsctor_medicines.select_related("medicine")
+    doctor_instance = appointment.doctor
+
+    context = {
+        "appointment": appointment,
+        "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
+        "doctor_email": doctor_instance.user.email,
+        "doctor_mobile": doctor_instance.user.mobile,
+        "clinic_name": doctor_instance.clinic_name,
+        "clinic_address":  doctor_instance.locality + doctor_instance.house_building +  doctor_instance.state +  doctor_instance.city +  doctor_instance.pincode,
+        "invoice_number": f"INV-{appointment.id}",
+        "issue_date": appointment.created_at.date(),
+        "medicines": medicines,
+    }
+    return render(request, "prescription_invoice.html", context)
