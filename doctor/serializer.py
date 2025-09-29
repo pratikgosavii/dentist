@@ -7,6 +7,8 @@ from .models import *
 from customer.serializer import *
 from rest_framework import serializers
 from users.serializer import UserProfileSerializer
+from datetime import date
+
 
 class doctor_serializer(serializers.ModelSerializer):
     # User fields — readable & writable
@@ -31,7 +33,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "designation", "title", "degree", "specializations", "education", "about_doctor",
             "experience_years", "rating", "review_count", "remark", "is_active", "offers"
         ]
-        read_only_fields = ["is_active"]
+        read_only_fields = ["is_active", "offers"]
 
     def create(self, validated_data):
         user_data = validated_data.pop('user', {})
@@ -51,7 +53,7 @@ class doctor_serializer(serializers.ModelSerializer):
     
     def get_offers(self, obj):
         """Return only active offers for this doctor"""
-        today = datetime.date.today()
+        today = date.today()
         offers = Offer.objects.filter(
             user=obj.user, valid_from__lte=today, valid_to__gte=today
         )
