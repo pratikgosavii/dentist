@@ -44,7 +44,7 @@ class DoctorViewSet(mixins.RetrieveModelMixin,
                              viewsets.GenericViewSet):
     serializer_class = doctor_serializer
     parser_classes = [MultiPartParser, JSONParser, FormParser]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
 
     def get_object(self):
@@ -67,7 +67,7 @@ from django.db.models import Q
 
 class DoctorMedicineViewSet(viewsets.ModelViewSet):
     serializer_class = medicine_serializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         qs = medicine.objects.filter(is_active=True)
@@ -91,7 +91,7 @@ class DoctorMedicineViewSet(viewsets.ModelViewSet):
 class AppointmentMedicineViewSet(viewsets.ModelViewSet):
     queryset = Appoinment_Medicine.objects.all()
     serializer_class = AppointmentMedicineSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def perform_create(self, serializer):
         try:
@@ -135,7 +135,7 @@ class AppointmentMedicineViewSet(viewsets.ModelViewSet):
 
 
 class TreatmentAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, treatment_id=None):
         """
@@ -159,7 +159,7 @@ class TreatmentAPIView(APIView):
 
 
 class AppointmentsListAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, appointment_id=None):
         # Ensure logged-in user is a doctor
@@ -210,7 +210,7 @@ from .serializer import AppointmentTreatmentSerializer
 
 class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentTreatmentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         """
@@ -263,7 +263,7 @@ class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
         
 class AppointmentDocumentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentDocumentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         # Only documents of appointments this user is related to
@@ -293,7 +293,7 @@ from rest_framework.decorators import action
 
 class DoctorAppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorAppointmentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
 
     def perform_create(self, serializer):
@@ -411,12 +411,12 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
 class LabViewSet(viewsets.ModelViewSet):
     queryset = Lab.objects.all()
     serializer_class = LabSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
 
 class LabWorkViewSet(viewsets.ModelViewSet):
     serializer_class = LabWorkSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
 
@@ -433,7 +433,7 @@ class LabWorkViewSet(viewsets.ModelViewSet):
 
 class OfferViewSet(viewsets.ModelViewSet):
     serializer_class = OfferSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         # Only return offers created by logged-in user
@@ -447,7 +447,7 @@ class OfferViewSet(viewsets.ModelViewSet):
 class InventoryProductViewSet(viewsets.ModelViewSet):
     queryset = InventoryProduct.objects.all().order_by("expiry_date")
     serializer_class = InventoryProductSerializer
-    permission_classes = [permissions.IsAuthenticated]  # only logged-in users
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     # You can override create/update if you want custom logic later
 
@@ -460,7 +460,7 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 class DoctorVerifyCustomerOTP(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def post(self, request):
         print(request.user)
@@ -542,7 +542,7 @@ class DoctorVerifyCustomerOTP(APIView):
 
 class AppointmentLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentLedgerSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         # show ledgers only for appointments belonging to this doctor
@@ -567,7 +567,7 @@ class AppointmentLedgerViewSet(viewsets.ModelViewSet):
 
 class ExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = ExpenseSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         # show ledgers only for expenses belonging to this doctor
@@ -595,7 +595,7 @@ class DoctorReportAPIView(APIView):
     """
     API view to return earnings report for the logged-in doctor.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -638,7 +638,7 @@ class DoctorReportAPIView(APIView):
    
 class list_patient(generics.ListAPIView):
     serializer_class = customer_serializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         # fetch distinct users who have appointments with this doctor
@@ -651,13 +651,13 @@ class list_patient(generics.ListAPIView):
     
 class DoctorLeaveViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorLeaveSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     from datetime import date
 
 class DoctorLeaveViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorLeaveSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
         try:
@@ -708,6 +708,9 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
 
    
 class DoctorAvailabilityView(APIView):
+
+    permission_classes = [IsAuthenticated, IsDoctor]
+
     def post(self, request):
         serializer = DoctorAvailabilityBulkSerializer( data=request.data, context={"request": request}  )
         if serializer.is_valid():
@@ -809,7 +812,8 @@ class MyReviewsAPIView(APIView):
     """
     Retrieve all reviews for appointments of the logged-in doctor.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
+
 
     def get(self, request):
         user = request.user
@@ -859,7 +863,7 @@ def render_to_pdf(template_src, context_dict):
 
 
 class InvoicePDFAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, appointment_id):
         appointment = Appointment.objects.get(id=appointment_id)
@@ -905,7 +909,7 @@ class InvoicePDFAPIView(APIView):
 
 
 class PrescriptionPDFAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, appointment_id):
         appointment = Appointment.objects.get(id=appointment_id)
