@@ -839,54 +839,100 @@ class MyReviewsAPIView(APIView):
 
 from decimal import Decimal
 
-    
-def invoice_view(request, appointment_id):
-    appointment = Appointment.objects.get(id=appointment_id)
-    treatments = appointment.treatments.prefetch_related("steps")
-
-    subtotal = Decimal(0)
-    for t in treatments:
-        for step in t.steps.all():
-            subtotal += step.price
-
-    gst = subtotal * Decimal("0.18")
-    grand_total = subtotal + gst
-
-    doctor_instance = appointment.doctor
-
-    context = {
-        "invoice_number": f"INV-{appointment.id}",
-        "issue_date": appointment.created_at.date(),
-        "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
-        "doctor_email": doctor_instance.user.email,
-        "doctor_mobile": doctor_instance.user.mobile,
-        "clinic_name": doctor_instance.clinic_name,
-        "clinic_address":  doctor_instance.locality + doctor_instance.house_building +  doctor_instance.state +  doctor_instance.city +  doctor_instance.pincode,
-        "treatments": treatments,
-        "subtotal": subtotal,
-        "gst": gst,
-        "grand_total": grand_total,
-        "appointment" : appointment
-    }
-    return render(request, "invoice.html", context)
+import base64
+from io import BytesIO
+from django.template.loader import render_to_string
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from xhtml2pdf import pisa
+from decimal import Decimal
 
 
+def render_to_pdf(template_src, context_dict):
+    html_string = render_to_string(template_src, context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html_string.encode("UTF-8")), result)
+    if not pdf.err:
+        return result.getvalue()
+    return None
 
-def prescription_invoice_view(request, appointment_id):
 
-    appointment = Appointment.objects.get(id=appointment_id)
-    medicines = appointment.dosdsctor_medicines.select_related("medicine")
-    doctor_instance = appointment.doctor
+class InvoicePDFAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    context = {
-        "appointment": appointment,
-        "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
-        "doctor_email": doctor_instance.user.email,
-        "doctor_mobile": doctor_instance.user.mobile,
-        "clinic_name": doctor_instance.clinic_name,
-        "clinic_address":  doctor_instance.locality + doctor_instance.house_building +  doctor_instance.state +  doctor_instance.city +  doctor_instance.pincode,
-        "invoice_number": f"INV-{appointment.id}",
-        "issue_date": appointment.created_at.date(),
-        "medicines": medicines,
-    }
-    return render(request, "prescription_invoice.html", context)
+    def get(self, request, appointment_id):
+        appointment = Appointment.objects.get(id=appointment_id)
+        treatments = appointment.treatments.prefetch_related("steps")
+
+        subtotal = Decimal(0)
+        for t in treatments:
+            for step in t.steps.all():
+                subtotal += step.price
+
+        gst = subtotal * Decimal("0.18")
+        grand_total = subtotal + gst
+
+        doctor_instance = appointment.doctor
+
+        context = {
+            "invoice_number": f"INV-{appointment.id}",
+            "issue_date": appointment.created_at.date(),
+            "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
+            "doctor_email": doctor_instance.user.email,
+            "doctor_mobile": doctor_instance.user.mobile,
+            "clinic_name": doctor_instance.clinic_name,
+            "clinic_address": doctor_instance.locality + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
+            "treatments": treatments,
+            "subtotal": subtotal,
+            "gst": gst,
+            "grand_total": grand_total,
+            "appointment": appointment,
+        }
+
+        pdf_file = render_to_pdf("invoice.html", context)
+
+        if not pdf_file:
+            return Response({"error": "PDF generation failed"}, status=500)
+
+        pdf_base64 = base64.b64encode(pdf_file).decode("utf-8")
+
+        return Response({
+            "filename": f"invoice_{appointment.id}.pdf",
+            "filetype": "application/pdf",
+            "data": pdf_base64
+        })
+
+
+class PrescriptionPDFAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, appointment_id):
+        appointment = Appointment.objects.get(id=appointment_id)
+        medicines = appointment.dosdsctor_medicines.select_related("medicine")
+        doctor_instance = appointment.doctor
+
+        context = {
+            "appointment": appointment,
+            "doctor_name": doctor_instance.user.first_name + doctor_instance.user.last_name,
+            "doctor_email": doctor_instance.user.email,
+            "doctor_mobile": doctor_instance.user.mobile,
+            "clinic_name": doctor_instance.clinic_name,
+            "clinic_address": doctor_instance.locality + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
+            "invoice_number": f"INV-{appointment.id}",
+            "issue_date": appointment.created_at.date(),
+            "medicines": medicines,
+        }
+
+        pdf_file = render_to_pdf("prescription_invoice.html", context)
+
+        if not pdf_file:
+            return Response({"error": "PDF generation failed"}, status=500)
+
+        pdf_base64 = base64.b64encode(pdf_file).decode("utf-8")
+
+        return Response({
+            "filename": f"prescription_{appointment.id}.pdf",
+            "filetype": "application/pdf",
+            "data": pdf_base64
+        })

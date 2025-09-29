@@ -17,6 +17,9 @@ class doctor_serializer(serializers.ModelSerializer):
     profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
     gender = serializers.CharField(source='user.gender', required=False, allow_null=True)
     users_details = UserProfileSerializer(source = 'user', read_only = True)
+    
+    offers = serializers.SerializerMethodField()
+    
     class Meta:
         model = doctor
         fields = [
@@ -26,7 +29,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
-            "experience_years", "rating", "review_count", "remark", "is_active"
+            "experience_years", "rating", "review_count", "remark", "is_active", "offers"
         ]
         read_only_fields = ["is_active"]
 
@@ -46,7 +49,13 @@ class doctor_serializer(serializers.ModelSerializer):
         user.save()
         return super().update(instance, validated_data)
     
-
+    def get_offers(self, obj):
+        """Return only active offers for this doctor"""
+        today = datetime.date.today()
+        offers = Offer.objects.filter(
+            user=obj.user, valid_from__lte=today, valid_to__gte=today
+        )
+        return OfferSerializer(offers, many=True).data
 
 
 class medicine_serializer(serializers.ModelSerializer):

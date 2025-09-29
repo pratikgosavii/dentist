@@ -7,3 +7,4 @@ from .models import *
 
 admin.site.register(customer)
 admin.site.register(Appointment)
+admin.site.register(Review)
