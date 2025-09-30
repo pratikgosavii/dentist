@@ -91,6 +91,9 @@ SIMPLE_JWT = {
 }
 
 
+HTML2PDF_API_KEY = 'IjjR93npHaOZ6bXt6BmHdt2AwYRh3LBoe3hIYz0wBkHddGoa79PF00BB9cgPAdVl'
+
+
 ROOT_URLCONF = 'dentist.urls'
 
 TEMPLATES = [

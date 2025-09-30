@@ -853,13 +853,14 @@ from xhtml2pdf import pisa
 from decimal import Decimal
 
 
-def render_to_pdf(template_src, context_dict):
-    html_string = render_to_string(template_src, context_dict)
-    result = BytesIO()
-    pdf = pisa.pisaDocument(BytesIO(html_string.encode("UTF-8")), result)
-    if not pdf.err:
-        return result.getvalue()
-    return None
+import base64
+import requests
+from decimal import Decimal
+from django.conf import settings
+from django.template.loader import render_to_string
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class InvoicePDFAPIView(APIView):
@@ -874,8 +875,8 @@ class InvoicePDFAPIView(APIView):
             for step in t.steps.all():
                 subtotal += step.price
 
-        gst = subtotal * Decimal("0.18")
-        grand_total = subtotal + gst
+       
+        grand_total = subtotal
 
         doctor_instance = appointment.doctor
 
@@ -889,31 +890,59 @@ class InvoicePDFAPIView(APIView):
             "clinic_address": doctor_instance.locality + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
             "treatments": treatments,
             "subtotal": subtotal,
-            "gst": gst,
             "grand_total": grand_total,
             "appointment": appointment,
         }
 
-        pdf_file = render_to_pdf("invoice.html", context)
+        # Render HTML template
+        html_content = render_to_string("invoice.html", context)
 
-        if not pdf_file:
-            return Response({"error": "PDF generation failed"}, status=500)
+        # Generate PDF via HTML2PDF API
+        response = requests.post(
+            "https://api.html2pdf.app/v1/generate",
+            json={
+                "html": html_content,
+                "apiKey": settings.HTML2PDF_API_KEY,
+                "options": {
+                    "printBackground": True,
+                    "margin": "1cm",
+                    "pageSize": "A4",
+                },
+            },
+        )
 
-        pdf_base64 = base64.b64encode(pdf_file).decode("utf-8")
+        if response.status_code != 200:
+            return Response(
+                {"error": f"PDF generation failed: {response.text}"},
+                status=400,
+            )
+
+        pdf_bytes = response.content
+        pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
 
         return Response({
+            "message": "Invoice PDF generated successfully",
             "filename": f"invoice_{appointment.id}.pdf",
             "filetype": "application/pdf",
-            "data": pdf_base64
+            "data": pdf_base64,
         })
+
 
 
 class PrescriptionPDFAPIView(APIView):
     permission_classes = [IsAuthenticated, IsDoctor]
 
+    
+class PrescriptionPDFAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsDoctor]
+
     def get(self, request, appointment_id):
+        from .models import Appointment
         appointment = Appointment.objects.get(id=appointment_id)
-        medicines = appointment.dosdsctor_medicines.select_related("medicine")
+
+        # Fetch prescribed medicines (adjust field name if needed)
+        medicines = appointment.doctor_medicines.select_related("medicine")
+
         doctor_instance = appointment.doctor
 
         context = {
@@ -923,20 +952,40 @@ class PrescriptionPDFAPIView(APIView):
             "doctor_mobile": doctor_instance.user.mobile,
             "clinic_name": doctor_instance.clinic_name,
             "clinic_address": doctor_instance.locality + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
-            "invoice_number": f"INV-{appointment.id}",
+            "invoice_number": f"RX-{appointment.id}",
             "issue_date": appointment.created_at.date(),
             "medicines": medicines,
         }
 
-        pdf_file = render_to_pdf("prescription_invoice.html", context)
+        # Render HTML for prescription
+        html_content = render_to_string("prescription_invoice.html", context)
 
-        if not pdf_file:
-            return Response({"error": "PDF generation failed"}, status=500)
+        # Generate PDF using HTML2PDF API
+        response = requests.post(
+            "https://api.html2pdf.app/v1/generate",
+            json={
+                "html": html_content,
+                "apiKey": settings.HTML2PDF_API_KEY,
+                "options": {
+                    "printBackground": True,
+                    "margin": "1cm",
+                    "pageSize": "A4",
+                },
+            },
+        )
 
-        pdf_base64 = base64.b64encode(pdf_file).decode("utf-8")
+        if response.status_code != 200:
+            return Response(
+                {"error": f"PDF generation failed: {response.text}"},
+                status=400
+            )
+
+        pdf_bytes = response.content
+        pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
 
         return Response({
+            "message": "Prescription PDF generated successfully",
             "filename": f"prescription_{appointment.id}.pdf",
             "filetype": "application/pdf",
-            "data": pdf_base64
+            "data": pdf_base64,
         })
