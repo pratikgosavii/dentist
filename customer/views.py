@@ -84,7 +84,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def cancelled(self, request, pk=None):
         appointment = self.get_object()
-        if not appointment.user == request.user:
+        if appointment.user != request.user:
             return Response({"error": "This appointment does not belong to you."},
                             status=status.HTTP_403_FORBIDDEN)
 
@@ -92,18 +92,38 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment.save()
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=["post"])
+    def reschedule(self, request, pk=None):
+        appointment = self.get_object()
+        if appointment.user != request.user:
+            return Response({"error": "This appointment does not belong to you."},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        new_date = request.data.get("date")
+        slot = request.data.get("slot")
+
+        if not new_date or not slot:
+            return Response({"error": "date and slot are required to reschedule."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        appointment.date = new_date
+        appointment.slot__id = slot
+        appointment.save()
+
+        return Response({"detail": "Appointment rescheduled successfully."},
+                        status=status.HTTP_200_OK)
+
     def get_queryset(self):
         user = self.request.user
-
-        # Base queryset: only appointments of logged-in user
         qs = Appointment.objects.filter(user=user).order_by('-created_at')
 
-        # Optional doctor_id filter via query params: ?doctor_id=4
         doctor_id = self.request.query_params.get('doctor_id')
         if doctor_id:
             qs = qs.filter(doctor_id=doctor_id)
 
         return qs
+
+
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
