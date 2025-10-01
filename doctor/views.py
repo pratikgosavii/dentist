@@ -864,7 +864,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class InvoicePDFAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctor]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, appointment_id):
         appointment = Appointment.objects.get(id=appointment_id)
@@ -929,12 +929,9 @@ class InvoicePDFAPIView(APIView):
 
 
 
-class PrescriptionPDFAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctor]
-
     
 class PrescriptionPDFAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsDoctor]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, appointment_id):
         from .models import Appointment
