@@ -196,12 +196,12 @@ class LoginAPIView(APIView):
                 "user": {
                     "id": user.id,
                     "mobile": user.mobile,
-                    "doctor" if user.is_doctor else
-                    "customer" if user.is_customer else
-                    "created": created
+                    "role": "doctor" if user.is_doctor else "customer"
                 },
+                "created": created,
                 "user_details": user_details
             }, status=201 if created else 200)
+
 
         except Exception as e:
             print(f"Login failed: {e}")
