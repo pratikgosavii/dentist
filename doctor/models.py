@@ -271,27 +271,12 @@ class LabWork(models.Model):
 
     
 class Offer(models.Model):
-    DISCOUNT_TYPE_CHOICES = [
-        ("percentage", "Percentage"),
-        ("flat", "Flat"),
-    ]
-
-    ELIGIBILITY_CHOICES = [
-        ("existing", "For Existing Patients"),
-        ("new", "For New Patients"),
-        ("everyone", "For Everyone"),
-    ]
+  
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")  
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    discount_type = models.CharField(max_length=20, choices=DISCOUNT_TYPE_CHOICES)
-    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
-    valid_from = models.DateField()
-    valid_to = models.DateField()
-    applicable_treatments = models.CharField(max_length=255, blank=True, null=True)  # or FK/M2M if you have Treatment model
-    eligibility = models.CharField(max_length=20, choices=ELIGIBILITY_CHOICES, default="everyone")
-    banner = models.ImageField(upload_to="offers/banners/", blank=True, null=True)
+    valid_to = models.DateTimeField(auto_now_add=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
