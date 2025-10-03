@@ -119,12 +119,12 @@ from users.models import User
 class enquiry(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enquiries_user", blank=True, null=True)  
-    full_name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
+    full_name = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    dob = models.DateField()
+    dob = models.DateField(blank=True, null=True)
     age = models.PositiveIntegerField()
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
 
     house = models.CharField("House/Building/Apartment No.", max_length=100)
     area = models.CharField("Locality/Area/street/Sector", max_length=150)

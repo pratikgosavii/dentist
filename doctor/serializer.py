@@ -55,7 +55,7 @@ class doctor_serializer(serializers.ModelSerializer):
         """Return only active offers for this doctor"""
         today = date.today()
         offers = Offer.objects.filter(
-            user=obj.user, valid_from__lte=today, valid_to__gte=today
+            user=obj.user, valid_to__lte=today
         )
         return OfferSerializer(offers, many=True).data
 
