@@ -217,6 +217,13 @@ class Expense(models.Model):
 
 
 class AppointmentDocument(models.Model):
+
+    TITLE_CHOICES = [
+        ("xray", "X-Ray"),
+        ("document", "Document"),
+        ("report", "Report"),
+    ]
+     
     appointment = models.ForeignKey(
         "customer.appointment", 
         on_delete=models.CASCADE, 
@@ -227,7 +234,13 @@ class AppointmentDocument(models.Model):
         on_delete=models.CASCADE
     )
     file = models.FileField(upload_to="appointment_documents/")
-    title = models.CharField(max_length=255, blank=True, null=True)
+   
+
+    title = models.CharField(
+        max_length=50,
+        choices=TITLE_CHOICES,
+        default="document"
+    )
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
