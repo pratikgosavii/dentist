@@ -48,7 +48,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
-            "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", 'availabilities'
+            "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities'
         ]
         read_only_fields = ["is_active", "offers"]
 
