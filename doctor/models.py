@@ -23,8 +23,6 @@ class doctor(models.Model):
 
     user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name="doctor")
 
-    # Basic Info
-    image = models.ImageField(upload_to="doctor_images/", blank=True, null=True)
     gender = models.CharField(max_length=10, choices=[
         ("Male", "Male"), ("Female", "Female"), ("Other", "Other")
     ], blank=True, null=True)

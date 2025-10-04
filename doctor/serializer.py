@@ -29,6 +29,7 @@ class doctor_serializer(serializers.ModelSerializer):
     # User fields — readable & writable
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
+    address = serializers.CharField(source='user.address')
     email = serializers.EmailField(source='user.email', allow_blank=True, required=False)
     dob = serializers.DateField(source='user.dob', required=False, allow_null=True)
     profile_photo = serializers.ImageField(source='user.profile_photo', required=False, allow_null=True)
@@ -41,8 +42,8 @@ class doctor_serializer(serializers.ModelSerializer):
         model = doctor
         fields = [
             "id",
-            "first_name", "last_name", "email", "dob", "gender", "profile_photo",
-            "image", "users_details",
+            "first_name", "last_name", "address", "email", "dob", "gender", "profile_photo",
+            "users_details",
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor",
