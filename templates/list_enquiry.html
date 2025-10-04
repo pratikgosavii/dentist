@@ -87,55 +87,109 @@
                     <div class="table-responsive">
                         <table id="datatable" class="table table-bordered table-striped">
                             <thead>
-    <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Mobile</th>
-        <th>Gender</th>
-        <th>Age</th>
-        <th>Email</th>
-        <th>Enquiry Type</th>
-        <th>Status</th>
-        <th>Address</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-</thead>
-<tbody>
-    {% if data %}
-        {% for enquiry in data %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ enquiry.full_name }}</td>
-                <td>{{ enquiry.phone_number }}</td>
-                <td>{{ enquiry.gender }}</td>
-                <td>{{ enquiry.age }}</td>
-                <td>{{ enquiry.email }}</td>
-                <td>{{ enquiry.enquiry_type }}</td>
-                <td>{{ enquiry.status }}</td>
-                <td>
-                    {{ enquiry.house }},
-                    {{ enquiry.area }},
-                    {{ enquiry.city }},
-                    {{ enquiry.state }} - {{ enquiry.pincode }}
-                </td>
-                <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
-                <td class="action-icons">
-                    <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
-                        <i class="bi bi-pencil-square text-primary"></i>
-                    </a>
-                    <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
-                        <i class="bi bi-trash text-danger"></i>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan="11" class="text-center">No enquiries found.</td>
-        </tr>
-    {% endif %}
-</tbody>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Enquiry For</th>
+                                    <th>Name</th>
+                                    <th>Mobile</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Email</th>
+                                    <th>Enquiry Type</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            {% if data %}
+                                {% for enquiry in data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+
+                                        <!-- ✅ Name -->
+                                        <td>
+                                            {{ enquiry.booking_type }}
+                                        </td>
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.full_name }}
+                                            {% else %}
+                                                {{ enquiry.full_name }}
+                                            {% endif %}
+                                        </td>
+
+                                        <!-- ✅ Mobile -->
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.mobile }}
+                                            {% else %}
+                                                {{ enquiry.phone_number }}
+                                            {% endif %}
+                                        </td>
+
+                                        <!-- ✅ Gender -->
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.gender }}
+                                            {% else %}
+                                                {{ enquiry.gender }}
+                                            {% endif %}
+                                        </td>
+
+                                        <!-- ✅ Age -->
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.age }}
+                                            {% else %}
+                                                {{ enquiry.age }}
+                                            {% endif %}
+                                        </td>
+
+                                        <!-- ✅ Email -->
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.email }}
+                                            {% else %}
+                                                {{ enquiry.email }}
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ enquiry.enquiry_type }}</td>
+                                        <td>{{ enquiry.status }}</td>
+
+                                        <!-- ✅ Address -->
+                                        <td>
+                                            {% if enquiry.booking_type == "self" %}
+                                                {{ enquiry.user.house }}, {{ enquiry.user.area }},
+                                                {{ enquiry.user.city }}, {{ enquiry.user.state }} - {{ enquiry.user.pincode }}
+                                            {% else %}
+                                                {{ enquiry.house }}, {{ enquiry.area }},
+                                                {{ enquiry.city }}, {{ enquiry.state }} - {{ enquiry.pincode }}
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ enquiry.created_at|date:"d-m-Y H:i" }}</td>
+
+                                        <!-- Actions -->
+                                        <td class="action-icons">
+                                            <a href="{% url 'update_enquiry' enquiry.id %}" title="Edit">
+                                                <i class="bi bi-pencil-square text-primary"></i>
+                                            </a>
+                                            <a href="{% url 'delete_enquiry' enquiry.id %}" title="Delete">
+                                                <i class="bi bi-trash text-danger"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="11" class="text-center">No enquiries found.</td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
 
                         </table>
                     </div>
