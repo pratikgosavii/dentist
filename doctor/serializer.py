@@ -10,7 +10,22 @@ from users.serializer import UserProfileSerializer
 from datetime import date
 
 
+
+from masters.serializers import slot_serializer
+
+class DoctorAvailabilitySerializer(serializers.ModelSerializer):
+    slot = slot_serializer()
+
+    class Meta:
+        model = DoctorAvailability
+        fields = ['id', 'day', 'slot', 'is_active']
+
+
 class doctor_serializer(serializers.ModelSerializer):
+
+    availabilities = DoctorAvailabilitySerializer(many=True, read_only=True)
+    is_all_details_available = serializers.SerializerMethodField()
+
     # User fields — readable & writable
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
@@ -59,7 +74,39 @@ class doctor_serializer(serializers.ModelSerializer):
         )
         return OfferSerializer(offers, many=True).data
 
+    def get_is_all_details_available(self, obj):
+        required_fields = [
+            "image", "gender", "clinic_name", "clinic_consultation_fees",
+            "clinic_phone_number", "house_building", "locality", "pincode",
+            "state", "city", "country", "designation", "title", "degree",
+            "specializations", "education", "about_doctor", "experience_years"
+        ]
 
+        # Check if all required doctor fields are filled
+        for field in required_fields:
+            value = getattr(obj, field, None)
+            if value in [None, "", []]:
+                return False
+
+        # ✅ Check if doctor has all 7 days of active availability
+        days_present = (
+            obj.availabilities
+            .filter(is_active=True)
+            .values_list("day", flat=True)
+            .distinct()
+        )
+
+        required_days = {
+            'Monday', 'Tuesday', 'Wednesday',
+            'Thursday', 'Friday', 'Saturday', 'Sunday'
+        }
+
+        if not required_days.issubset(set(days_present)):
+            return False
+
+        return True
+    
+    
 class medicine_serializer(serializers.ModelSerializer):
     class Meta:
         model = medicine
@@ -245,15 +292,6 @@ class DoctorLeaveSerializer(serializers.ModelSerializer):
 
         return data
 
-
-from masters.serializers import slot_serializer
-
-class DoctorAvailabilitySerializer(serializers.ModelSerializer):
-    slot = slot_serializer()
-
-    class Meta:
-        model = DoctorAvailability
-        fields = ['id', 'day', 'slot', 'is_active']
 
 
 
