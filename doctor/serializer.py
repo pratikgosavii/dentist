@@ -77,7 +77,7 @@ class doctor_serializer(serializers.ModelSerializer):
 
     def get_is_all_details_available(self, obj):
         required_fields = [
-            "image", "gender", "clinic_name", "clinic_consultation_fees",
+            "gender", "clinic_name", "clinic_consultation_fees",
             "clinic_phone_number", "house_building", "locality", "pincode",
             "state", "city", "country", "designation", "title", "degree",
             "specializations", "education", "about_doctor", "experience_years"
