@@ -994,3 +994,7 @@ class PrescriptionPDFAPIView(APIView):
             "filetype": "application/pdf",
             "data": pdf_base64,
         })
+    
+
+
+

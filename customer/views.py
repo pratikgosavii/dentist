@@ -352,3 +352,24 @@ class MyDoctorsAPIView(APIView):
 
         serializer = doctor_serializer(doctor_set, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+    
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .helpers import get_distance_and_eta
+
+class NearbyDoctorsAPIView(APIView):
+    def post(self, request):
+        user_lat = float(request.data.get("latitude"))
+        user_lon = float(request.data.get("longitude"))
+
+        # Fetch all doctors
+        doctors = doctor.objects.all()
+        serializer = doctor_serializer(doctors, many=True)
+        doctor_data = serializer.data
+
+        # Call Google API and attach distance + ETA
+        doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctor_data)
+
+        return Response({"doctors": doctors_with_distance})

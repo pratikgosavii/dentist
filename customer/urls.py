@@ -34,6 +34,9 @@ urlpatterns = [
 
     path("my-doctors/", MyDoctorsAPIView.as_view(), name="my-doctors"),
 
+    path("nearby/doctors/", NearbyDoctorsAPIView.as_view(), name="doctor-nearby"),
+
+
 ] + router.urls 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

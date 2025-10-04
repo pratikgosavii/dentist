@@ -47,7 +47,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "users_details",
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
-            "designation", "title", "degree", "specializations", "education", "about_doctor",
+            "designation", "title", "degree", "specializations", "education", "about_doctor", "latitude", "longitude",
             "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities'
         ]
         read_only_fields = ["is_active", "offers"]
@@ -81,10 +81,10 @@ class doctor_serializer(serializers.ModelSerializer):
             "clinic_name", "clinic_consultation_fees",
             "clinic_phone_number", "house_building", "locality", "pincode",
             "state", "city", "country", "designation", "title", "degree",
-            "specializations", "education", "about_doctor", "experience_years"
+            "specializations", "education", "about_doctor", "experience_years",
         ]
         required_user_fields = [
-            "gender", "first_name", "last_name", "dob", "profile_photo"
+             "first_name", "last_name", 
         ]
 
         # check doctor fields
@@ -99,20 +99,7 @@ class doctor_serializer(serializers.ModelSerializer):
             if value in [None, "", []]:
                 return False
 
-        # availability check
-        days_present = (
-            obj.availabilities
-            .filter(is_active=True)
-            .values_list("day", flat=True)
-            .distinct()
-        )
-        required_days = {
-            'Monday', 'Tuesday', 'Wednesday',
-            'Thursday', 'Friday', 'Saturday', 'Sunday'
-        }
-        if not required_days.issubset(set(days_present)):
-            return False
-
+      
         return True
 
 

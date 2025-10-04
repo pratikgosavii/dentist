@@ -55,6 +55,9 @@ class doctor(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
     review_count = models.PositiveIntegerField(default=0)
 
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
     remark = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
