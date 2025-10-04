@@ -113,10 +113,18 @@ ENQUIRY_TYPE_CHOICES = [
     ("skin_hydrafacial", "Skin/Hydrafacial"),
 ]
 
+BOOKING_TYPE_CHOICES = [
+    ("self", "Booking for Yourself"),
+    ("other", "Booking for Someone Else"),
+]
+
 from users.models import User
 
 
 class enquiry(models.Model):
+   
+
+    
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enquiries_user", blank=True, null=True)  
     full_name = models.CharField(max_length=100, blank=True, null=True)
@@ -134,7 +142,12 @@ class enquiry(models.Model):
 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     enquiry_type = models.CharField(max_length=20, choices=ENQUIRY_TYPE_CHOICES, default='Pending')
-
+    booking_type = models.CharField(
+        max_length=10,
+        choices=BOOKING_TYPE_CHOICES,
+        default="self"
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
 
