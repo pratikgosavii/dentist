@@ -134,11 +134,11 @@ class enquiry(models.Model):
     age = models.PositiveIntegerField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
 
-    house = models.CharField("House/Building/Apartment No.", max_length=100)
-    area = models.CharField("Locality/Area/street/Sector", max_length=150)
-    pincode = models.CharField(max_length=10)
-    state = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
+    house = models.CharField("House/Building/Apartment No.", max_length=100, blank=True, null=True)
+    area = models.CharField("Locality/Area/street/Sector", max_length=150, blank=True, null=True)
+    pincode = models.CharField(max_length=10, blank=True, null=True)
+    state = models.CharField(max_length=50, blank=True, null=True)
+    city = models.CharField(max_length=50, blank=True, null=True)
 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     enquiry_type = models.CharField(max_length=20, choices=ENQUIRY_TYPE_CHOICES, default='Pending')
