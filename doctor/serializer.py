@@ -25,6 +25,7 @@ class doctor_serializer(serializers.ModelSerializer):
 
     availabilities = DoctorAvailabilitySerializer(many=True, read_only=True)
     is_all_details_available = serializers.SerializerMethodField()
+    is_availabilities_details = serializers.SerializerMethodField()
 
     # User fields — readable & writable
     first_name = serializers.CharField(source='user.first_name')
@@ -88,6 +89,8 @@ class doctor_serializer(serializers.ModelSerializer):
             value = getattr(obj, field, None)
             if value in [None, "", []]:
                 return False
+
+    def get_is_availabilities_details(self, obj):
 
         # ✅ Check if doctor has all 7 days of active availability
         days_present = (
