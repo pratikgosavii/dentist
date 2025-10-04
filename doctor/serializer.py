@@ -77,18 +77,44 @@ class doctor_serializer(serializers.ModelSerializer):
         return OfferSerializer(offers, many=True).data
 
     def get_is_all_details_available(self, obj):
-        required_fields = [
-            "gender", "clinic_name", "clinic_consultation_fees",
+        required_doctor_fields = [
+            "clinic_name", "clinic_consultation_fees",
             "clinic_phone_number", "house_building", "locality", "pincode",
             "state", "city", "country", "designation", "title", "degree",
             "specializations", "education", "about_doctor", "experience_years"
         ]
+        required_user_fields = [
+            "gender", "first_name", "last_name", "dob", "profile_photo"
+        ]
 
-        # Check if all required doctor fields are filled
-        for field in required_fields:
+        # check doctor fields
+        for field in required_doctor_fields:
             value = getattr(obj, field, None)
             if value in [None, "", []]:
                 return False
+
+        # check user fields
+        for field in required_user_fields:
+            value = getattr(obj.user, field, None)
+            if value in [None, "", []]:
+                return False
+
+        # availability check
+        days_present = (
+            obj.availabilities
+            .filter(is_active=True)
+            .values_list("day", flat=True)
+            .distinct()
+        )
+        required_days = {
+            'Monday', 'Tuesday', 'Wednesday',
+            'Thursday', 'Friday', 'Saturday', 'Sunday'
+        }
+        if not required_days.issubset(set(days_present)):
+            return False
+
+        return True
+
 
     def get_is_availabilities_details(self, obj):
 
