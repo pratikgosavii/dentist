@@ -688,7 +688,7 @@ def update_treatment_steps(request, treatment_step_id):
     
     else:
 
-        instance = TreatmentStep.objects.get(id=treatment_steps_id)
+        instance = TreatmentStep.objects.get(id=treatment_step_id)
         forms = TreatmentStepForm(instance=instance)
 
         context = {

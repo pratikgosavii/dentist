@@ -123,7 +123,7 @@ class enquiry(models.Model):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
 
     house = models.CharField("House/Building/Apartment No.", max_length=100)
