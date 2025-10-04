@@ -409,9 +409,17 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
 
     
 class LabViewSet(viewsets.ModelViewSet):
-    queryset = Lab.objects.all()
     serializer_class = LabSerializer
     permission_classes = [IsAuthenticated, IsDoctor]
+
+    def get_queryset(self):
+        # Show only labs created by this doctor
+        return Lab.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        # Automatically assign the logged-in doctor as owner
+        serializer.save(user=self.request.user)
+
 
 
 class LabWorkViewSet(viewsets.ModelViewSet):
