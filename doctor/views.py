@@ -391,7 +391,7 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         appointment.date = new_date
-        appointment.slot = slot
+        appointment.slot__id = slot
         appointment.status = "waiting"  # back to waiting for confirmation
         appointment.save()
         return Response({"detail": "Appointment rescheduled."}, status=status.HTTP_200_OK)
