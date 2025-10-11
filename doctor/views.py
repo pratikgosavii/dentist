@@ -945,7 +945,7 @@ class PrescriptionPDFAPIView(APIView):
 
         # Fetch prescribed medicines (adjust field name if needed)
         medicines = appointment.dosdsctor_medicines.select_related("medicine")
-
+    
         doctor_instance = appointment.doctor
 
         context = {
