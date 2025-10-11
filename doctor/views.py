@@ -941,7 +941,6 @@ class PrescriptionPDFAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, appointment_id):
-        from .models import Appointment
         appointment = Appointment.objects.get(id=appointment_id)
 
         # Fetch prescribed medicines (adjust field name if needed)
