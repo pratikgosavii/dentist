@@ -985,3 +985,152 @@ def ticket_detail(request, ticket_id):
     })
 
 
+
+
+
+def list_prescription(request):
+    """All prescriptions list"""
+
+    mobile = request.GET.get('mobile')
+    user = None
+
+    if mobile:
+        user = User.objects.filter(mobile=mobile).first()
+        if user:
+            prescriptions = Prescription.objects.filter(user=user).order_by('-date')
+        else:
+            prescriptions = None
+    else:
+        prescriptions = Prescription.objects.select_related('user').order_by('-date')
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+
+
+def prescription_medicine_list(request, prescription_id):
+    prescription = get_object_or_404(Prescription, id=prescription_id)
+    medicines = prescription.medicines.select_related('medicine')
+    return render(request, 'list_prescription_medicine.html', {
+        'prescription': prescription,
+        'medicines': medicines
+    })
+
+
+
+
+def create_prescription(request):
+    user_id = request.GET.get('user_id')  # from search or Add New
+    selected_user = None
+    if user_id:
+        selected_user = get_object_or_404(User, pk=user_id)
+
+    medicines = medicine.objects.all()
+
+    if request.method == "POST":
+
+
+        print(request.POST)
+        user_id_post = request.POST.get("user")
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+
+        if not user_id_post or not title:
+            return redirect(request.path)
+
+        user_instance = get_object_or_404(User, pk=user_id_post)
+
+        # Create prescription
+        pres = Prescription.objects.create(
+            user=user_instance,
+            title=title,
+            description=description
+        )
+
+        # Loop through medicine fields
+        med_ids = request.POST.getlist("medicine[]")
+        quantities = request.POST.getlist("quantity[]")
+        doses = request.POST.getlist("dose[]")
+        dose_times = request.POST.getlist("dose_time[]")
+        meal_relations = request.POST.getlist("meal_relation[]")
+        durations = request.POST.getlist("duration_in_days[]")
+        instructions_list = request.POST.getlist("instructions[]")
+
+        for i in range(len(med_ids)):
+            if med_ids[i]:
+                PrescriptionMedicine.objects.create(
+                    prescription=pres,
+                    medicine_id=med_ids[i],
+                    quantity=quantities[i] or 1,
+                    dose=doses[i],
+                    dose_time=dose_times[i],
+                    meal_relation=meal_relations[i],
+                    duration_in_days=durations[i] or 1,
+                    instructions=instructions_list[i]
+                )
+
+        return redirect("list_prescription")  # replace with your list url
+
+    return render(request, "add_prescription.html", {
+        "user": selected_user,
+        "medicines": medicines
+    })
+
+
+
+
+def update_prescription(request, pk):
+    prescription = get_object_or_404(Prescription, pk=pk)
+    medicines = medicine.objects.all()
+    selected_user = prescription.user
+
+    # Add choices here (for template dropdowns)
+    dose_choices = PrescriptionMedicine._meta.get_field('dose').choices
+    dose_time_choices = PrescriptionMedicine._meta.get_field('dose_time').choices
+    meal_relation_choices = PrescriptionMedicine._meta.get_field('meal_relation').choices
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+
+        if not title:
+            return redirect(request.path)
+
+        prescription.title = title
+        prescription.description = description
+        prescription.save()
+
+        # Delete existing medicines before re-adding
+        prescription.medicines.all().delete()
+
+        med_ids = request.POST.getlist("medicine[]")
+        quantities = request.POST.getlist("quantity[]")
+        doses = request.POST.getlist("dose[]")
+        dose_times = request.POST.getlist("dose_time[]")
+        meal_relations = request.POST.getlist("meal_relation[]")
+        durations = request.POST.getlist("duration_in_days[]")
+        instructions_list = request.POST.getlist("instructions[]")
+
+        for i in range(len(med_ids)):
+            if med_ids[i]:
+                PrescriptionMedicine.objects.create(
+                    prescription=prescription,
+                    medicine_id=med_ids[i],
+                    quantity=quantities[i] or 1,
+                    dose=doses[i],
+                    dose_time=dose_times[i],
+                    meal_relation=meal_relations[i],
+                    duration_in_days=durations[i] or 1,
+                    instructions=instructions_list[i]
+                )
+
+        return redirect("list_prescription")
+
+    prescription_medicines = prescription.medicines.select_related('medicine').all()
+
+    return render(request, "update_prescription.html", {
+        "prescription": prescription,
+        "user": selected_user,
+        "medicines": medicines,
+        "prescription_medicines": prescription_medicines,
+        "dose_choices": dose_choices,
+        "dose_time_choices": dose_time_choices,
+        "meal_relation_choices": meal_relation_choices,
+    })

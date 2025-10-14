@@ -1,0 +1,183 @@
+{% extends "partials/adminBase.html" %}
+{% load static %}
+
+{% block title %}Update Prescription{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<style>
+    .medicine-row {
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background: #fafafa;
+        position: relative;
+    }
+    .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        color: red;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-content container-fluid">
+    <h4 class="mb-4">Update Prescription</h4>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label>User</label>
+            <input type="text" class="form-control" value="{{ user }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label>Title</label>
+            <input type="text" name="title" class="form-control" value="{{ prescription.title }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea name="description" class="form-control" rows="3">{{ prescription.description }}</textarea>
+        </div>
+
+        <h5 class="mt-4 d-flex justify-content-between align-items-center">
+            <span>Medicines</span>
+            <button type="button" class="btn btn-sm btn-success" id="addMedicineBtn">➕ Add Medicine</button>
+        </h5>
+
+        <div id="medicine-container">
+            {% for pm in prescription_medicines %}
+            <div class="medicine-row row">
+                <span class="remove-btn" onclick="this.parentElement.remove()">×</span>
+
+                <div class="col-md-3 mb-2">
+                    <select name="medicine[]" class="form-control select2">
+                        <option value="">Select Medicine</option>
+                        {% for m in medicines %}
+                            <option value="{{ m.id }}" {% if m.id == pm.medicine.id %}selected{% endif %}>{{ m.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-1 mb-2">
+                    <input type="number" name="quantity[]" class="form-control" value="{{ pm.quantity }}" placeholder="Qty">
+                </div>
+
+                <div class="col-md-1 mb-2">
+                    <select name="dose[]" class="form-control">
+                        {% for val, label in dose_choices %}
+                            <option value="{{ val }}" {% if val == pm.dose %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <select name="dose_time[]" class="form-control">
+                        {% for val, label in dose_time_choices %}
+                            <option value="{{ val }}" {% if val == pm.dose_time %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <select name="meal_relation[]" class="form-control">
+                        {% for val, label in meal_relation_choices %}
+                            <option value="{{ val }}" {% if val == pm.meal_relation %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-1 mb-2">
+                    <input type="number" name="duration_in_days[]" class="form-control" value="{{ pm.duration_in_days }}" placeholder="Days">
+                </div>
+
+                <div class="col-md-2 mb-2">
+                    <input type="text" name="instructions[]" class="form-control" value="{{ pm.instructions }}" placeholder="Instructions">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            <a href="{% url 'list_prescription' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'libs/select2/dist/js/select2.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+
+        // Template for new medicine row
+        const medicineTemplate = `
+        <div class="medicine-row row">
+            <span class="remove-btn" onclick="this.parentElement.remove()">×</span>
+
+            <div class="col-md-3 mb-2">
+                <select name="medicine[]" class="form-control select2">
+                    <option value="">Select Medicine</option>
+                    {% for m in medicines %}
+                        <option value="{{ m.id }}">{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-1 mb-2">
+                <input type="number" name="quantity[]" class="form-control" value="1" placeholder="Qty">
+            </div>
+
+            <div class="col-md-1 mb-2">
+                <select name="dose[]" class="form-control">
+                    {% for val, label in dose_choices %}
+                        <option value="{{ val }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-2">
+                <select name="dose_time[]" class="form-control">
+                    {% for val, label in dose_time_choices %}
+                        <option value="{{ val }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-2 mb-2">
+                <select name="meal_relation[]" class="form-control">
+                    {% for val, label in meal_relation_choices %}
+                        <option value="{{ val }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-1 mb-2">
+                <input type="number" name="duration_in_days[]" class="form-control" value="1" placeholder="Days">
+            </div>
+
+            <div class="col-md-2 mb-2">
+                <input type="text" name="instructions[]" class="form-control" placeholder="Instructions">
+            </div>
+        </div>
+        `;
+
+        // Add medicine dynamically
+        $('#addMedicineBtn').on('click', function() {
+            $('#medicine-container').append(medicineTemplate);
+            $('.select2').select2(); // reinit Select2 for new row
+        });
+    });
+</script>
+{% endblock %}

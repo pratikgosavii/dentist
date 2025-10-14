@@ -77,6 +77,12 @@ urlpatterns = [
         # urls.py
     path('admin/support-tickets/', list_support_tickets, name='list_support_tickets'),
     path('admin/support-tickets/<int:ticket_id>/', ticket_detail, name='ticket_detail'),
+    
+    path('list-prescription/', list_prescription, name='list_prescription'),
+    path('list-prescription-medicine/<prescription_id>', prescription_medicine_list, name='prescription_medicine_list'),
+    path('create-prescription/', create_prescription, name='create_prescription'),
+    path('update-prescription/<pk>', update_prescription, name='update_prescription'),
+    # path('delete-prescription/', delete_prescription, name='delete_prescription'),
 
     ]  + router.urls
 

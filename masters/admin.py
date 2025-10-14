@@ -8,3 +8,4 @@ from .models import *
 admin.site.register(medicine)
 admin.site.register(area)
 admin.site.register(city)
+admin.site.register(PrescriptionMedicine)

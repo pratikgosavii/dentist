@@ -1,0 +1,140 @@
+{% extends "partials/adminBase.html" %}
+{% load static %}
+
+{% block title %}Add New Prescription{% endblock %}
+
+{% block extra_css %}
+<!-- select2 css -->
+<link href="{% static 'libs/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<!-- dropzone css -->
+<link href="{% static 'libs/dropzone/dist/dropzone.css'%}" rel="stylesheet" type="text/css" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-content container-fluid">
+        <h4>Add New Prescription</h4>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input type="text" name="title" class="form-control" required>
+                <input type="hidden" name="user" value="{{ user.id }}">
+            </div>
+
+            <div class="mb-3">
+                <label>Description</label>
+                <textarea name="description" class="form-control"></textarea>
+            </div>
+
+            <hr>
+            <h5>Medicines</h5>
+
+<table class="table table-bordered" id="medicine-table">
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Qty</th>
+            <th>Dose</th>
+            <th>Dose Time</th>
+            <th>Meal Relation</th>
+            <th>Duration (Days)</th>
+            <th>Instructions</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="medicine-row">
+            <td>
+                <select name="medicine[]" class="form-control" required>
+                    <option value="">-- Select Medicine --</option>
+                    {% for med in medicines %}
+                        <option value="{{ med.id }}">{{ med.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <input type="number" step="0.1" name="quantity[]" class="form-control" placeholder="Qty">
+            </td>
+            <td>
+                <select name="dose[]" class="form-control">
+                    <option value="half">Half</option>
+                    <option value="1">1</option>
+                    <option value="5 ml">5 ml</option>
+                    <option value="10 ml">10 ml</option>
+                    <option value="15 ml">15 ml</option>
+                    <option value="20 ml">20 ml</option>
+                </select>
+            </td>
+            <td>
+                <select name="dose_time[]" class="form-control">
+                    <option value="morning">Morning</option>
+                    <option value="afternoon">Afternoon</option>
+                    <option value="night">Night</option>
+                </select>
+            </td>
+            <td>
+                <select name="meal_relation[]" class="form-control">
+                    <option value="before_breakfast">Before Breakfast</option>
+                    <option value="after_breakfast">After Breakfast</option>
+                    <option value="before_lunch">Before Lunch</option>
+                    <option value="after_lunch">After Lunch</option>
+                    <option value="before_dinner">Before Dinner</option>
+                    <option value="after_dinner">After Dinner</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" name="duration_in_days[]" class="form-control" placeholder="Days" value="1">
+            </td>
+            <td>
+                <input type="text" name="instructions[]" class="form-control" placeholder="Instructions">
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger remove-medicine">-</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button type="button" class="btn btn-secondary mb-3" id="add-medicine">+ Add Medicine</button>
+<button type="submit" class="btn btn-primary mb-3">Save Prescription</button>
+
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const container = document.getElementById("medicine-container");
+    const addBtn = document.getElementById("add-medicine");
+
+    // Add new medicine row
+    addBtn.addEventListener("click", function() {
+        let firstRow = container.querySelector(".medicine-row");
+        let newRow = firstRow.cloneNode(true);
+
+        // Clear all input fields in the new row
+        newRow.querySelectorAll("input").forEach(el => el.value = "");
+
+        // Reset all selects in the new row to the first option
+        newRow.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+
+        container.appendChild(newRow);
+    });
+
+    // Remove a medicine row
+    container.addEventListener("click", function(e) {
+        if (e.target.classList.contains("remove-medicine")) {
+            const rows = container.querySelectorAll(".medicine-row");
+            if (rows.length > 1) {
+                e.target.closest(".medicine-row").remove();
+            }
+        }
+    });
+});
+</script>
+{% endblock extra_js %}

@@ -44,3 +44,911 @@ Traceback (most recent call last):
   File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\doctor\views.py", line 947, in get
     medicines = appointment.doctor_medicines.select_related("medicine")
 AttributeError: 'Appointment' object has no attribute 'doctor_medicines'
+2025-10-14 04:15:13,091: WARNING: Not Found: /favicon.ico
+2025-10-14 04:15:14,485: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:15:20,309: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:14,326: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:17:14,627: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:38,339: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:17:42,739: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:17:43,217: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:47,703: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:49,369: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:17:54,848: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:56,934: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:17:57,360: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:21:16,575: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 04:21:19,198: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:21:23,828: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:21:32,507: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:21:42,301: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:22:16,070: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:22:22,966: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:57:46,046: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:57:52,864: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:57:59,857: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:58:06,031: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:58:08,386: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:58:19,239: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:58:23,754: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:59:41,705: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 998, in list_prescription
+    user = User.objects.filter(phone_number__icontains=mobile).first()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1491, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1303, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1768, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'phone_number' into field. Choices are: address, appointmentdocument, appointments, customer, date_joined, dob, doctor, doctor_wdefredsasmedicines, email, enquiries_user, expense, firebase_uid, first_name, gender, groups, id, is_active, is_customer, is_doctor, is_staff, is_superuser, lab, last_login, last_name, logentry, medicine, mobile, offers, password, prescriptions, profile_photo, sent_support_messages, support_tickets, teeth, user_permissions, video_call_history
+2025-10-14 04:59:43,615: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 04:59:52,876: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view masters.views.list_prescription didn't return an HttpResponse object. It returned None instead.
+2025-10-14 04:59:54,594: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:00:06,752: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:00:17,973: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:02:08,309: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:02:10,771: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:04:39,838: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1005, in list_prescription
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'create_prescription' not found. 'create_prescription' is not a valid view function or pattern name.
+2025-10-14 05:04:41,879: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:05:19,478: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:05:19,951: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1068, in create_prescription
+    return render(request, "add_prescription.html", {
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 523, in parse
+    self.unclosed_block_tag(parse_until)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 586, in unclosed_block_tag
+    raise self.error(token, msg)
+django.template.exceptions.TemplateSyntaxError: Unclosed tag on line 6: 'block'. Looking for one of: endblock.
+2025-10-14 05:05:21,701: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:05:47,662: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:05:48,872: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:05:55,828: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:06:02,425: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:06:33,676: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:06:37,620: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:06:47,903: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:06:50,266: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:06:54,375: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:07:27,469: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:07:28,134: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:07:30,784: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:07:41,547: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:07:43,807: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:07:49,490: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:07:52,401: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:08:21,006: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:08:23,215: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:08:29,195: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:08:31,824: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:47:11,103: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:47:13,147: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:47:42,612: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:47:45,508: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:48:07,946: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:48:09,392: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:48:10,196: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:48:11,623: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:48:22,272: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:48:23,708: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:48:24,468: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:48:25,889: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:51:35,547: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:51:38,053: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:51:38,205: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:51:41,032: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:52:06,824: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:52:09,754: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:52:11,423: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:52:14,107: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:52:54,125: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:54:15,084: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:54:16,895: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:54:20,067: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:55:34,389: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:56:54,047: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:56:57,111: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:57:38,141: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:57:41,223: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 05:58:23,774: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:58:26,035: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:58:33,912: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 05:58:36,947: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:29:07,688: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:29:10,531: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:29:12,161: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:29:14,595: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:30:42,588: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:30:44,569: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:33:48,081: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:33:49,191: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:35:13,321: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:35:16,900: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:37:02,976: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1068, in create_prescription
+    return render(request, "add_prescription.html", {
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'extra_js' appears more than once
+2025-10-14 06:37:03,311: WARNING: Not Found: /favicon.ico
+2025-10-14 06:37:04,938: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:37:14,898: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 510, in parse
+    compile_func = self.tags[command]
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1068, in create_prescription
+    return render(request, "add_prescription.html", {
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 573, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 162: 'endblock'. Did you forget to register or load this tag?
+2025-10-14 06:37:16,925: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:37:27,410: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:37:30,505: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:37:56,666: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:37:59,296: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:38:12,165: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:38:14,760: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:38:26,190: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:38:29,075: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:39:38,784: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:39:41,884: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:40:33,556: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:40:36,545: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:41:17,716: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:41:20,735: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:41:23,198: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:41:25,944: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:42:29,685: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:42:32,612: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:43:34,507: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:43:37,378: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:43:40,033: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:43:43,103: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:43:50,555: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:43:53,270: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:44:12,028: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:44:14,949: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:44:24,956: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:44:28,450: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:45:08,159: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 06:45:10,881: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:45:24,892: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:46:30,111: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:46:31,320: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:47:29,885: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:47:48,963: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:48:50,731: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:53:02,429: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:54:40,520: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:55:35,638: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:56:29,963: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:56:42,952: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:57:39,071: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:57:59,304: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:03,501: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:05,308: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:08,018: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:14,196: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:26,327: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:28,268: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:29,498: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:30,629: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:32,442: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:33,964: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:39,742: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:58:42,274: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:59:06,610: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:59:46,784: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 06:59:57,645: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:00:00,037: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:00:02,949: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:00:05,492: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:00:08,288: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:01:13,294: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:01:17,717: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:01:25,281: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:05,329: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:11,996: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:13,783: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:23,677: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:41,269: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:04:46,352: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\fields\__init__.py", line 2123, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: 'class="form-control"'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1051, in create_prescription
+    user_instance = get_object_or_404(User, pk=user_id_post)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 86, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 635, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1494, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\query.py", line 1501, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1609, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1641, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1555, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\sql\query.py", line 1385, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\lookups.py", line 30, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\lookups.py", line 369, in get_prep_lookup
+    return super().get_prep_lookup()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\lookups.py", line 88, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\db\models\fields\__init__.py", line 2125, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'id' expected a number but got 'class="form-control"'.
+2025-10-14 07:04:48,321: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:05:12,787: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:05:13,996: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:05:19,643: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:06:06,930: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:06:08,301: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:06:12,976: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:06:50,003: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:06:51,386: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:07:05,826: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1066, in create_prescription
+    instructions=instructions_list[i]
+IndexError: list index out of range
+2025-10-14 07:07:07,667: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:07:28,974: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:07:33,286: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:11:04,256: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:11:07,990: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:11:14,238: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1066, in create_prescription
+    instructions=instructions_list[i]
+IndexError: list index out of range
+2025-10-14 07:11:14,333: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:11:16,221: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:42:16,210: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:42:20,008: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:42:22,174: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:42:29,622: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1066, in create_prescription
+    instructions=instructions_list[i]
+IndexError: list index out of range
+2025-10-14 07:42:29,814: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:42:31,634: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:44:50,463: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:44:53,168: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:46:00,555: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:46:56,572: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:47:07,442: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:48:23,136: WARNING: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-10-14 07:48:25,961: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:48:36,316: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1069, in create_prescription
+    return redirect("prescription_list")  # replace with your list url
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 180, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'prescription_list' not found. 'prescription_list' is not a valid view function or pattern name.
+2025-10-14 07:48:38,175: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:49:13,261: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1005, in list_prescription
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'prescription_medicine_list' with arguments '(1,)' not found. 1 pattern(s) tried: ['masters/list\\-prescription\\-medicine/\\Z']
+2025-10-14 07:49:15,200: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:49:44,845: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:49:45,144: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1005, in list_prescription
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'edit_prescription' not found. 'edit_prescription' is not a valid view function or pattern name.
+2025-10-14 07:49:46,976: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1005, in list_prescription
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'edit_prescription' not found. 'edit_prescription' is not a valid view function or pattern name.
+2025-10-14 07:49:48,876: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:50:26,682: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:50:30,137: ERROR: Internal Server Error: /masters/list-prescription-medicine/1
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1011, in prescription_medicine_list
+    return render(request, 'list_prescription_medicine.html', {
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'prescription_list' not found. 'prescription_list' is not a valid view function or pattern name.
+2025-10-14 07:50:32,080: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:50:56,433: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 07:51:03,184: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 13:57:15,909: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 13:57:18,697: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 13:57:21,499: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 13:57:40,602: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:22:13,629: ERROR: Internal Server Error: /masters/list-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1005, in list_prescription
+    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'update_prescription' with arguments '(1,)' not found. 1 pattern(s) tried: ['masters/update\\-prescription/\\Z']
+2025-10-14 14:22:15,633: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:22:54,906: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:22:55,074: ERROR: Internal Server Error: /masters/update-prescription/1
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 819, in __init__
+    self.literal = float(var)
+ValueError: could not convert string to float: 'pm._meta.get_field'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 835, in __init__
+    self.literal = mark_safe(unescape_string_literal(var))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\utils\functional.py", line 231, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\utils\text.py", line 446, in unescape_string_literal
+    raise ValueError("Not a string literal: %r" % s)
+ValueError: Not a string literal: 'pm._meta.get_field'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1123, in update_prescription
+    return render(request, "update_prescription.html", {
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 861, in do_for
+    sequence = parser.compile_filter(bits[in_index + 1])
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 605, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 693, in __init__
+    var_obj = Variable(var)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 840, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Variables and attributes may not begin with underscores: 'pm._meta.get_field'
+2025-10-14 14:22:56,865: WARNING: Not Found: /firebase-messaging-sw.js
