@@ -1,3 +1,4 @@
+import hmac
 from django.shortcuts import get_object_or_404, render
 
 # Create your views here.
@@ -373,3 +374,104 @@ class NearbyDoctorsAPIView(APIView):
         doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctor_data)
 
         return Response({"doctors": doctors_with_distance})
+    
+
+
+
+import razorpay
+import hmac
+import hashlib
+from django.conf import settings
+from rest_framework import viewsets
+from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import PaidDoubt
+
+
+razorpay_client = razorpay.Client(
+    auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+)
+
+class PaidDoubtViewSet(viewsets.ModelViewSet):
+    queryset = PaidDoubt.objects.all().order_by('-id')
+    serializer_class = PaidDoubtSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        """
+        Create PaidDoubt and Razorpay order in one API call.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Save the doubt (pending payment)
+        paid_doubt = serializer.save(user=request.user)
+
+        # Create Razorpay order
+        amount_paise = int(paid_doubt.amount * 100)
+        order_data = {
+            "amount": amount_paise,
+            "currency": "INR",
+            "payment_capture": "1",
+        }
+
+        order = razorpay_client.order.create(order_data)
+
+        # Save order ID in DB
+        paid_doubt.razorpay_order_id = order["id"]
+        paid_doubt.save()
+
+        # Return all details to frontend for checkout
+        return Response({
+            "status": "success",
+            "paid_doubt_id": paid_doubt.id,
+            "order_id": order["id"],
+            "amount": paid_doubt.amount,
+            "currency": "INR",
+            "key": settings.RAZORPAY_KEY_ID,
+        }, status=status.HTTP_201_CREATED)
+
+
+
+# ✅ Webhook endpoint
+@api_view(['POST'])
+def razorpay_webhook(request):
+    """
+    Handle Razorpay webhook events securely.
+    """
+    webhook_secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", None)
+    received_signature = request.headers.get('X-Razorpay-Signature')
+
+    if not webhook_secret or not received_signature:
+        return Response({"error": "Missing webhook secret or signature"}, status=400)
+
+    # Verify webhook signature
+    body = request.body
+    expected_signature = hmac.new(
+        webhook_secret.encode('utf-8'),
+        body,
+        hashlib.sha256
+    ).hexdigest()
+
+    if received_signature != expected_signature:
+        return Response({"error": "Invalid signature"}, status=400)
+
+    # Parse payload
+    payload = request.data
+    event = payload.get('event')
+    payment_entity = payload.get('payload', {}).get('payment', {}).get('entity', {})
+
+    order_id = payment_entity.get('order_id')
+    payment_id = payment_entity.get('id')
+
+    if event == "payment.captured" and order_id:
+        try:
+            paid_doubt = PaidDoubt.objects.get(razorpay_order_id=order_id)
+            paid_doubt.payment_status = "paid"
+            paid_doubt.razorpay_payment_id = payment_id
+            paid_doubt.save()
+        except PaidDoubt.DoesNotExist:
+            pass
+
+    return Response({"status": "ok"})

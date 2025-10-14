@@ -158,3 +158,24 @@ class Review(models.Model):
     @property
     def doctor(self):
         return self.appointment.doctor
+
+
+
+
+
+class PaidDoubt(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, blank=True, null=True)
+    phone = models.CharField(max_length=15)
+    message = models.TextField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    payment_status = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Pending'), ('paid', 'Paid')],
+        default='pending'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.phone} - {self.payment_status}"

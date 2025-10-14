@@ -111,6 +111,7 @@ GENDER_CHOICES = [
 ENQUIRY_TYPE_CHOICES = [
     ("aligners", "Aligners"),
     ("skin_hydrafacial", "Skin/Hydrafacial"),
+    ("home_visit", "Home Visit"),
 ]
 
 BOOKING_TYPE_CHOICES = [

@@ -36,6 +36,7 @@ urlpatterns = [
 
     path("nearby/doctors/", NearbyDoctorsAPIView.as_view(), name="doctor-nearby"),
 
+    path('razorpay/webhook/', razorpay_webhook, name='razorpay_webhook'),
 
 ] + router.urls 
 

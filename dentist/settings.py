@@ -94,6 +94,15 @@ SIMPLE_JWT = {
 HTML2PDF_API_KEY = 'IjjR93npHaOZ6bXt6BmHdt2AwYRh3LBoe3hIYz0wBkHddGoa79PF00BB9cgPAdVl'
 GOOGLE_MAPS_API_KEY = 'AIzaSyDSHEo7c3hgK2fl7LdLcmbB2dZa4Z0aOBY'
 
+
+
+# Razorpay API keys
+RAZORPAY_KEY_ID = "rzp_test_YourKeyIDHere"      # Public key (for frontend checkout)
+RAZORPAY_KEY_SECRET = "YourSecretKeyHere"       # Secret key (for backend API calls)
+RAZORPAY_WEBHOOK_SECRET = "YourWebhookSecret"   # Secret string to verify webhooks
+
+
+
 ROOT_URLCONF = 'dentist.urls'
 
 TEMPLATES = [

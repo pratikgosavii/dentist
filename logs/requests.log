@@ -994,3 +994,5 @@ IndexError: list index out of range
 2025-10-14 15:19:50,627: WARNING: Not Found: /firebase-messaging-sw.js
 2025-10-14 15:20:02,009: WARNING: Not Found: /firebase-messaging-sw.js
 2025-10-14 15:20:03,377: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 02:57:03,660: WARNING: Unauthorized: /masters/user/prescriptions/
+2025-10-15 02:59:47,122: WARNING: Unauthorized: /masters/user/prescriptions/

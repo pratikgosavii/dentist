@@ -238,3 +238,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         # check if doctor is assigned from appointment
 
         return data
+    
+
+    
+class PaidDoubtSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaidDoubt
+        fields = '__all__'
+        read_only_fields = ['user', 'payment_status', 'razorpay_order_id', 'razorpay_payment_id', 'created_at']
