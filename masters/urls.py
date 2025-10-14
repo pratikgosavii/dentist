@@ -84,6 +84,8 @@ urlpatterns = [
     path('update-prescription/<pk>', update_prescription, name='update_prescription'),
     # path('delete-prescription/', delete_prescription, name='delete_prescription'),
 
+    path('user/prescriptions/', UserPrescriptionListView.as_view(), name='user-prescription-list'),
+
     ]  + router.urls
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

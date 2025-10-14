@@ -61,3 +61,28 @@ class TreatmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = treatment
         fields = ['id', 'name', 'description', 'is_active', 'steps']
+
+
+
+
+
+class PrescriptionMedicineSerializer(serializers.ModelSerializer):
+    medicine_details = medicine_serializer(read_only=True)
+   
+    class Meta:
+        model = PrescriptionMedicine
+        fields = [
+            'id', 'medicine', 'medicine_details', 'quantity', 'dose', 'dose_time',
+            'meal_relation', 'duration_in_days', 'instructions'
+        ]
+
+
+class PrescriptionSerializer(serializers.ModelSerializer):
+    medicines = PrescriptionMedicineSerializer(many=True, read_only=True)
+    user_name = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Prescription
+        fields = [
+            'id', 'user', 'user_name', 'title', 'description', 'date', 'created_at', 'medicines'
+        ]

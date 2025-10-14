@@ -952,3 +952,45 @@ Traceback (most recent call last):
     raise TemplateSyntaxError(
 django.template.exceptions.TemplateSyntaxError: Variables and attributes may not begin with underscores: 'pm._meta.get_field'
 2025-10-14 14:22:56,865: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:24:44,477: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:24:52,281: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:25:47,641: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:57:04,040: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:57:07,439: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:58:34,273: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:58:41,090: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:59:08,998: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:59:16,032: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:59:18,169: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 14:59:27,920: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:00:27,145: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:00:29,729: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:13:38,253: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:13:50,980: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:14:05,498: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:14:07,537: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:14:12,208: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:14:13,374: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:17:30,470: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:17:33,807: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:17:35,643: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:17:43,245: ERROR: Internal Server Error: /masters/create-prescription/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1066, in create_prescription
+    instructions=instructions_list[i]
+IndexError: list index out of range
+2025-10-14 15:17:45,049: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:17:47,054: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:18:31,145: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:18:38,422: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:18:43,367: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:18:49,744: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:19:06,548: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:19:08,448: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:19:50,627: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:20:02,009: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-14 15:20:03,377: WARNING: Not Found: /firebase-messaging-sw.js

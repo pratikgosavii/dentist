@@ -1134,3 +1134,13 @@ def update_prescription(request, pk):
         "dose_time_choices": dose_time_choices,
         "meal_relation_choices": meal_relation_choices,
     })
+
+
+
+
+class UserPrescriptionListView(generics.ListAPIView):
+    serializer_class = PrescriptionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Prescription.objects.filter(user = user).order_by('-created_at')
