@@ -224,7 +224,7 @@ class Prescription(models.Model):
 class PrescriptionMedicine(models.Model):
     prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='medicines')
     medicine = models.ForeignKey(medicine, on_delete=models.CASCADE)
-    quantity = models.DecimalField(max_digits=4, decimal_places=1)
+    quantity = models.IntegerField(default=1)
     
     dose_time = models.CharField(
         max_length=20,
