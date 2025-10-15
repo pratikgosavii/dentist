@@ -16,3 +16,10 @@ logs/
 # Ignore individual prod files
 firebase_key.json
 ping
+
+# Production-only files and logs
+logs/
+*.log
+firebase_key.json
+ping
+*.bak
