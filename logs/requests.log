@@ -996,3 +996,428 @@ IndexError: list index out of range
 2025-10-14 15:20:03,377: WARNING: Not Found: /firebase-messaging-sw.js
 2025-10-15 02:57:03,660: WARNING: Unauthorized: /masters/user/prescriptions/
 2025-10-15 02:59:47,122: WARNING: Unauthorized: /masters/user/prescriptions/
+2025-10-15 05:35:08,452: WARNING: Not Found: /favicon.ico
+2025-10-15 05:35:10,032: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:35:18,997: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:35:30,114: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: list_paiddoubt.html
+2025-10-15 05:35:32,109: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:36:12,778: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: list_paiddoubt.html
+2025-10-15 05:36:14,717: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:36:15,154: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: list_paiddoubt.html
+2025-10-15 05:36:17,193: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:36:26,855: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: list_paiddoubt.html
+2025-10-15 05:36:28,915: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:37:40,959: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 489, in parse
+    raise self.error(token, e)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 605, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 706, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if pd.user else "Guest"' from 'pd.user.username if pd.user else "Guest"'
+2025-10-15 05:37:43,009: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:38:19,488: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:38:35,935: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 05:47:12,373: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:08:55,015: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filter": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'list_hotel' not found. 'list_hotel' is not a valid view function or pattern name.
+2025-10-15 06:08:57,009: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:09:24,122: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:09:29,661: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:09:52,226: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:10:58,498: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:10:59,793: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:11:13,649: WARNING: Unauthorized: /customer/paiddoubts/
+2025-10-15 06:11:28,561: ERROR: Internal Server Error: /customer/paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\customer\views.py", line 419, in create
+    order = razorpay_client.order.create(order_data)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\razorpay\resources\order.py", line 71, in create
+    return self.post_url(url, data, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\razorpay\resources\base.py", line 20, in post_url
+    return self.client.post(url, data, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\razorpay\client.py", line 156, in post
+    return self.request('post', path, data=data, **options)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\razorpay\client.py", line 137, in request
+    raise BadRequestError(msg)
+razorpay.errors.BadRequestError: Authentication failed
+2025-10-15 06:12:16,326: ERROR: Internal Server Error: /customer/paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\customer\views.py", line 422, in create
+    paid_doubt.razorpay_order_id = order["id"]
+TypeError: string indices must be integers
+2025-10-15 06:12:29,737: ERROR: Internal Server Error: /customer/paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\customer\views.py", line 422, in create
+    paid_doubt.razorpay_order_id = order["id"]
+TypeError: 'int' object is not subscriptable
+2025-10-15 06:12:45,203: ERROR: Internal Server Error: /customer/paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\customer\views.py", line 429, in create
+    "order_id": order["id"],
+TypeError: 'int' object is not subscriptable
+2025-10-15 06:13:11,719: ERROR: Internal Server Error: /masters/list-paiddoubts/
+Traceback (most recent call last):
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Pratik Gosavi\OneDrive\Desktop\hope again\dentist\masters\views.py", line 1000, in list_paiddoubts
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filterset": paiddoubt_filter})
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 1008, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Pratik Gosavi\AppData\Local\Programs\Python\Python310\lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'paiddoubt_detail' not found. 'paiddoubt_detail' is not a valid view function or pattern name.
+2025-10-15 06:13:13,762: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:06,601: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:27,752: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:29,583: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:33,788: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:42,577: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:15:46,146: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:02,402: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:09,879: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:13,028: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:53,983: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:55,222: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:16:59,198: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:00,425: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:04,921: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:06,721: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:09,488: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:14,327: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:17,740: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:20,679: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:23,184: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:25,024: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:33,068: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:34,630: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:42,954: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:44,265: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:53,466: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:56,602: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:17:58,907: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:18:03,570: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:18:16,068: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:18:22,691: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:18:24,955: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:18:37,571: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:29,356: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:31,442: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:33,017: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:38,016: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:44,883: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:48,688: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:50,439: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:52,381: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:53,831: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:55,385: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:19:56,282: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:23,792: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:25,058: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:30,210: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:33,913: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:38,805: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:40,247: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:42,740: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:44,983: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:50,091: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:52,015: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:53,364: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:20:59,659: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:07,307: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:43,168: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:44,730: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:47,435: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:49,200: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:21:57,410: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:22:02,987: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:22:04,257: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:22:09,709: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:22:33,936: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:22:38,409: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:24:37,284: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:25:32,809: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:28:10,816: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:28:13,786: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:28:15,312: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:28:17,928: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:28:18,994: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:29:07,644: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:29:08,792: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:29:18,689: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:29:22,437: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 06:29:24,199: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 15:12:36,699: WARNING: Unauthorized: /doctor/prescription-invoice/12/
+2025-10-15 15:13:03,211: WARNING: Method Not Allowed: /doctor/prescription-invoice/12/
+2025-10-15 15:13:36,141: WARNING: Not Found: /favicon.ico
+2025-10-15 15:13:38,078: WARNING: Not Found: /firebase-messaging-sw.js

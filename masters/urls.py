@@ -78,6 +78,7 @@ urlpatterns = [
     path('admin/support-tickets/', list_support_tickets, name='list_support_tickets'),
     path('admin/support-tickets/<int:ticket_id>/', ticket_detail, name='ticket_detail'),
     
+    path('list-paiddoubts/', list_paiddoubts, name='list_paiddoubts'),
     path('list-prescription/', list_prescription, name='list_prescription'),
     path('list-prescription-medicine/<prescription_id>', prescription_medicine_list, name='prescription_medicine_list'),
     path('create-prescription/', create_prescription, name='create_prescription'),

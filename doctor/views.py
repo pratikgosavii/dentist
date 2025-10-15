@@ -534,7 +534,7 @@ class DoctorVerifyCustomerOTP(APIView):
     def get(self, request, pk=None):
         """Return one or all customers created by this doctor"""
         if not request.user.is_doctor:
-            return Response({"error": "Only doctors can view their customers."}, status=403)
+            return Response({"error": "Only doctors can use this api"}, status=403)
 
         if pk:  # ✅ Detail view
             cust = get_object_or_404(customer, pk=pk)

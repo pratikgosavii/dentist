@@ -988,10 +988,25 @@ def ticket_detail(request, ticket_id):
 
 
 
+
+def list_paiddoubts(request):
+    """All PaidDoubt list with mobile filter"""
+    paiddoubts = PaidDoubt.objects.select_related('user').order_by('-created_at')
+
+    # Apply filter
+    paiddoubt_filter = PaidDoubtFilter(request.GET, queryset=paiddoubts)
+    paiddoubts = paiddoubt_filter.qs
+
+    return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filterset": paiddoubt_filter})
+
+
+
+
 def list_prescription(request):
     """All prescriptions list"""
 
     mobile = request.GET.get('mobile')
+    print(mobile)
     user = None
 
     if mobile:

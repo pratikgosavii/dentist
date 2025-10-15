@@ -98,3 +98,37 @@ class AppointmentFilter(django_filters.FilterSet):
     class Meta:
         model = Appointment
         fields = ['user', 'full_name', 'phone_number', 'gender', 'appointment_type', 'date']
+
+
+
+        # filters.py
+from django_filters import rest_framework as filters
+from customer.models import PaidDoubt
+
+
+
+class PaidDoubtFilter(django_filters.FilterSet):
+    
+  
+
+    user = django_filters.ModelChoiceFilter(
+        queryset=User.objects.all(),
+        label='User'
+    )
+
+    class Meta:
+        model = PaidDoubt
+        fields = ['user']
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+        # Hide user filter for non-admins
+        if request and not request.user.is_superuser:
+            self.filters.pop('user', None)
+
+        # Add Bootstrap class to fields
+        for field in self.form.fields.values():
+            if not isinstance(field.widget, (forms.CheckboxInput, forms.RadioSelect)):
+                field.widget.attrs.update({'class': 'form-control'})
