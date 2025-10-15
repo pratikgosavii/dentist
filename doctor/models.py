@@ -199,7 +199,7 @@ class AppointmentLedger(models.Model):
     )
     title = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField(auto_now_add=True)  # default today if not provided
+    date = models.DateField(auto_now_add=False)  # default today if not provided
 
     def __str__(self):
         return f"{self.title} - {self.amount} ({self.date})"
@@ -210,7 +210,7 @@ class Expense(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField(auto_now_add=True)  # default today if not provided
+    date = models.DateField(auto_now_add=False)  # default today if not provided
 
     def __str__(self):
         return f"{self.title} - {self.amount} ({self.date})"

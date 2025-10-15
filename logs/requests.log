@@ -1421,3 +1421,4 @@ django.urls.exceptions.NoReverseMatch: Reverse for 'paiddoubt_detail' not found.
 2025-10-15 15:13:03,211: WARNING: Method Not Allowed: /doctor/prescription-invoice/12/
 2025-10-15 15:13:36,141: WARNING: Not Found: /favicon.ico
 2025-10-15 15:13:38,078: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 17:33:00,558: WARNING: Not Found: /firebase-messaging-sw.js
