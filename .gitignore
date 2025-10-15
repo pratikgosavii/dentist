@@ -9,3 +9,10 @@ media
 # Ignore wsgi.py
 dentist/wsgi.py
 
+
+# Ignore logs folder
+logs/
+
+# Ignore individual prod files
+firebase_key.json
+ping
