@@ -1512,3 +1512,11 @@ decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
 2025-10-15 17:38:04,882: WARNING: Not Found: /firebase-messaging-sw.js
 2025-10-15 17:40:05,106: WARNING: Not Found: /firebase-messaging-sw.js
 2025-10-15 17:40:06,865: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 17:47:10,637: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 17:47:23,614: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 17:53:11,931: WARNING: Not Found: /admin/vendor/printvariant/23/change/
+2025-10-15 17:53:12,775: WARNING: Not Found: /favicon.ico
+2025-10-15 17:53:14,734: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 18:05:38,839: WARNING: Not Found: /vendor/add-product/
+2025-10-15 18:05:40,975: WARNING: Not Found: /firebase-messaging-sw.js
+2025-10-15 18:05:44,471: WARNING: Not Found: /firebase-messaging-sw.js

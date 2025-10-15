@@ -67,7 +67,7 @@ class TreatmentSerializer(serializers.ModelSerializer):
 
 
 class PrescriptionMedicineSerializer(serializers.ModelSerializer):
-    medicine_details = medicine_serializer(read_only=True)
+    medicine_details = medicine_serializer(read_only=True, source = "medicine")
    
     class Meta:
         model = PrescriptionMedicine
