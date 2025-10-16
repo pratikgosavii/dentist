@@ -152,7 +152,7 @@ class TreatmentAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         # list all active treatments
-        queryset = treatment.objects.filter(is_active=True)
+        queryset = treatment.objects.filter(is_active=True).order_by('-id')
         serializer = TreatmentSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -183,7 +183,7 @@ class AppointmentsListAPIView(APIView):
 
         # Fetch all appointments or filter by date
         date_param = request.query_params.get('date')  # e.g., ?date=2025-09-24
-        appointments = Appointment.objects.filter(doctor=doctor_instance)
+        appointments = Appointment.objects.filter(doctor=doctor_instance).order_by('-id')
 
         if date_param:
             try:
@@ -225,7 +225,7 @@ class AppointmentTreatmentViewSet(viewsets.ModelViewSet):
 
         appointment_id = self.request.query_params.get("appointment_id")
         if appointment_id:
-            qs = qs.filter(appointment_id=appointment_id)
+            qs = qs.filter(appointment__id=appointment_id)
 
         return qs
 
@@ -561,7 +561,7 @@ class AppointmentLedgerViewSet(viewsets.ModelViewSet):
             appointment_id = self.request.query_params.get("appointment_id")
             print()
             if appointment_id:
-                return AppointmentLedger.objects.filter(appointment_id=appointment_id, appointment__doctor=user.doctor)
+                return AppointmentLedger.objects.filter(appointment_id=appointment_id, appointment__doctor=user.doctor).order_by('-id')
 
 
     def perform_create(self, serializer):
@@ -584,7 +584,7 @@ class ExpenseViewSet(viewsets.ModelViewSet):
 
             # if expense id is passed, filter further
            
-            return Expense.objects.filter(user=user)
+            return Expense.objects.filter(user=user).order_by('-id')
         else:
 
             return Response({"error": "You are not a doctor."},

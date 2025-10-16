@@ -55,7 +55,7 @@ urlpatterns = [
     path("doctors/availability/", DoctorWeeklyAvailabilityAPIView.as_view(), name="doctor-weekly-availability"),
     
     path("myreviews/", MyReviewsAPIView.as_view(), name="MyReviewsAPIView"),
-    
+     
     path("generate-invoice/<appointment_id>/", InvoicePDFAPIView.as_view(), name="invoice_view"),
     path("prescription-invoice/<appointment_id>/", PrescriptionPDFAPIView.as_view(), name="prescription_invoice_view"),
 
