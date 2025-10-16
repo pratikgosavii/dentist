@@ -974,7 +974,7 @@ def ticket_detail(request, ticket_id):
     if request.method == "POST":
         msg = request.POST.get('message')
         if msg:
-            TicketMessage.objects.create(ticket=ticket, sender=request.user, message=msg)
+            TicketMessage.objects.create(ticket=ticket, sender=request.user, is_admin = True, message=msg)
             return redirect('ticket_detail', ticket_id=ticket_id)
 
     return render(request, 'support_chat.html', {
