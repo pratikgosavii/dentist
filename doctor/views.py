@@ -649,11 +649,44 @@ class list_patient(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsDoctor]
 
     def get_queryset(self):
-        # fetch distinct users who have appointments with this doctor
+        doctor_user = self.request.user
+        # fetch distinct customers with appointments for this doctor
         return customer.objects.filter(
-            user__appointments__doctor__user=self.request.user
+            user__appointments__doctor__user=doctor_user
         ).distinct()
-    
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        doctor_user = request.user
+
+        # Prepare response data
+        data = []
+        for cust in queryset:
+            # total cost for this doctor's appointments
+            total_cost = AppointmentTreatmentStep.objects.filter(
+                appointment_treatment__appointment__user=cust.user,
+                appointment_treatment__appointment__doctor__user=doctor_user
+            ).aggregate(total=Sum("price"))["total"] or 0
+
+            # total paid from ledgers
+            total_paid = AppointmentLedger.objects.filter(
+                appointment__user=cust.user,
+                appointment__doctor__user=doctor_user
+            ).aggregate(total=Sum("amount"))["total"] or 0
+
+            balance = total_cost - total_paid
+
+            # Serialize the customer
+            serialized = self.get_serializer(cust).data
+
+            # Inject financial fields
+            serialized['total_cost'] = total_cost
+            serialized['total_paid'] = total_paid
+            serialized['balance'] = balance
+
+            data.append(serialized)
+
+        return Response(data)
 
 
     
