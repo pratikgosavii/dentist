@@ -378,21 +378,11 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = [
-            "id",
-            "user",              # doctor chooses which patient
-            "slot_details",
-            "appointment_type",
-            "status",
-            "status_display",
-            "date",
-            "slot",
-            "customer_details",
-            "concern",
-            "created_at",
-            "total_amount",
-            "ledger_paid",
-            "remaining_amount",
-        ]
+        "id", "user", "slot_details", "appointment_type", "status", "status_display",
+        "date", "slot", "customer_details", "concern", "created_at",
+        "total_amount", "ledger_paid", "remaining_amount",
+        "treatments", "medicines", "documents", "lab_works", "ledgers",
+    ]
         read_only_fields = ["created_at", "customer_details"]
 
     def validate_date(self, value):
