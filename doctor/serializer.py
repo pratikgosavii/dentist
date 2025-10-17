@@ -299,7 +299,7 @@ class AppointmentLedgerSerializer(serializers.ModelSerializer):
      # 💰 Amount logic
     def get_total_amount(self, obj):
         return AppointmentTreatmentStep.objects.filter(
-            appointment_treatment__appointment=obj
+            appointment_treatment__appointment=obj.appointment
         ).aggregate(total=Sum("price"))["total"] or 0
 
     def get_ledger_paid(self, obj):
