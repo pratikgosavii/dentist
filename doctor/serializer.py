@@ -140,9 +140,20 @@ class doctor_serializer(serializers.ModelSerializer):
         return obj.user.appointments.filter(review__isnull=False).count()
 
     def get_reviews(self, obj):
-        # Get all reviews of appointments for this doctor
-        reviews_qs = Review.objects.filter(appointment__doctor=obj)
-        return ReviewSerializer(reviews_qs, many=True).data
+        reviews = obj.user.appointments.filter(review__isnull=False).select_related('review')
+        return [
+            {
+                "appointment_id": r.id,
+                "rating": r.review.rating,
+                "comment": r.review.comment,
+                "created_at": r.review.created_at,
+                "customer": {
+                    "id": r.user.id,
+                    "name": r.user.first_name + " " + r.user.last_name
+                }
+            }
+            for r in reviews
+        ]
     
 
 
