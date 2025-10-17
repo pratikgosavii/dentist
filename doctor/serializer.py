@@ -133,14 +133,14 @@ class doctor_serializer(serializers.ModelSerializer):
         
     def get_average_rating(self, obj):
         from django.db.models import Avg
-        avg = obj.user.appointments.filter(review__isnull=False).aggregate(avg=Avg('review__rating'))['avg']
+        avg = obj.appointments_doctor.filter(review__isnull=False).aggregate(avg=Avg('review__rating'))['avg']
         return round(avg or 0, 1)
 
     def get_review_count(self, obj):
-        return obj.user.appointments.filter(review__isnull=False).count()
+        return obj.appointments_doctor.filter(review__isnull=False).count()
 
     def get_reviews(self, obj):
-        reviews = obj.user.appointments.filter(review__isnull=False).select_related('review')
+        reviews = obj.appointments_doctor.filter(review__isnull=False).select_related('review')
         return [
             {
                 "appointment_id": r.id,
