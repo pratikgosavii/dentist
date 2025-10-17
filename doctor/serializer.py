@@ -39,6 +39,11 @@ class doctor_serializer(serializers.ModelSerializer):
     
     offers = serializers.SerializerMethodField()
     
+    average_rating = serializers.SerializerMethodField()   
+    review_count = serializers.SerializerMethodField()
+    reviews = serializers.SerializerMethodField()  # optional, list of reviews
+
+
     class Meta:
         model = doctor
         fields = [
@@ -48,7 +53,10 @@ class doctor_serializer(serializers.ModelSerializer):
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
             "designation", "title", "degree", "specializations", "education", "about_doctor", "latitude", "longitude",
-            "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities'
+            "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities',
+
+            "review_count", "average_rating", "reviews",
+
         ]
         read_only_fields = ["is_active", "offers"]
 
@@ -122,7 +130,21 @@ class doctor_serializer(serializers.ModelSerializer):
             return False
 
         return True
+        
+    def get_average_rating(self, obj):
+        from django.db.models import Avg
+        avg = obj.user.appointments.filter(review__isnull=False).aggregate(avg=Avg('review__rating'))['avg']
+        return round(avg or 0, 1)
+
+    def get_review_count(self, obj):
+        return obj.user.appointments.filter(review__isnull=False).count()
+
+    def get_reviews(self, obj):
+        # Get all reviews of appointments for this doctor
+        reviews_qs = Review.objects.filter(appointment__doctor=obj)
+        return ReviewSerializer(reviews_qs, many=True).data
     
+
 
 class medicine_serializer(serializers.ModelSerializer):
     class Meta:
