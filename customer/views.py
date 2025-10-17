@@ -108,7 +108,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         appointment.date = new_date
-        appointment.slot__id = slot
+        appointment.slot_id = slot 
         appointment.save()
 
         return Response({"detail": "Appointment rescheduled successfully."},
