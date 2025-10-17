@@ -82,7 +82,7 @@ class DoctorMedicineViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.is_active = True
+        instance.is_active = False
         instance.save()
         return Response({"detail": "Soft deleted successfully."}, status=status.HTTP_200_OK)
     
@@ -377,25 +377,44 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         return Response({"detail": "Appointment marked as completed."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
+
     def reschedule(self, request, pk=None):
         appointment = self.get_object()
+
+        # ✅ Ensure doctor has permission
         if not self._check_doctor_permission(appointment, request.user):
-            return Response({"error": "You are not assigned to this appointment."},
-                            status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "You are not assigned to this appointment."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # ✅ Allow reschedule only if appointment is accepted
+        if appointment.status.lower() != "accepted":
+            return Response(
+                {"error": "Only accepted appointments can be rescheduled."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         new_date = request.data.get("date")
         slot = request.data.get("slot")
 
         if not new_date or not slot:
-            return Response({"error": "date and time are required to reschedule."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "date and time are required to reschedule."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
+        # ✅ Update fields safely
         appointment.date = new_date
         appointment.slot_id = slot
-        appointment.status = "waiting"  # back to waiting for confirmation
         appointment.save()
-        return Response({"detail": "Appointment rescheduled."}, status=status.HTTP_200_OK)
-    
+
+        return Response(
+            {"detail": "Appointment rescheduled successfully."},
+            status=status.HTTP_200_OK
+        )
+
+        
 
     @action(detail=False, methods=['get'], url_path='patients')
     def list_patients(self, request):

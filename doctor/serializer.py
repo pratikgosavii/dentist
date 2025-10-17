@@ -250,11 +250,32 @@ class InventoryProductSerializer(serializers.ModelSerializer):
 
         
 class AppointmentLedgerSerializer(serializers.ModelSerializer):
+
+    # 💰 Amounts
+    total_amount = serializers.SerializerMethodField()
+    ledger_paid = serializers.SerializerMethodField()
+    remaining_amount = serializers.SerializerMethodField()
+    
     class Meta:
         model = AppointmentLedger
-        fields = ["id", "appointment", "title", "amount", "date"]
+        fields = ["id", "appointment", "title", "amount", "date",
+            "total_amount",
+            "ledger_paid",
+            "remaining_amount",]
 
+     # 💰 Amount logic
+    def get_total_amount(self, obj):
+        return AppointmentTreatmentStep.objects.filter(
+            appointment_treatment__appointment=obj
+        ).aggregate(total=Sum("price"))["total"] or 0
 
+    def get_ledger_paid(self, obj):
+        return obj.ledgers.aggregate(total=Sum("amount"))["total"] or 0
+
+    def get_remaining_amount(self, obj):
+        total = self.get_total_amount(obj)
+        paid = self.get_ledger_paid(obj)
+        return total - paid
 
         
 class ExpenseSerializer(serializers.ModelSerializer):

@@ -96,10 +96,18 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def reschedule(self, request, pk=None):
         appointment = self.get_object()
+        
         if appointment.user != request.user:
             return Response({"error": "This appointment does not belong to you."},
                             status=status.HTTP_403_FORBIDDEN)
 
+            # ✅ Allow reschedule only if appointment is accepted
+        if appointment.status.lower() != "accepted":
+            return Response(
+                {"error": "Only accepted appointments can be rescheduled."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
         new_date = request.data.get("date")
         slot = request.data.get("slot")
 
@@ -108,7 +116,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
         appointment.date = new_date
-        appointment.slot_id = slot 
+        appointment.slot_id = slot  
+        appointment.status = "waiting"  
         appointment.save()
 
         return Response({"detail": "Appointment rescheduled successfully."},
@@ -310,7 +319,7 @@ class ReviewViewSet(
     def get_queryset(self):
         user = self.request.user
         if getattr(user, "is_customer", False):
-            return Review.objects.filter(user=user)
+            return Review.objects.filter(appointment__user=user)
         return Review.objects.none()  # doctors shouldn’t list reviews from here
     
 
