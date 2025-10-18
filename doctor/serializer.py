@@ -330,8 +330,7 @@ class AppointmentLedgerSerializer(serializers.ModelSerializer):
 
     def get_remaining_amount(self, obj):
         total, paid = self._get_totals(obj.appointment_id)
-        return total - paidpaid(obj)
-        return total - paid
+        return total - paid(obj)
 
         
 class ExpenseSerializer(serializers.ModelSerializer):
