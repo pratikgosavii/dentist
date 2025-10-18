@@ -375,20 +375,19 @@ class NearbyDoctorsAPIView(APIView):
         user_lat = float(request.data.get("latitude"))
         user_lon = float(request.data.get("longitude"))
 
-        # Fetch all active doctors
         doctors = doctor.objects.filter(is_active=True)
         serializer = doctor_serializer(doctors, many=True)
         doctor_data = serializer.data
 
-        # Call Google API to calculate distance and ETA
         doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctor_data)
 
-        # Filter only doctors within 10 km
+        # ✅ Filter only within 10km (using GOOGLE distance_value)
         nearby_doctors = [
-            doc for doc in doctors_with_distance if doc.get("distance_km", 0) <= 10
+            doc for doc in doctors_with_distance if doc.get("distance_value", 0) / 1000 <= 10
         ]
 
         return Response({"doctors": nearby_doctors})
+
 
 
 
