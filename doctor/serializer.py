@@ -330,7 +330,8 @@ class AppointmentLedgerSerializer(serializers.ModelSerializer):
 
     def get_remaining_amount(self, obj):
         total, paid = self._get_totals(obj.appointment_id)
-        return total - paid(obj)
+        return total - paid
+
 
         
 class ExpenseSerializer(serializers.ModelSerializer):
@@ -466,10 +467,6 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Appointment date cannot be in the past.")
         return value
     
-    # ✅ Lazy imports to avoid circular dependencies
-    def get_doctor_details(self, obj):
-        from doctor.serializer import doctor_serializer
-        return doctor_serializer(obj.doctor).data if obj.doctor else None
 
     def get_treatments(self, obj):
         from doctor.serializer import AppointmentTreatmentSerializer
@@ -500,11 +497,11 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
     def get_ledger_paid(self, obj):
         return obj.ledgers.aggregate(total=Sum("amount"))["total"] or 0
 
+
     def get_remaining_amount(self, obj):
         total = self.get_total_amount(obj)
         paid = self.get_ledger_paid(obj)
         return total - paid
-    
 
 
 
