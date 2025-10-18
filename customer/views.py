@@ -369,21 +369,26 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .helpers import get_distance_and_eta
 
+
 class NearbyDoctorsAPIView(APIView):
     def post(self, request):
         user_lat = float(request.data.get("latitude"))
         user_lon = float(request.data.get("longitude"))
 
-        # Fetch all doctors
-        doctors = doctor.objects.all()
+        # Fetch all active doctors
+        doctors = doctor.objects.filter(is_active=True)
         serializer = doctor_serializer(doctors, many=True)
         doctor_data = serializer.data
 
-        # Call Google API and attach distance + ETA
+        # Call Google API to calculate distance and ETA
         doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctor_data)
 
-        return Response({"doctors": doctors_with_distance})
-    
+        # Filter only doctors within 10 km
+        nearby_doctors = [
+            doc for doc in doctors_with_distance if doc.get("distance_km", 0) <= 10
+        ]
+
+        return Response({"doctors": nearby_doctors})
 
 
 
