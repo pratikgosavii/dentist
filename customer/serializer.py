@@ -124,7 +124,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
     treatments = serializers.SerializerMethodField()
     medicines = serializers.SerializerMethodField()
     documents = serializers.SerializerMethodField()
-    lab_works = serializers.SerializerMethodField()
     ledgers = serializers.SerializerMethodField()
 
     # 💰 Amounts
@@ -155,7 +154,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
             "treatments",
             "medicines",
             "documents",
-            "lab_works",
             "ledgers",
 
             # 👇 computed amounts
@@ -187,10 +185,6 @@ class AppointmentSerializer(serializers.ModelSerializer):
     def get_documents(self, obj):
         from doctor.serializer import AppointmentDocumentSerializer
         return AppointmentDocumentSerializer(obj.documents.all(), many=True).data
-
-    def get_lab_works(self, obj):
-        from doctor.serializer import LabWorkSerializer
-        return LabWorkSerializer(obj.lab_works.all(), many=True).data
 
     def get_ledgers(self, obj):
         from doctor.serializer import AppointmentLedgerSerializer

@@ -448,7 +448,6 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
     treatments = serializers.SerializerMethodField()
     medicines = serializers.SerializerMethodField()
     documents = serializers.SerializerMethodField()
-    lab_works = serializers.SerializerMethodField()
     ledgers = serializers.SerializerMethodField()
 
 
@@ -458,7 +457,7 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
         "id", "user", "slot_details", "appointment_type", "status", "status_display",
         "date", "slot", "customer_details", "concern", "created_at",
         "total_amount", "ledger_paid", "remaining_amount",
-        "treatments", "medicines", "documents", "lab_works", "ledgers",
+        "treatments", "medicines", "documents", "ledgers",
     ]
         read_only_fields = ["created_at", "customer_details"]
 
@@ -479,10 +478,6 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
     def get_documents(self, obj):
         from doctor.serializer import AppointmentDocumentSerializer
         return AppointmentDocumentSerializer(obj.documents.all(), many=True).data
-
-    def get_lab_works(self, obj):
-        from doctor.serializer import LabWorkSerializer
-        return LabWorkSerializer(obj.lab_works.all(), many=True).data
 
     def get_ledgers(self, obj):
         from doctor.serializer import AppointmentLedgerSerializer

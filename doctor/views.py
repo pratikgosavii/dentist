@@ -183,7 +183,7 @@ class AppointmentsListAPIView(APIView):
 
         # Fetch all appointments or filter by date
         date_param = request.query_params.get('date')  # e.g., ?date=2025-09-24
-        appointments = Appointment.objects.filter(doctor=doctor_instance).order_by('-id')
+        appointments = Appointment.objects.filter(doctor=doctor_instance)
 
         if date_param:
             try:
@@ -193,7 +193,7 @@ class AppointmentsListAPIView(APIView):
                 return Response({"error": "Invalid date format. Use YYYY-MM-DD."},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-        appointments = appointments.order_by('-date')
+        appointments = appointments.order_by('date')
         serializer = AppointmentSerializer(appointments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

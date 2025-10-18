@@ -277,8 +277,6 @@ class LabWork(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Lab Work for Appointment {self.appointment.id} - {self.type_of_work}"
     
 
 
