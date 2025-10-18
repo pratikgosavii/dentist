@@ -82,6 +82,27 @@ class customer_serializer(serializers.ModelSerializer):
         return AppointmentDocumentSerializer(documents, many=True).data
 
 
+    # -----------------------------
+    # Doctor-specific financial calculations
+    # -----------------------------
+    def get_total_cost(self, obj):
+        doctor_user = self.context['request'].user
+        from django.db.models import Sum
+        return AppointmentTreatmentStep.objects.filter(
+            appointment_treatment__appointment__user=obj.user,
+            appointment_treatment__appointment__doctor__user=doctor_user
+        ).aggregate(total=Sum("price"))["total"] or 0
+
+    def get_total_paid(self, obj):
+        doctor_user = self.context['request'].user
+        from django.db.models import Sum
+        return AppointmentLedger.objects.filter(
+            appointment__user=obj.user,
+            appointment__doctor__user=doctor_user
+        ).aggregate(total=Sum("amount"))["total"] or 0
+
+    def get_balance(self, obj):
+        return self.get_total_cost(obj) - self.get_total_paid(obj)
 
 
 from doctor.models import *

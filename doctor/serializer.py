@@ -283,6 +283,8 @@ class InventoryProductSerializer(serializers.ModelSerializer):
 
         
 
+from functools import lru_cache
+
 class AppointmentLedgerSerializer(serializers.ModelSerializer):
     total_amount = serializers.SerializerMethodField()
     ledger_paid = serializers.SerializerMethodField()
@@ -301,26 +303,34 @@ class AppointmentLedgerSerializer(serializers.ModelSerializer):
             "remaining_amount",
         ]
 
-    def get_total_amount(self, obj):
-        # ✅ Total treatment cost for the appointment
-        return (
-            AppointmentTreatmentStep.objects.filter(
-                appointment_treatment__appointment=obj.appointment
-            ).aggregate(total=Sum("price"))["total"]
+    # Cache totals per appointment so multiple ledgers don't trigger multiple queries
+    @lru_cache(maxsize=None)
+    def _get_totals(self, appointment_id):
+        total_amount = (
+            AppointmentTreatmentStep.objects
+            .filter(appointment_treatment__appointment_id=appointment_id)
+            .aggregate(total=Sum("price"))["total"]
             or 0
         )
-
-    def get_ledger_paid(self, obj):
-        # ✅ Total paid amount across ALL ledger entries for this appointment
-        return (
-            AppointmentLedger.objects.filter(appointment=obj.appointment)
+        ledger_paid = (
+            AppointmentLedger.objects
+            .filter(appointment_id=appointment_id)
             .aggregate(total=Sum("amount"))["total"]
             or 0
         )
+        return total_amount, ledger_paid
+
+    def get_total_amount(self, obj):
+        total, _ = self._get_totals(obj.appointment_id)
+        return total
+
+    def get_ledger_paid(self, obj):
+        _, paid = self._get_totals(obj.appointment_id)
+        return paid
 
     def get_remaining_amount(self, obj):
-        total = self.get_total_amount(obj)
-        paid = self.get_ledger_paid(obj)
+        total, paid = self._get_totals(obj.appointment_id)
+        return total - paidpaid(obj)
         return total - paid
 
         
