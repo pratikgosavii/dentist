@@ -52,7 +52,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "users_details",
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
             "house_building", "locality", "pincode", "state", "city", "country",
-            "designation", "title", "degree", "specializations", "education", "about_doctor", "latitude", "longitude",
+            "title", "degree", "specializations", "education", "about_doctor", "latitude", "longitude",
             "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities',
 
             "review_count", "average_rating", "reviews",
@@ -88,7 +88,7 @@ class doctor_serializer(serializers.ModelSerializer):
         required_doctor_fields = [
             "clinic_name", "clinic_consultation_fees",
             "clinic_phone_number", "house_building", "locality", "pincode",
-            "state", "city", "country", "designation", "title", "degree",
+            "state", "city", "country", "title", "degree",
             "specializations", "education", "about_doctor", "experience_years",
         ]
         required_user_fields = [

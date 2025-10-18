@@ -43,7 +43,6 @@ class doctor(models.Model):
     country = models.CharField(max_length=120, blank=True, null=True)
 
     # Professional Info
-    designation = models.CharField(max_length=200, blank=True, null=True)   # Dentist, Orthodontist, etc.
     title = models.CharField(max_length=120, blank=True, null=True)         # Dr., Prof., etc.
     degree = models.CharField(max_length=120, blank=True, null=True)        # MDS, BDS, etc.
     specializations = models.TextField(blank=True, null=True)               # Store as comma-separated or JSON
