@@ -51,7 +51,7 @@ class doctor_serializer(serializers.ModelSerializer):
             "first_name", "last_name", "address", "email", "dob", "gender", "profile_photo",
             "users_details",
             "clinic_name", "clinic_phone_number", "clinic_consultation_fees", "clinic_image", "clinic_logo",
-            "house_building", "locality", "pincode", "state", "city", "country",
+            
             "title", "degree", "specializations", "education", "about_doctor", "latitude", "longitude",
             "experience_years", "rating", "review_count", "remark", "is_active", "offers", "is_all_details_available", "is_availabilities_details", 'availabilities',
 
@@ -87,8 +87,7 @@ class doctor_serializer(serializers.ModelSerializer):
     def get_is_all_details_available(self, obj):
         required_doctor_fields = [
             "clinic_name", "clinic_consultation_fees",
-            "clinic_phone_number", "house_building", "locality", "pincode",
-            "state", "city", "country", "title", "degree",
+            "clinic_phone_number", "title", "degree",
             "specializations", "education", "about_doctor", "experience_years",
         ]
         required_user_fields = [
