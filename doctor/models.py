@@ -35,8 +35,7 @@ class doctor(models.Model):
     clinic_phone_number = models.CharField(max_length=15, blank=True, null=True)
 
     # Address
-    house_building = models.CharField(max_length=120, blank=True, null=True)
-    locality = models.CharField(max_length=120, blank=True, null=True)
+    street_address = models.CharField(max_length=120, blank=True, null=True)
     pincode = models.CharField(max_length=10, blank=True, null=True)
     state = models.CharField(max_length=120, blank=True, null=True)
     city = models.CharField(max_length=120, blank=True, null=True)
