@@ -772,7 +772,7 @@ class DoctorAvailabilityView(APIView):
     permission_classes = [IsAuthenticated, IsDoctor]
 
     def post(self, request):
-        serializer = DoctorAvailabilityBulkSerializer( data=request.data, context={"request": request}  )
+        serializer = DoctorAvailabilityBulkSerializer(data=request.data, context={"request": request}  )
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Availability updated successfully"}, status=status.HTTP_201_CREATED)
