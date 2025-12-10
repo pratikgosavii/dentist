@@ -1006,7 +1006,7 @@ class PrescriptionPDFAPIView(APIView):
             "doctor_email": doctor_instance.user.email,
             "doctor_mobile": doctor_instance.user.mobile,
             "clinic_name": doctor_instance.clinic_name,
-            "clinic_address": doctor_instance.house_building + doctor_instance.state  + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
+            "clinic_address": doctor_instance.street_address + doctor_instance.state  + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
             "invoice_number": f"RX-{appointment.id}",
             "issue_date": appointment.created_at.date(),
             "medicines": medicines,
