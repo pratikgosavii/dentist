@@ -946,7 +946,7 @@ class InvoicePDFAPIView(APIView):
             "doctor_email": doctor_instance.user.email,
             "doctor_mobile": doctor_instance.user.mobile,
             "clinic_name": doctor_instance.clinic_name,
-            "clinic_address": doctor_instance.locality + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
+            "clinic_address": doctor_instance.city + doctor_instance.house_building + doctor_instance.state + doctor_instance.city + doctor_instance.pincode,
             "treatments": treatments,
             "subtotal": subtotal,
             "grand_total": grand_total,
