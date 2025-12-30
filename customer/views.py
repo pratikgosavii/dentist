@@ -413,16 +413,16 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-        Create PaidDoubt and Razorpay order in one API call.
+        Create PaidDoubt (Skip the Doubt) - Fixed ₹199 payment
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # Save the doubt (pending payment)
-        paid_doubt = serializer.save(user=request.user)
+        # Save the doubt with fixed ₹199 amount
+        paid_doubt = serializer.save(user=request.user, amount=199.00)
 
-        # Create Razorpay order
-        amount_paise = int(paid_doubt.amount * 100)
+        # Create Razorpay order for ₹199
+        amount_paise = 19900  # ₹199 in paise
         order_data = {
             "amount": amount_paise,
             "currency": "INR",
@@ -440,7 +440,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
             "status": "success",
             "paid_doubt_id": paid_doubt.id,
             "order_id": order["id"],
-            "amount": paid_doubt.amount,
+            "amount": 199.00,
             "currency": "INR",
             "key": settings.RAZORPAY_KEY_ID,
         }, status=status.HTTP_201_CREATED)
@@ -451,7 +451,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def razorpay_webhook(request):
     """
-    Handle Razorpay webhook events securely.
+    Handle Razorpay webhook events for Skip the Doubt (₹199 payment)
     """
     webhook_secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", None)
     received_signature = request.headers.get('X-Razorpay-Signature')
@@ -473,18 +473,21 @@ def razorpay_webhook(request):
     # Parse payload
     payload = request.data
     event = payload.get('event')
-    payment_entity = payload.get('payload', {}).get('payment', {}).get('entity', {})
-
-    order_id = payment_entity.get('order_id')
-    payment_id = payment_entity.get('id')
-
-    if event == "payment.captured" and order_id:
-        try:
-            paid_doubt = PaidDoubt.objects.get(razorpay_order_id=order_id)
-            paid_doubt.payment_status = "paid"
-            paid_doubt.razorpay_payment_id = payment_id
-            paid_doubt.save()
-        except PaidDoubt.DoesNotExist:
-            pass
+    event_payload = payload.get('payload', {})
+    
+    # Handle payment.captured event for Skip the Doubt (₹199)
+    if event == "payment.captured":
+        payment_entity = event_payload.get('payment', {}).get('entity', {})
+        order_id = payment_entity.get('order_id')
+        payment_id = payment_entity.get('id')
+        
+        if order_id:
+            try:
+                paid_doubt = PaidDoubt.objects.get(razorpay_order_id=order_id)
+                paid_doubt.payment_status = "paid"
+                paid_doubt.razorpay_payment_id = payment_id
+                paid_doubt.save()
+            except PaidDoubt.DoesNotExist:
+                pass
 
     return Response({"status": "ok"})

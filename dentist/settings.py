@@ -97,9 +97,9 @@ GOOGLE_MAPS_API_KEY = 'AIzaSyDSHEo7c3hgK2fl7LdLcmbB2dZa4Z0aOBY'
 
 
 # Razorpay API keys
-RAZORPAY_KEY_ID = "rzp_test_YourKeyIDHere"      # Public key (for frontend checkout)
-RAZORPAY_KEY_SECRET = "YourSecretKeyHere"       # Secret key (for backend API calls)
-RAZORPAY_WEBHOOK_SECRET = "YourWebhookSecret"   # Secret string to verify webhooks
+RAZORPAY_KEY_ID = "rzp_live_RxliNUJgfo2jZk"
+RAZORPAY_KEY_SECRET = "GI66GvcBLwnKrTCbLtCgxrWN"       # Secret key (for backend API calls)
+RAZORPAY_WEBHOOK_SECRET = "AIzaSyDSHEo7c3hgK2fl7LdLcmbB2dZa4Z0aOBY"   # Secret string to verify webhooks
 
 
 
