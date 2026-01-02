@@ -422,7 +422,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
         paid_doubt = serializer.save(user=request.user, amount=199.00)
 
         # Create Razorpay order for ₹199
-        amount_paise = 19900  # ₹199 in paise
+        amount_paise = 100  # ₹199 in paise
         order_data = {
             "amount": amount_paise,
             "currency": "INR",
@@ -440,7 +440,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
             "status": "success",
             "paid_doubt_id": paid_doubt.id,
             "order_id": order["id"],
-            "amount": 199.00,
+            "amount": 1.00,
             "currency": "INR",
             "key": settings.RAZORPAY_KEY_ID,
         }, status=status.HTTP_201_CREATED)
