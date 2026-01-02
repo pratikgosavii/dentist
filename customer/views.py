@@ -419,7 +419,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         # Save the doubt with fixed ₹199 amount
-        paid_doubt = serializer.save(user=request.user, amount=199.00)
+        paid_doubt = serializer.save(user=request.user, amount=1.00)
 
         # Create Razorpay order for ₹199
         amount_paise = 100  # ₹199 in paise
