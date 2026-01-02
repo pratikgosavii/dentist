@@ -110,6 +110,7 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Type</th>
+                                                <th>Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody id="tableBody">
@@ -117,8 +118,8 @@
                                             {% for i in data %}
                                                 <tr>
                                                     <td>{{ forloop.counter }}</td>
-                                                    <td>{{ i.username }}</td>
-                                                    <td>{{ i.email }}</td>
+                                                    <td>{{ i.first_name }} {{ i.last_name }}</td>
+                                                    <td>{{ i.email|default:"-" }}</td>
                                                     <td>   {% if i.is_customer %}
                                                     Customer
                                                 {% elif i.is_doctor %}
@@ -130,7 +131,15 @@
                                                 {% else %}
                                                     Unknown
                                                 {% endif %}</td>
-                                                   
+                                                <td>
+                                                    {% if i.is_doctor %}
+                                                        <a href="{% url 'update_user_subscription' i.id %}" class="btn btn-sm btn-primary">
+                                                            <i class="bi bi-calendar-check"></i> Subscription
+                                                        </a>
+                                                    {% else %}
+                                                        <span class="text-muted">-</span>
+                                                    {% endif %}
+                                                </td>
                                                 </tr>
                                             {% endfor %}
                                             {% endif %}

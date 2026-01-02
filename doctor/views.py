@@ -49,6 +49,16 @@ class DoctorViewSet(mixins.RetrieveModelMixin,
 
     def get_object(self):
         return doctor.objects.get(user=self.request.user, is_active=True)
+    
+    def retrieve(self, request, *args, **kwargs):
+        """Doctor home API - Check subscription before returning profile"""
+        # Check if doctor is subscribed
+        if not request.user.subscription_is_active:
+            return Response(
+                {"error": "User not subscribed"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().retrieve(request, *args, **kwargs)
 
      # 👇 handle PATCH (partial update)
     def partial_update(self, request, *args, **kwargs):
@@ -162,6 +172,13 @@ class AppointmentsListAPIView(APIView):
     permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, appointment_id=None):
+        # Check if doctor is subscribed
+        if not request.user.subscription_is_active:
+            return Response(
+                {"error": "User not subscribed"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
         # Ensure logged-in user is a doctor
         try:
             doctor_instance = doctor.objects.get(user=request.user)

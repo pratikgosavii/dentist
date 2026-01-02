@@ -190,6 +190,11 @@ class LoginAPIView(APIView):
             refresh = RefreshToken.for_user(user)
             user_details = UserProfileSerializer(user).data
 
+            # Calculate subscription status (for doctors)
+            is_subscribed = False
+            if user.is_doctor:
+                is_subscribed = user.subscription_is_active
+
             return Response({
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
@@ -199,6 +204,7 @@ class LoginAPIView(APIView):
                     "role": "doctor" if user.is_doctor else "customer"
                 },
                 "created": created,
+                "is_subscribed": is_subscribed,
                 "user_details": user_details
             }, status=201 if created else 200)
 
@@ -336,10 +342,55 @@ def user_list(request):
 
 
 from doctor.models import doctor
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 def dentist_list(request):
 
     data = doctor.objects.all()
+
+
+@login_required(login_url='login_admin')
+def update_user_subscription(request, user_id):
+    """
+    View and update user subscription details (for doctors)
+    """
+    user = get_object_or_404(User, id=user_id)
+    doctor_profile = None
+    
+    # Get doctor profile if user is a doctor
+    if user.is_doctor:
+        try:
+            doctor_profile = doctor.objects.get(user=user)
+        except doctor.DoesNotExist:
+            doctor_profile = None
+    
+    if request.method == 'POST':
+        # Update only subscription fields (editable)
+        subscription_valid_from = request.POST.get('subscription_valid_from')
+        subscription_valid_to = request.POST.get('subscription_valid_to')
+        
+        if subscription_valid_from:
+            user.subscription_valid_from = subscription_valid_from
+        else:
+            user.subscription_valid_from = None
+            
+        if subscription_valid_to:
+            user.subscription_valid_to = subscription_valid_to
+        else:
+            user.subscription_valid_to = None
+            
+        user.save()
+        
+        messages.success(request, 'Subscription details updated successfully!')
+        return redirect('update_user_subscription', user_id=user_id)
+    
+    context = {
+        'user': user,
+        'doctor': doctor_profile,
+    }
+    
+    return render(request, 'update_user_subscription.html', context)
 
     return render(request, 'list_doctor.html', { 'data' : data})
 

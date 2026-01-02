@@ -1,0 +1,263 @@
+{% extends "partials/adminBase.html" %}
+{% load static %}
+
+{% block title %}User Subscription Details{% endblock title %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<style>
+    body {
+        background-color: gainsboro;
+        color: #4952FB;
+    }
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .card-header {
+        background-color: #4952FB;
+        color: #ffffff;
+        border-radius: 8px 8px 0 0;
+        padding: 20px;
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .form-label {
+        font-weight: bold;
+        color: #4952FB;
+        margin-bottom: 5px;
+    }
+    .form-control:read-only {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+    .editable-field {
+        background-color: #ffffff;
+    }
+    .view-only-field {
+        background-color: #f8f9fa;
+    }
+    .status-badge {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        display: inline-block;
+    }
+    .status-active {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-inactive {
+        background-color: #dc3545;
+        color: white;
+    }
+    .info-section {
+        margin-bottom: 30px;
+    }
+    .section-title {
+        color: #4952FB;
+        border-bottom: 2px solid #4952FB;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- Page Title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0 font-size-18">User Subscription Details</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <form method="POST" action="{% url 'update_user_subscription' user.id %}">
+                    {% csrf_token %}
+                    
+                    <!-- User Details Section (View Only) -->
+                    <div class="card info-section">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">User Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ user.first_name }} {{ user.last_name }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control view-only-field" 
+                                           value="{{ user.email|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Mobile</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ user.mobile }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ user.dob|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ user.get_gender_display|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ user.address|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">User Type</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{% if user.is_doctor %}Doctor{% elif user.is_customer %}Customer{% else %}Other{% endif %}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor Details Section (View Only) -->
+                    {% if doctor %}
+                    <div class="card info-section">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Doctor Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Clinic Name</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.clinic_name|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Clinic Phone</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.clinic_phone_number|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.title|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Degree</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.degree|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Specializations</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.specializations|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Experience (Years)</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.experience_years|default:'-' }}" readonly>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{% if doctor.street_address %}{{ doctor.street_address }}, {% endif %}{{ doctor.city|default:'' }}{% if doctor.pincode %} - {{ doctor.pincode }}{% endif %}, {{ doctor.state|default:'' }}, {{ doctor.country|default:'' }}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Rating</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{% if doctor.rating %}⭐ {{ doctor.rating }}{% else %}-{% endif %}" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Review Count</label>
+                                    <input type="text" class="form-control view-only-field" 
+                                           value="{{ doctor.review_count|default:0 }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Subscription Details Section (Editable) -->
+                    <div class="card info-section">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Subscription Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Valid From <span class="text-danger">*</span></label>
+                                    <input type="date" name="subscription_valid_from" 
+                                           class="form-control editable-field" 
+                                           value="{{ user.subscription_valid_from|date:'Y-m-d'|default:'' }}" 
+                                           required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Valid To <span class="text-danger">*</span></label>
+                                    <input type="date" name="subscription_valid_to" 
+                                           class="form-control editable-field" 
+                                           value="{{ user.subscription_valid_to|date:'Y-m-d'|default:'' }}" 
+                                           required>
+                                </div>
+                            </div>
+                            
+                            <!-- Display current subscription status (calculated) -->
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <strong>Current Status:</strong>
+                                        {% if user.subscription_is_active %}
+                                            <span class="status-badge status-active">Active</span>
+                                        {% else %}
+                                            <span class="status-badge status-inactive">Inactive</span>
+                                        {% endif %}
+                                        {% if user.subscription_valid_from and user.subscription_valid_to %}
+                                            <br><small>Valid from {{ user.subscription_valid_from|date:"d M Y" }} to {{ user.subscription_valid_to|date:"d M Y" }}</small>
+                                            <br><small class="text-muted"><i>Status is automatically calculated based on current date</i></small>
+                                        {% else %}
+                                            <br><small class="text-muted">Please set valid from and valid to dates</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'user_list' %}" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back to User List
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Update Subscription
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% block footer %}
+        {% include 'partials/footer.html' %}
+    {% endblock footer %}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock extra_js %}
+

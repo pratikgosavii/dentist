@@ -44,6 +44,19 @@ class User(AbstractUser):
     mobile = models.CharField(max_length=15, unique=True)
     email = models.EmailField(null=True, blank=True)  # Email is optional
 
+    # Subscription fields (for doctors)
+    subscription_valid_from = models.DateField(null=True, blank=True)
+    subscription_valid_to = models.DateField(null=True, blank=True)
+    
+    @property
+    def subscription_is_active(self):
+        """Calculate if subscription is active based on dates"""
+        from django.utils import timezone
+        today = timezone.now().date()
+        if self.subscription_valid_from and self.subscription_valid_to:
+            return self.subscription_valid_from <= today <= self.subscription_valid_to
+        return False
+
     username = None  # Remove username field
 
     USERNAME_FIELD = 'mobile'  # Set mobile as the login field
