@@ -51,14 +51,11 @@ class DoctorViewSet(mixins.RetrieveModelMixin,
         return doctor.objects.get(user=self.request.user, is_active=True)
     
     def retrieve(self, request, *args, **kwargs):
-        """Doctor home API - Check subscription before returning profile"""
-        # Check if doctor is subscribed
-        if not request.user.subscription_is_active:
-            return Response(
-                {"error": "User not subscribed"},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        return super().retrieve(request, *args, **kwargs)
+        """Doctor home API - Include subscription status in response"""
+        response = super().retrieve(request, *args, **kwargs)
+        # Add subscription status to response
+        response.data['is_subscribed'] = request.user.subscription_is_active
+        return response
 
      # 👇 handle PATCH (partial update)
     def partial_update(self, request, *args, **kwargs):
@@ -172,13 +169,6 @@ class AppointmentsListAPIView(APIView):
     permission_classes = [IsAuthenticated, IsDoctor]
 
     def get(self, request, appointment_id=None):
-        # Check if doctor is subscribed
-        if not request.user.subscription_is_active:
-            return Response(
-                {"error": "User not subscribed"},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        
         # Ensure logged-in user is a doctor
         try:
             doctor_instance = doctor.objects.get(user=request.user)
@@ -196,7 +186,9 @@ class AppointmentsListAPIView(APIView):
                 doctor=doctor_instance
             )
             serializer = AppointmentSerializer(appointment)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            response_data = serializer.data
+            response_data['is_subscribed'] = request.user.subscription_is_active
+            return Response(response_data, status=status.HTTP_200_OK)
 
         # Fetch all appointments or filter by date
         date_param = request.query_params.get('date')  # e.g., ?date=2025-09-24
@@ -212,7 +204,11 @@ class AppointmentsListAPIView(APIView):
 
         appointments = appointments.order_by('date')
         serializer = AppointmentSerializer(appointments, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        response_data = {
+            "appointments": serializer.data,
+            "is_subscribed": request.user.subscription_is_active
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 from django.shortcuts import get_object_or_404
