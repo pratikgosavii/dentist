@@ -126,6 +126,33 @@
                                     <input type="text" class="form-control view-only-field" 
                                            value="{% if user.is_doctor %}Doctor{% elif user.is_customer %}Customer{% else %}Other{% endif %}" readonly>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Account Status</label>
+                                    <div class="d-flex align-items-center">
+                                        {% if user.is_active %}
+                                            <span class="status-badge status-active me-2">Active</span>
+                                        {% else %}
+                                            <span class="status-badge status-inactive me-2">Inactive</span>
+                                        {% endif %}
+                                        {% if user.is_active %}
+                                            <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to deactivate this user account? They will not be able to login.');">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="deactivate_user">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-x-circle"></i> Deactivate User
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <form method="POST" style="display: inline;" onsubmit="return confirm('Activate this user account? They will be able to login.');">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="activate_user">
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    <i class="bi bi-check-circle"></i> Activate User
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -202,12 +229,19 @@
                                            value="{{ user.subscription_valid_from|date:'Y-m-d'|default:'' }}" 
                                            required>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Valid To <span class="text-danger">*</span></label>
                                     <input type="date" name="subscription_valid_to" 
                                            class="form-control editable-field" 
                                            value="{{ user.subscription_valid_to|date:'Y-m-d'|default:'' }}" 
                                            required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Received Amount (₹)</label>
+                                    <input type="number" name="subscription_received_amount" 
+                                           class="form-control editable-field" 
+                                           value="{{ user.subscription_received_amount|default:0 }}" 
+                                           step="0.01" min="0" placeholder="0.00">
                                 </div>
                             </div>
                             
@@ -236,13 +270,18 @@
                     <!-- Action Buttons -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <a href="{% url 'user_list' %}" class="btn btn-secondary">
                                     <i class="bi bi-arrow-left"></i> Back to User List
                                 </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save"></i> Update Subscription
-                                </button>
+                                <div>
+                                    <a href="{% url 'subscription_payment_history' user.id %}" class="btn btn-info me-2">
+                                        <i class="bi bi-clock-history"></i> View Payment History
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> Update Subscription
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

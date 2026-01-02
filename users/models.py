@@ -47,6 +47,7 @@ class User(AbstractUser):
     # Subscription fields (for doctors)
     subscription_valid_from = models.DateField(null=True, blank=True)
     subscription_valid_to = models.DateField(null=True, blank=True)
+    subscription_received_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True)
     
     @property
     def subscription_is_active(self):

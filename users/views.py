@@ -366,9 +366,25 @@ def update_user_subscription(request, user_id):
             doctor_profile = None
     
     if request.method == 'POST':
-        # Update only subscription fields (editable)
+        action = request.POST.get('action')
+        
+        # Handle user account activate/deactivate
+        if action == 'activate_user':
+            user.is_active = True
+            user.save()
+            messages.success(request, 'User account activated successfully!')
+            return redirect('update_user_subscription', user_id=user_id)
+        
+        elif action == 'deactivate_user':
+            user.is_active = False
+            user.save()
+            messages.success(request, 'User account deactivated successfully!')
+            return redirect('update_user_subscription', user_id=user_id)
+        
+        # Regular update of subscription fields
         subscription_valid_from = request.POST.get('subscription_valid_from')
         subscription_valid_to = request.POST.get('subscription_valid_to')
+        subscription_received_amount = request.POST.get('subscription_received_amount')
         
         if subscription_valid_from:
             user.subscription_valid_from = subscription_valid_from
@@ -379,6 +395,14 @@ def update_user_subscription(request, user_id):
             user.subscription_valid_to = subscription_valid_to
         else:
             user.subscription_valid_to = None
+        
+        if subscription_received_amount:
+            try:
+                user.subscription_received_amount = float(subscription_received_amount)
+            except (ValueError, TypeError):
+                pass
+        else:
+            user.subscription_received_amount = 0.00
             
         user.save()
         
@@ -392,7 +416,37 @@ def update_user_subscription(request, user_id):
     
     return render(request, 'update_user_subscription.html', context)
 
-    return render(request, 'list_doctor.html', { 'data' : data})
+
+@login_required(login_url='login_admin')
+def subscription_payment_history(request, user_id):
+    """
+    View payment history for user subscription
+    """
+    user = get_object_or_404(User, id=user_id)
+    doctor_profile = None
+    
+    # Get doctor profile if user is a doctor
+    if user.is_doctor:
+        try:
+            doctor_profile = doctor.objects.get(user=user)
+        except doctor.DoesNotExist:
+            doctor_profile = None
+    
+    # Get payment history (PaidDoubt payments for this user)
+    from customer.models import PaidDoubt
+    payment_history = PaidDoubt.objects.filter(user=user, payment_status='paid').order_by('-created_at')
+    
+    # Calculate total received
+    total_received = sum(payment.amount for payment in payment_history)
+    
+    context = {
+        'user': user,
+        'doctor': doctor_profile,
+        'payment_history': payment_history,
+        'total_received': total_received,
+    }
+    
+    return render(request, 'subscription_payment_history.html', context)
 
 
 
