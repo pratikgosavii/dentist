@@ -341,6 +341,15 @@ def user_list(request):
     return render(request, 'user_list.html', { 'data' : data})
 
 
+def customer_list(request):
+    """
+    List all customers (users with is_customer=True)
+    """
+    data = User.objects.filter(is_customer=True).order_by('-date_joined')
+    
+    return render(request, 'customer_list.html', {'data': data})
+
+
 from doctor.models import doctor
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
