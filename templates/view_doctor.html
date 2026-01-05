@@ -83,69 +83,56 @@
                     <i class="bi bi-arrow-left"></i> Back to Doctors List
                 </a>
 
-                <div class="doctor-header">
-                    <h2><i class="bi bi-person-badge"></i> {{ doctor.user.get_full_name|default:"Doctor" }}</h2>
-                    {% if doctor.title %}
-                        <p class="mb-0 mt-2" style="opacity: 0.9;">{{ doctor.title }}{% if doctor.degree %} - {{ doctor.degree }}{% endif %}</p>
-                    {% endif %}
-                </div>
-
                 <!-- User Information -->
-                <div class="card">
-                    <div class="card-header section-header">
-                        User Information
+                <div class="card info-section">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">User Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-envelope icon-label"></i><span class="label">Email:</span> <span class="value">{{ user.email|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.first_name }} {{ user.last_name }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-phone icon-label"></i><span class="label">Mobile:</span> <span class="value">{{ user.mobile|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control view-only-field" 
+                                       value="{{ user.email|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-person icon-label"></i><span class="label">First Name:</span> <span class="value">{{ user.first_name|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Mobile</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.mobile }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-person icon-label"></i><span class="label">Last Name:</span> <span class="value">{{ user.last_name|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Date of Birth</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.dob|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-calendar icon-label"></i><span class="label">Date of Birth:</span> <span class="value">{{ user.dob|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Gender</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.get_gender_display|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-gender-ambiguous icon-label"></i><span class="label">Gender:</span> <span class="value">{{ user.get_gender_display|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.address|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-geo-alt icon-label"></i><span class="label">Address:</span> <span class="value">{{ user.address|default:"-" }}</span></p>
-                                </div>
+                                <label class="form-label">Date Joined</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ user.date_joined|date:'d M Y' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-calendar-check icon-label"></i><span class="label">Date Joined:</span> <span class="value">{{ user.date_joined|date:"d M Y" }}</span></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-check-circle icon-label"></i><span class="label">Account Status:</span> 
-                                        {% if user.is_active %}
-                                            <span class="badge bg-success badge-custom">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-danger badge-custom">Inactive</span>
-                                        {% endif %}
-                                    </p>
+                                <label class="form-label">Account Status</label>
+                                <div class="d-flex align-items-center">
+                                    {% if user.is_active %}
+                                        <span class="status-badge status-active me-2">Active</span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive me-2">Inactive</span>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -153,99 +140,110 @@
                 </div>
 
                 <!-- Doctor Professional Information -->
-                <div class="card">
-                    <div class="card-header section-header">
-                        Professional Information
+                <div class="card info-section">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Professional Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Title:</span> <span class="value">{{ doctor.title|default:"-" }}</span></p>
+                                <label class="form-label">Title</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.title|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Degree:</span> <span class="value">{{ doctor.degree|default:"-" }}</span></p>
+                                <label class="form-label">Degree</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.degree|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Gender:</span> <span class="value">{{ doctor.gender|default:"-" }}</span></p>
+                                <label class="form-label">Gender</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.gender|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Experience (Years):</span> <span class="value">{{ doctor.experience_years|default:"-" }}</span></p>
+                                <label class="form-label">Experience (Years)</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.experience_years|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <p><span class="label">Specializations:</span> <span class="value">{{ doctor.specializations|default:"-" }}</span></p>
+                                <label class="form-label">Specializations</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.specializations|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <p><span class="label">Education:</span> <span class="value">{{ doctor.education|default:"-" }}</span></p>
+                                <label class="form-label">Education</label>
+                                <textarea class="form-control view-only-field" rows="3" readonly>{{ doctor.education|default:'-' }}</textarea>
                             </div>
                             <div class="col-md-12 mb-3">
-                                <p><span class="label">About Doctor:</span> <span class="value">{{ doctor.about_doctor|default:"-" }}</span></p>
+                                <label class="form-label">About Doctor</label>
+                                <textarea class="form-control view-only-field" rows="3" readonly>{{ doctor.about_doctor|default:'-' }}</textarea>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-star-fill icon-label" style="color: #ffc107;"></i><span class="label">Rating:</span> 
-                                        {% if doctor.rating %}
-                                            <span class="value"><strong>{{ doctor.rating }}</strong> ⭐</span>
-                                        {% else %}
-                                            <span class="value">-</span>
-                                        {% endif %}
-                                    </p>
+                                <label class="form-label">Rating</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{% if doctor.rating %}⭐ {{ doctor.rating }}{% else %}-{% endif %}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Review Count</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.review_count|default:0 }}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Status</label>
+                                <div class="d-flex align-items-center">
+                                    {% if doctor.is_active %}
+                                        <span class="status-badge status-active me-2">Active</span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive me-2">Inactive</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-chat-dots icon-label"></i><span class="label">Review Count:</span> <span class="value">{{ doctor.review_count|default:"0" }}</span></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-toggle-on icon-label"></i><span class="label">Status:</span> 
-                                        {% if doctor.is_active %}
-                                            <span class="badge bg-success badge-custom">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-danger badge-custom">Inactive</span>
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <p><span class="label">Remark:</span> <span class="value">{{ doctor.remark|default:"-" }}</span></p>
+                                <label class="form-label">Remark</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.remark|default:'-' }}" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Clinic Information -->
-                <div class="card">
-                    <div class="card-header section-header">
-                        Clinic Information
+                <div class="card info-section">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Clinic Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Clinic Name:</span> <span class="value">{{ doctor.clinic_name|default:"-" }}</span></p>
+                                <label class="form-label">Clinic Name</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.clinic_name|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Clinic Phone:</span> <span class="value">{{ doctor.clinic_phone_number|default:"-" }}</span></p>
+                                <label class="form-label">Clinic Phone</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.clinic_phone_number|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Consultation Fees:</span> 
-                                    {% if doctor.clinic_consultation_fees %}
-                                        <span class="value">₹{{ doctor.clinic_consultation_fees }}</span>
-                                    {% else %}
-                                        <span class="value">-</span>
-                                    {% endif %}
-                                </p>
+                                <label class="form-label">Consultation Fees</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{% if doctor.clinic_consultation_fees %}₹{{ doctor.clinic_consultation_fees }}{% else %}-{% endif %}" readonly>
                             </div>
                             {% if doctor.clinic_image %}
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Clinic Image:</span></p>
-                                <img src="{{ doctor.clinic_image.url }}" alt="Clinic Image" class="img-thumbnail" style="max-width: 200px;">
+                                <label class="form-label">Clinic Image</label>
+                                <div>
+                                    <img src="{{ doctor.clinic_image.url }}" alt="Clinic Image" class="img-thumbnail">
+                                </div>
                             </div>
                             {% endif %}
                             {% if doctor.clinic_logo %}
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Clinic Logo:</span></p>
-                                <img src="{{ doctor.clinic_logo.url }}" alt="Clinic Logo" class="img-thumbnail" style="max-width: 200px;">
+                                <label class="form-label">Clinic Logo</label>
+                                <div>
+                                    <img src="{{ doctor.clinic_logo.url }}" alt="Clinic Logo" class="img-thumbnail">
+                                </div>
                             </div>
                             {% endif %}
                         </div>
@@ -253,32 +251,42 @@
                 </div>
 
                 <!-- Address Information -->
-                <div class="card">
-                    <div class="card-header section-header">
-                        Address Information
+                <div class="card info-section">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Address Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <p><span class="label">Street Address:</span> <span class="value">{{ doctor.street_address|default:"-" }}</span></p>
+                                <label class="form-label">Street Address</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.street_address|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <p><span class="label">City:</span> <span class="value">{{ doctor.city|default:"-" }}</span></p>
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.city|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <p><span class="label">State:</span> <span class="value">{{ doctor.state|default:"-" }}</span></p>
+                                <label class="form-label">State</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.state|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <p><span class="label">Pincode:</span> <span class="value">{{ doctor.pincode|default:"-" }}</span></p>
+                                <label class="form-label">Pincode</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.pincode|default:'-' }}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Country:</span> <span class="value">{{ doctor.country|default:"-" }}</span></p>
+                                <label class="form-label">Country</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.country|default:'-' }}" readonly>
                             </div>
                             {% if doctor.latitude and doctor.longitude %}
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Coordinates:</span> 
-                                    <span class="value">{{ doctor.latitude }}, {{ doctor.longitude }}</span>
-                                </p>
+                                <label class="form-label">Coordinates</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{{ doctor.latitude }}, {{ doctor.longitude }}" readonly>
                             </div>
                             {% endif %}
                         </div>
@@ -286,54 +294,39 @@
                 </div>
 
                 <!-- Subscription Information -->
-                <div class="card">
-                    <div class="card-header section-header">
-                        Subscription Information
+                <div class="card info-section">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Subscription Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Valid From:</span> 
-                                    {% if user.subscription_valid_from %}
-                                        <span class="value">{{ user.subscription_valid_from|date:"d M Y" }}</span>
-                                    {% else %}
-                                        <span class="value">-</span>
-                                    {% endif %}
-                                </p>
+                                <label class="form-label">Valid From</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{% if user.subscription_valid_from %}{{ user.subscription_valid_from|date:'d M Y' }}{% else %}-{% endif %}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Valid To:</span> 
-                                    {% if user.subscription_valid_to %}
-                                        <span class="value">{{ user.subscription_valid_to|date:"d M Y" }}</span>
-                                    {% else %}
-                                        <span class="value">-</span>
-                                    {% endif %}
-                                </p>
+                                <label class="form-label">Valid To</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{% if user.subscription_valid_to %}{{ user.subscription_valid_to|date:'d M Y' }}{% else %}-{% endif %}" readonly>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-shield-check icon-label"></i><span class="label">Subscription Status:</span> 
-                                        {% if user.subscription_is_active %}
-                                            <span class="badge bg-success badge-custom">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-danger badge-custom">Inactive</span>
-                                        {% endif %}
-                                    </p>
+                                <label class="form-label">Subscription Status</label>
+                                <div class="d-flex align-items-center">
+                                    {% if user.subscription_is_active %}
+                                        <span class="status-badge status-active me-2">Active</span>
+                                    {% else %}
+                                        <span class="status-badge status-inactive me-2">Inactive</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="info-item">
-                                    <p class="mb-0"><i class="bi bi-currency-rupee icon-label"></i><span class="label">Received Amount:</span> 
-                                        {% if user.subscription_received_amount %}
-                                            <span class="value"><strong>₹{{ user.subscription_received_amount }}</strong></span>
-                                        {% else %}
-                                            <span class="value">₹0.00</span>
-                                        {% endif %}
-                                    </p>
-                                </div>
+                                <label class="form-label">Received Amount</label>
+                                <input type="text" class="form-control view-only-field" 
+                                       value="{% if user.subscription_received_amount %}₹{{ user.subscription_received_amount }}{% else %}₹0.00{% endif %}" readonly>
                             </div>
                             <div class="col-md-12 mb-3 mt-3">
-                                <a href="{% url 'update_user_subscription' user.id %}" class="btn btn-primary btn-lg" style="border-radius: 8px; padding: 12px 30px;">
+                                <a href="{% url 'update_user_subscription' user.id %}" class="btn btn-primary">
                                     <i class="bi bi-calendar-check"></i> Manage Subscription
                                 </a>
                             </div>
