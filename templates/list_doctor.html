@@ -98,7 +98,7 @@
                                                     <td>{{ i.user.email|default:"-" }}</td>
                                                     <td>{{ i.user.get_full_name|default:"-" }}</td>
                                                     <td>{{ i.user.mobile|default:"-" }}</td>
-                                                    <td>{{ i.gender|default:"-" }}</td>
+                                                    <td>{{ i.user.gender|default:"-" }}</td>
                                                     <td>
                                                         {% if i.street_address or i.city %}
                                                             {{ i.street_address|default:"" }} {{ i.city|default:"" }}{% if i.pincode %} - {{ i.pincode }}{% endif %}, {{ i.state|default:"" }}, {{ i.country|default:"" }}
