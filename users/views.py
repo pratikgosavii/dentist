@@ -349,6 +349,8 @@ def dentist_list(request):
 
     data = doctor.objects.all()
 
+    return render(request, 'list_doctor.html', { 'data' : data})
+
 
 @login_required(login_url='login_admin')
 def update_user_subscription(request, user_id):
