@@ -132,13 +132,7 @@
                                                     Unknown
                                                 {% endif %}</td>
                                                 <td>
-                                                    {% if i.is_doctor %}
-                                                        <a href="{% url 'update_user_subscription' i.id %}" class="btn btn-sm btn-primary">
-                                                            <i class="bi bi-calendar-check"></i> Subscription
-                                                        </a>
-                                                    {% else %}
-                                                        <span class="text-muted">-</span>
-                                                    {% endif %}
+                                                    <span class="text-muted">-</span>
                                                 </td>
                                                 </tr>
                                             {% endfor %}

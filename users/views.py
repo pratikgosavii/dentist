@@ -1,6 +1,7 @@
 from email import message
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from users.serializer import UserProfileSerializer
@@ -350,9 +351,25 @@ def customer_list(request):
     return render(request, 'customer_list.html', {'data': data})
 
 
+@login_required(login_url='login_admin')
+def view_doctor_details(request, doctor_id):
+    """
+    View all details of a doctor
+    """
+    from doctor.models import doctor
+    
+    doctor_instance = get_object_or_404(doctor, id=doctor_id)
+    user = doctor_instance.user
+    
+    context = {
+        'doctor': doctor_instance,
+        'user': user,
+    }
+    
+    return render(request, 'view_doctor.html', context)
+
+
 from doctor.models import doctor
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
 
 def dentist_list(request):
 
