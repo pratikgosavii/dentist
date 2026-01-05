@@ -110,7 +110,6 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Type</th>
-                                                <th>Actions</th>
                                             </tr>
                                             </thead>
                                             <tbody id="tableBody">
@@ -124,16 +123,10 @@
                                                     Customer
                                                 {% elif i.is_doctor %}
                                                     Doctor
-                                                {% elif i.is_daycare %}
-                                                    Daycare
-                                                {% elif i.is_service_provider %}
-                                                    Service Provider
                                                 {% else %}
                                                     Unknown
                                                 {% endif %}</td>
-                                                <td>
-                                                    <span class="text-muted">-</span>
-                                                </td>
+                                               
                                                 </tr>
                                             {% endfor %}
                                             {% endif %}

@@ -5,6 +5,7 @@
 
 {% block extra_css %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <style>
     body {
         background-color: #f5f5f5;
@@ -12,29 +13,85 @@
     }
     .card {
         background-color: #fff;
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 25px;
         margin-top: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.12);
     }
     .card-header {
-        font-weight: bold;
-        font-size: 1.1rem;
+        font-weight: 600;
+        font-size: 1.2rem;
         background-color: #4952FB !important;
         color: white;
+        border-radius: 8px 8px 0 0;
+        padding: 15px 20px;
+        margin: -25px -25px 20px -25px;
     }
     .label {
         font-weight: 600;
-        color: #555;
+        color: #4952FB;
+        font-size: 0.95rem;
+        display: inline-block;
+        min-width: 150px;
     }
     .value {
-        color: #000;
+        color: #333;
+        font-size: 0.95rem;
     }
     .section-header {
-        padding: 7px 14px;
+        padding: 15px 20px;
     }
     .btn-back {
         margin-bottom: 20px;
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+    .info-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    .doctor-header {
+        background: linear-gradient(135deg, #4952FB 0%, #6c75ff 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(73, 82, 251, 0.3);
+    }
+    .doctor-header h2 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 2rem;
+    }
+    .badge-custom {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+    .img-thumbnail {
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icon-label {
+        margin-right: 8px;
+        color: #4952FB;
+    }
+    .row {
+        margin-bottom: 0;
+    }
+    .mb-3 {
+        margin-bottom: 1rem !important;
     }
 </style>
 {% endblock extra_css %}
@@ -52,7 +109,12 @@
                     <i class="bi bi-arrow-left"></i> Back to Doctors List
                 </a>
 
-                <h2 class="mb-4 text-center">{{ doctor.user.get_full_name|default:"Doctor" }}</h2>
+                <div class="doctor-header">
+                    <h2><i class="bi bi-person-badge"></i> {{ doctor.user.get_full_name|default:"Doctor" }}</h2>
+                    {% if doctor.title %}
+                        <p class="mb-0 mt-2" style="opacity: 0.9;">{{ doctor.title }}{% if doctor.degree %} - {{ doctor.degree }}{% endif %}</p>
+                    {% endif %}
+                </div>
 
                 <!-- User Information -->
                 <div class="card">
@@ -62,37 +124,55 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Email:</span> <span class="value">{{ user.email|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-envelope icon-label"></i><span class="label">Email:</span> <span class="value">{{ user.email|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Mobile:</span> <span class="value">{{ user.mobile|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-phone icon-label"></i><span class="label">Mobile:</span> <span class="value">{{ user.mobile|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">First Name:</span> <span class="value">{{ user.first_name|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-person icon-label"></i><span class="label">First Name:</span> <span class="value">{{ user.first_name|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Last Name:</span> <span class="value">{{ user.last_name|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-person icon-label"></i><span class="label">Last Name:</span> <span class="value">{{ user.last_name|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Date of Birth:</span> <span class="value">{{ user.dob|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-calendar icon-label"></i><span class="label">Date of Birth:</span> <span class="value">{{ user.dob|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Gender:</span> <span class="value">{{ user.get_gender_display|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-gender-ambiguous icon-label"></i><span class="label">Gender:</span> <span class="value">{{ user.get_gender_display|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Address:</span> <span class="value">{{ user.address|default:"-" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-geo-alt icon-label"></i><span class="label">Address:</span> <span class="value">{{ user.address|default:"-" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Date Joined:</span> <span class="value">{{ user.date_joined|date:"d M Y" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-calendar-check icon-label"></i><span class="label">Date Joined:</span> <span class="value">{{ user.date_joined|date:"d M Y" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Account Status:</span> 
-                                    {% if user.is_active %}
-                                        <span class="badge bg-success">Active</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">Inactive</span>
-                                    {% endif %}
-                                </p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-check-circle icon-label"></i><span class="label">Account Status:</span> 
+                                        {% if user.is_active %}
+                                            <span class="badge bg-success badge-custom">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger badge-custom">Inactive</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,25 +207,31 @@
                                 <p><span class="label">About Doctor:</span> <span class="value">{{ doctor.about_doctor|default:"-" }}</span></p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Rating:</span> 
-                                    {% if doctor.rating %}
-                                        <span class="value">⭐ {{ doctor.rating }}</span>
-                                    {% else %}
-                                        <span class="value">-</span>
-                                    {% endif %}
-                                </p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-star-fill icon-label" style="color: #ffc107;"></i><span class="label">Rating:</span> 
+                                        {% if doctor.rating %}
+                                            <span class="value"><strong>{{ doctor.rating }}</strong> ⭐</span>
+                                        {% else %}
+                                            <span class="value">-</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Review Count:</span> <span class="value">{{ doctor.review_count|default:"0" }}</span></p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-chat-dots icon-label"></i><span class="label">Review Count:</span> <span class="value">{{ doctor.review_count|default:"0" }}</span></p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Status:</span> 
-                                    {% if doctor.is_active %}
-                                        <span class="badge bg-success">Active</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">Inactive</span>
-                                    {% endif %}
-                                </p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-toggle-on icon-label"></i><span class="label">Status:</span> 
+                                        {% if doctor.is_active %}
+                                            <span class="badge bg-success badge-custom">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger badge-custom">Inactive</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <p><span class="label">Remark:</span> <span class="value">{{ doctor.remark|default:"-" }}</span></p>
@@ -251,25 +337,29 @@
                                 </p>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Subscription Status:</span> 
-                                    {% if user.subscription_is_active %}
-                                        <span class="badge bg-success">Active</span>
-                                    {% else %}
-                                        <span class="badge bg-danger">Inactive</span>
-                                    {% endif %}
-                                </p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-shield-check icon-label"></i><span class="label">Subscription Status:</span> 
+                                        {% if user.subscription_is_active %}
+                                            <span class="badge bg-success badge-custom">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger badge-custom">Inactive</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <p><span class="label">Received Amount:</span> 
-                                    {% if user.subscription_received_amount %}
-                                        <span class="value">₹{{ user.subscription_received_amount }}</span>
-                                    {% else %}
-                                        <span class="value">₹0.00</span>
-                                    {% endif %}
-                                </p>
+                                <div class="info-item">
+                                    <p class="mb-0"><i class="bi bi-currency-rupee icon-label"></i><span class="label">Received Amount:</span> 
+                                        {% if user.subscription_received_amount %}
+                                            <span class="value"><strong>₹{{ user.subscription_received_amount }}</strong></span>
+                                        {% else %}
+                                            <span class="value">₹0.00</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <a href="{% url 'update_user_subscription' user.id %}" class="btn btn-primary">
+                            <div class="col-md-12 mb-3 mt-3">
+                                <a href="{% url 'update_user_subscription' user.id %}" class="btn btn-primary btn-lg" style="border-radius: 8px; padding: 12px 30px;">
                                     <i class="bi bi-calendar-check"></i> Manage Subscription
                                 </a>
                             </div>
