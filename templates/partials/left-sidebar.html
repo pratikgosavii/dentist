@@ -23,11 +23,12 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow">
                                 <i data-feather="layers"></i>
-                                <span data-key="t-authentication">Users managemnt</span>
+                                <span data-key="t-authentication">Users management</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{% url 'user_list' %}">Users List</a></li>
+                                <li><a href="{% url 'user_list' %}">All Users List</a></li>
                                 <li><a href="{% url 'dentist_list' %}">Dentist List</a></li>
+                                {% comment %} <li><a href="{% url 'customer_list' %}">Customer List</a></li> {% endcomment %}
                             </ul>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="{% url 'list_support_tickets' %}">Chat Support</a></li>
