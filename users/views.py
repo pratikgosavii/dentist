@@ -347,8 +347,9 @@ def customer_list(request):
     List all customers (users with is_customer=True)
     """
     data = User.objects.filter(is_customer=True).order_by('-date_joined')
+    count = data.count()
     
-    return render(request, 'customer_list.html', {'data': data})
+    return render(request, 'customer_list.html', {'data': data, 'count': count})
 
 
 @login_required(login_url='login_admin')
@@ -374,8 +375,9 @@ from doctor.models import doctor
 def dentist_list(request):
 
     data = doctor.objects.all()
+    count = data.count()
 
-    return render(request, 'list_doctor.html', { 'data' : data})
+    return render(request, 'list_doctor.html', { 'data' : data, 'count': count})
 
 
 @login_required(login_url='login_admin')
