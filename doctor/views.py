@@ -420,10 +420,49 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         # ✅ Update fields safely
         appointment.date = new_date
         appointment.slot_id = slot
+        appointment.status = "rescheduled"
         appointment.save()
 
         return Response(
             {"detail": "Appointment rescheduled successfully."},
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=["post"])
+    def next_appointment(self, request, pk=None):
+        appointment = self.get_object()
+
+        # ✅ Ensure doctor has permission
+        if not self._check_doctor_permission(appointment, request.user):
+            return Response(
+                {"error": "You are not assigned to this appointment."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # ✅ Allow next_appointment only if appointment is accepted
+        if appointment.status.lower() != "accepted":
+            return Response(
+                {"error": "Only accepted appointments can be marked as next appointment."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        new_date = request.data.get("date")
+        slot = request.data.get("slot")
+
+        if not new_date or not slot:
+            return Response(
+                {"error": "date and time are required for next appointment."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ✅ Update fields safely
+        appointment.date = new_date
+        appointment.slot_id = slot
+        appointment.status = "next_appointment"
+        appointment.save()
+
+        return Response(
+            {"detail": "Appointment marked as next appointment successfully."},
             status=status.HTTP_200_OK
         )
 
