@@ -189,7 +189,7 @@ class AppointmentTreatmentStepSerializer(serializers.ModelSerializer):
             "status",
             "price",
         ]
-        read_only_fields = ["date"]
+        # date is now writable and comes from API
 
 from masters.serializers import TreatmentSerializer
 
