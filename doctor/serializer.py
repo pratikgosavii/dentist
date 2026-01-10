@@ -175,10 +175,19 @@ class AppointmentMedicineSerializer(serializers.ModelSerializer):
     
     def validate_dose_time(self, value):
         """Validate that dose_time contains only valid choices"""
+        # Allow None for nullable field
+        if value is None:
+            return None
+        
+        # Must be a list if provided
         if not isinstance(value, list):
-            raise serializers.ValidationError("dose_time must be a list.")
-        if not value:
-            raise serializers.ValidationError("At least one dose_time must be selected.")
+            raise serializers.ValidationError("dose_time must be a list or None.")
+        
+        # Allow empty list (field is optional)
+        if len(value) == 0:
+            return []
+        
+        # Validate choices if list is not empty
         invalid_choices = [choice for choice in value if choice not in self.DOSE_TIME_CHOICES]
         if invalid_choices:
             raise serializers.ValidationError(

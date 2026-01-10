@@ -140,6 +140,16 @@ class Appoinment_Medicine(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        """Ensure dose_time is always a valid list (JSON) or None"""
+        if self.dose_time is None:
+            # Keep as None if explicitly set to None
+            pass
+        elif not isinstance(self.dose_time, list):
+            # Convert invalid types to empty list
+            self.dose_time = []
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.medicine.name} "
     
