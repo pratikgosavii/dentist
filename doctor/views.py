@@ -815,6 +815,22 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
             raise serializers.ValidationError("You are not registered as a doctor.")
         serializer.save(doctor=doctor_instance)
     
+    @action(detail=False, methods=['get'], url_path='weekly-off-days')
+    def get_weekly_off_days(self, request):
+        """
+        Get weekly off days for the clinic.
+        """
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response({"error": "You are not registered as a doctor."}, status=400)
+        
+        weekly_off_days = doctor_instance.weekly_off_days if doctor_instance.weekly_off_days else []
+        
+        return Response({
+            "weekly_off_days": weekly_off_days
+        }, status=200)
+    
     @action(detail=False, methods=['post'], url_path='set-weekly-off-days')
     def set_weekly_off_days(self, request):
         """
@@ -852,11 +868,124 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
             "weekly_off_days": doctor_instance.weekly_off_days
         }, status=200)
     
+    
+
+    
+
+class AvailableSlotsAPIView(APIView):
+    """
+    Get available slots for a specific date.
+    Query parameter: ?date=2026-01-15 (YYYY-MM-DD format)
+    """
+    permission_classes = [IsAuthenticated, IsDoctor]
+    
+    def get(self, request):
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response({"error": "You are not registered as a doctor."}, status=400)
+        
+        # Get date from query parameters
+        date_str = request.query_params.get('date')
+        if not date_str:
+            return Response({"error": "Date parameter is required. Format: YYYY-MM-DD"}, status=400)
+        
+        try:
+            from datetime import datetime
+            selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return Response({"error": "Invalid date format. Please use YYYY-MM-DD format"}, status=400)
+        
+        # Check if date is in the past
+        if selected_date < date.today():
+            return Response({"error": "Cannot check availability for past dates"}, status=400)
+        
+        # Get day name (full name: Monday, Tuesday, etc.)
+        day_name = selected_date.strftime("%A")  # Returns: Monday, Tuesday, etc.
+        
+        # Map day abbreviations to full names for weekly off days check
+        day_abbreviation = selected_date.strftime("%a")  # Returns: Mon, Tue, etc.
+        
+        # Check if this is a weekly off day
+        weekly_off_days = doctor_instance.weekly_off_days if doctor_instance.weekly_off_days else []
+        if day_abbreviation in weekly_off_days:
+            return Response({
+                "date": selected_date.strftime("%Y-%m-%d"),
+                "day": day_name,
+                "is_available": False,
+                "reason": "Weekly off day",
+                "available_slots": []
+            }, status=200)
+        
+        # Check if doctor is on leave on this date
+        from doctor.models import DoctorLeave
+        if DoctorLeave.objects.filter(doctor=doctor_instance, leave_date=selected_date).exists():
+            return Response({
+                "date": selected_date.strftime("%Y-%m-%d"),
+                "day": day_name,
+                "is_available": False,
+                "reason": "Doctor is on leave",
+                "available_slots": []
+            }, status=200)
+        
+        # Get all configured slots for this day from DoctorAvailability
+        from doctor.models import DoctorAvailability
+        from masters.serializers import slot_serializer
+        
+        availabilities = DoctorAvailability.objects.filter(
+            doctor=doctor_instance,
+            day=day_name,
+            is_active=True
+        ).select_related('slot')
+        
+        if not availabilities.exists():
+            return Response({
+                "date": selected_date.strftime("%Y-%m-%d"),
+                "day": day_name,
+                "is_available": False,
+                "reason": "No slots configured for this day",
+                "available_slots": []
+            }, status=200)
+        
+        # Get all booked slots for this date
+        from customer.models import Appointment
+        booked_slots = set(
+            Appointment.objects.filter(
+                doctor=doctor_instance,
+                date=selected_date,
+                slot__isnull=False
+            ).values_list('slot_id', flat=True)
+        )
+        
+        # Filter available slots (configured slots minus booked slots)
+        available_slots_data = []
+        
+        for availability in availabilities:
+            slot_obj = availability.slot
+            # Only include slots that are not booked
+            if slot_obj.id not in booked_slots:
+                slot_data = slot_serializer(slot_obj).data
+                available_slots_data.append(slot_data)
+        
+        available_count = len(available_slots_data)
+        booked_count = len(booked_slots)
+        total_count = len(availabilities)
+        
+        return Response({
+            "date": selected_date.strftime("%Y-%m-%d"),
+            "day": day_name,
+            "is_available": True,
+            "reason": None,
+            "summary": {
+                "total_configured_slots": total_count,
+                "available_slots": available_count,
+                "booked_slots": booked_count
+            },
+            "available_slots": available_slots_data
+        }, status=200)
 
    
 
-
-   
 class DoctorAvailabilityView(APIView):
 
     permission_classes = [IsAuthenticated, IsDoctor]
