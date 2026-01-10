@@ -63,6 +63,7 @@ STATUS_CHOICES = [
     ("rejected", "Rejected"),
     ("cancelled", "Cancelled"),
     ("rescheduled", "Rescheduled"),
+    ("rescheduled_by_patient", "Rescheduled by Patient"),
     ("next_appointment", "Next Appointment"),
 ]
 
@@ -74,7 +75,7 @@ class Appointment(models.Model):
     appointment_type = models.CharField(max_length=20, choices=APPOINTMENT_TYPE_CHOICES, default="In Person")
 
     status = models.CharField(
-        max_length=20,
+        max_length=30,
         choices=STATUS_CHOICES,
         default="waiting"
     )

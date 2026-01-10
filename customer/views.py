@@ -117,7 +117,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.date = new_date
         appointment.slot_id = slot  
-        appointment.status = "waiting"  
+        appointment.status = "rescheduled_by_patient"  
         appointment.save()
 
         return Response({"detail": "Appointment rescheduled successfully."},
