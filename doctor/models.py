@@ -110,6 +110,8 @@ class Appoinment_Medicine(models.Model):
     
     dose_time = models.JSONField(
         default=list,
+        blank=True,
+        null=True,
         help_text="List of selected times: ['morning', 'afternoon', 'night']"
     )
 
