@@ -925,7 +925,7 @@ class AvailableSlotsAPIView(APIView):
                 "day": day_name,
                 "is_available": False,
                 "reason": "Doctor is on leave",
-                "available_slots": []
+                "slots": []
             }, status=200)
         
         # Get all configured slots for this day from DoctorAvailability
@@ -936,7 +936,7 @@ class AvailableSlotsAPIView(APIView):
             doctor=doctor_instance,
             day=day_name,
             is_active=True
-        ).select_related('slot')
+        ).select_related('slot').order_by('slot__start')
         
         if not availabilities.exists():
             return Response({
@@ -944,7 +944,7 @@ class AvailableSlotsAPIView(APIView):
                 "day": day_name,
                 "is_available": False,
                 "reason": "No slots configured for this day",
-                "available_slots": []
+                "slots": []
             }, status=200)
         
         # Get all slots for this day
