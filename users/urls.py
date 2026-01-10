@@ -21,8 +21,10 @@ urlpatterns = [
     path('delete-account/', delete_user, name='delete_account'),
 
     path('dentist_list/', dentist_list, name='dentist_list'),
+    path('export-dentist-list-excel/', export_dentist_list_excel, name='export_dentist_list_excel'),
     path('user_list/', user_list, name='user_list'),
     path('customer_list/', customer_list, name='customer_list'),
+    path('export-customer-list-excel/', export_customer_list_excel, name='export_customer_list_excel'),
     path('view-doctor/<int:doctor_id>/', view_doctor_details, name='view_doctor_details'),
     path('update-user-subscription/<int:user_id>/', update_user_subscription, name='update_user_subscription'),
     path('subscription-payment-history/<int:user_id>/', subscription_payment_history, name='subscription_payment_history'),

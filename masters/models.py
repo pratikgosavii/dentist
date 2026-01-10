@@ -90,6 +90,12 @@ class medicine(models.Model):
         blank=True,
         null=True
     )
+    
+    duration = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Duration in days"
+    )
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

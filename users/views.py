@@ -3,6 +3,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter
+from datetime import datetime
 
 from users.serializer import UserProfileSerializer
 
@@ -353,6 +358,65 @@ def customer_list(request):
 
 
 @login_required(login_url='login_admin')
+def export_customer_list_excel(request):
+    """Export customer list to Excel"""
+    data = User.objects.filter(is_customer=True).order_by('-date_joined')
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Customers"
+    
+    # Headers
+    headers = ['#', 'User Email', 'First Name', 'Last Name', 'Mobile', 'Gender', 'Date of Birth', 'Address', 'Date Joined']
+    ws.append(headers)
+    
+    # Style header row
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_font = Font(bold=True, color="FFFFFF")
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Data rows
+    for idx, user in enumerate(data, start=1):
+        ws.append([
+            idx,
+            user.email or "-",
+            user.first_name or "-",
+            user.last_name or "-",
+            user.mobile or "-",
+            user.gender or "-",
+            user.dob.strftime("%d-%m-%Y") if user.dob else "-",
+            user.address or "-",
+            user.date_joined.strftime("%d-%m-%Y %H:%M") if user.date_joined else "-"
+        ])
+    
+    # Auto-adjust column widths
+    for column in ws.columns:
+        max_length = 0
+        column_letter = get_column_letter(column[0].column)
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f"customers_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    wb.save(response)
+    return response
+
+
+@login_required(login_url='login_admin')
 def view_doctor_details(request, doctor_id):
     """
     View all details of a doctor
@@ -378,6 +442,68 @@ def dentist_list(request):
     count = data.count()
 
     return render(request, 'list_doctor.html', { 'data' : data, 'count': count})
+
+
+@login_required(login_url='login_admin')
+def export_dentist_list_excel(request):
+    """Export dentist list to Excel with subscription valid till date"""
+    data = doctor.objects.select_related('user').all()
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Dentists"
+    
+    # Headers - including subscription_valid_to
+    headers = ['#', 'User Email', 'Name', 'Mobile', 'Gender', 'Address', 'Subscription Valid From', 'Subscription Valid Till']
+    ws.append(headers)
+    
+    # Style header row
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_font = Font(bold=True, color="FFFFFF")
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Data rows
+    for idx, doc in enumerate(data, start=1):
+        user = doc.user
+        full_name = f"{user.first_name or ''} {user.last_name or ''}".strip() or "-"
+        address = user.address or "-"
+        
+        ws.append([
+            idx,
+            user.email or "-",
+            full_name,
+            user.mobile or "-",
+            user.gender or "-",
+            address,
+            user.subscription_valid_from.strftime("%d-%m-%Y") if user.subscription_valid_from else "-",
+            user.subscription_valid_to.strftime("%d-%m-%Y") if user.subscription_valid_to else "-"
+        ])
+    
+    # Auto-adjust column widths
+    for column in ws.columns:
+        max_length = 0
+        column_letter = get_column_letter(column[0].column)
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f"dentists_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    wb.save(response)
+    return response
 
 
 @login_required(login_url='login_admin')

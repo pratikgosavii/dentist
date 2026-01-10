@@ -160,7 +160,7 @@ class doctor_serializer(serializers.ModelSerializer):
 class medicine_serializer(serializers.ModelSerializer):
     class Meta:
         model = medicine
-        fields = ['id', 'name', 'form', 'description', 'dose_time', 'meal_relation', 'is_active']
+        fields = ['id', 'name', 'form', 'description', 'quantity', 'dose_time', 'meal_relation', 'duration', 'is_active']
         read_only_fields = ['created_by']
         
     def create(self, validated_data):

@@ -58,6 +58,17 @@
     <div class="page-content">
         <div class="container-fluid">
 
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between mb-3">
+                        <h4 class="mb-sm-0 font-size-18">Paid Doubts List</h4>
+                        <a href="{% url 'export_paiddoubts_excel' %}?{{ request.GET.urlencode }}" class="btn btn-success">
+                            <i class="bi bi-download"></i> Download to Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
           <form method="get">
     <div class="row">
         {% for field in filterset.form %}

@@ -76,6 +76,9 @@
                                                 <th>Name</th>
                                                 <th>Form</th>
                                                 <th>Quantity</th>
+                                                <th>Dose Time</th>
+                                                <th>Meal Relation</th>
+                                                <th>Duration (Days)</th>
                                                 <th>Description</th>
                                                 <th>Active</th>
                                                 <th>Action</th>
@@ -89,7 +92,26 @@
                                                         <td>{{ medicine.name }}</td>
                                                         <td>{{ medicine.form }}</td>
                                                         <td>{{ medicine.quantity|default:"-" }}</td>
-                                                        <td>{{ medicine.description|truncatechars:50 }}</td>
+                                                        <td>
+                                                            {% if medicine.dose_time %}
+                                                                {% if medicine.dose_time|length > 0 %}
+                                                                    {% for time in medicine.dose_time %}
+                                                                        {% if time == 'morning' %}☀️ Morning
+                                                                        {% elif time == 'afternoon' %}🌤️ Afternoon
+                                                                        {% elif time == 'night' %}🌙 Night
+                                                                        {% else %}{{ time }}{% endif %}
+                                                                        {% if not forloop.last %}, {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    -
+                                                                {% endif %}
+                                                            {% else %}
+                                                                -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ medicine.meal_relation|default:"-"|title }}</td>
+                                                        <td>{{ medicine.duration|default:"-" }}</td>
+                                                        <td>{{ medicine.description|truncatechars:50|default:"-" }}</td>
                                                         <td>
                                                             {% if medicine.is_active %}
                                                                 ✅
@@ -105,7 +127,7 @@
                                                 {% endfor %}
                                             {% else %}
                                                 <tr>
-                                                    <td colspan="8" class="text-center">No medicines found.</td>
+                                                    <td colspan="10" class="text-center">No medicines found.</td>
                                                 </tr>
                                             {% endif %}
                                         </tbody>

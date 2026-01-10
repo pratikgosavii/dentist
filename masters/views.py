@@ -1,4 +1,9 @@
 from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter
+from datetime import datetime
 
 # Create your views here.
 
@@ -793,6 +798,87 @@ def list_enquiry(request):
 
 
 @login_required(login_url='login_admin')
+def export_enquiry_excel(request):
+    """Export enquiry list to Excel"""
+    from .filters import EnquiryFilter
+    
+    enquiry_qs = enquiry.objects.all().order_by('-created_at')
+    enquiry_filter = EnquiryFilter(request.GET, queryset=enquiry_qs)
+    data = enquiry_filter.qs
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Enquiries"
+    
+    # Headers
+    headers = ['#', 'Enquiry For', 'Name', 'Mobile', 'Gender', 'Age', 'Email', 
+               'Enquiry Type', 'Status', 'Address', 'Date']
+    ws.append(headers)
+    
+    # Style header row
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_font = Font(bold=True, color="FFFFFF")
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Data rows
+    for idx, enquiry_item in enumerate(data, start=1):
+        if enquiry_item.booking_type == "self":
+            name = enquiry_item.user.get_full_name() if enquiry_item.user else "-"
+            mobile = enquiry_item.user.mobile if enquiry_item.user else "-"
+            gender = enquiry_item.user.gender if enquiry_item.user else "-"
+            age = enquiry_item.user.age if hasattr(enquiry_item.user, 'age') else "-"
+            email = enquiry_item.user.email if enquiry_item.user else "-"
+            address = f"{getattr(enquiry_item.user, 'house', '')}, {getattr(enquiry_item.user, 'area', '')}, {getattr(enquiry_item.user, 'city', '')}, {getattr(enquiry_item.user, 'state', '')} - {getattr(enquiry_item.user, 'pincode', '')}"
+        else:
+            name = enquiry_item.full_name or "-"
+            mobile = enquiry_item.phone_number or "-"
+            gender = enquiry_item.gender or "-"
+            age = enquiry_item.age or "-"
+            email = enquiry_item.email or "-"
+            address = f"{getattr(enquiry_item, 'house', '')}, {getattr(enquiry_item, 'area', '')}, {getattr(enquiry_item, 'city', '')}, {getattr(enquiry_item, 'state', '')} - {getattr(enquiry_item, 'pincode', '')}"
+        
+        ws.append([
+            idx,
+            enquiry_item.booking_type or "-",
+            name,
+            mobile,
+            gender,
+            age,
+            email,
+            enquiry_item.enquiry_type or "-",
+            enquiry_item.status or "-",
+            address,
+            enquiry_item.created_at.strftime("%d-%m-%Y %H:%M") if enquiry_item.created_at else "-"
+        ])
+    
+    # Auto-adjust column widths
+    for column in ws.columns:
+        max_length = 0
+        column_letter = get_column_letter(column[0].column)
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f"enquiries_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    wb.save(response)
+    return response
+
+
+@login_required(login_url='login_admin')
 def list_apppoinments(request):
     appointment_qs = Appointment.objects.all().order_by('-date')
     appointment_filter = AppointmentFilter(request.GET, queryset=appointment_qs)
@@ -1018,6 +1104,8 @@ def ticket_detail(request, ticket_id):
 
 def list_paiddoubts(request):
     """All PaidDoubt list with mobile filter"""
+    from customer.models import PaidDoubt
+    
     paiddoubts = PaidDoubt.objects.select_related('user').order_by('-created_at')
 
     # Apply filter
@@ -1025,6 +1113,71 @@ def list_paiddoubts(request):
     paiddoubts = paiddoubt_filter.qs
 
     return render(request, "list_paiddoubt.html", {"paiddoubts": paiddoubts, "filterset": paiddoubt_filter})
+
+
+@login_required(login_url='login_admin')
+def export_paiddoubts_excel(request):
+    """Export paid doubts list to Excel"""
+    from customer.models import PaidDoubt
+    from .filters import PaidDoubtFilter
+    
+    paiddoubts = PaidDoubt.objects.select_related('user').order_by('-created_at')
+    paiddoubt_filter = PaidDoubtFilter(request.GET, queryset=paiddoubts)
+    data = paiddoubt_filter.qs
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Paid Doubts"
+    
+    # Headers
+    headers = ['#', 'User', 'Phone', 'Message', 'Amount', 'Payment Status', 'Razorpay Order ID', 'Razorpay Payment ID', 'Created At']
+    ws.append(headers)
+    
+    # Style header row
+    header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+    header_font = Font(bold=True, color="FFFFFF")
+    for cell in ws[1]:
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+    
+    # Data rows
+    for idx, doubt in enumerate(data, start=1):
+        user_name = doubt.user.get_full_name() if doubt.user else "-"
+        ws.append([
+            idx,
+            user_name,
+            doubt.phone or "-",
+            doubt.message or "-",
+            float(doubt.amount) if doubt.amount else 0.00,
+            doubt.payment_status or "-",
+            doubt.razorpay_order_id or "-",
+            doubt.razorpay_payment_id or "-",
+            doubt.created_at.strftime("%d-%m-%Y %H:%M") if doubt.created_at else "-"
+        ])
+    
+    # Auto-adjust column widths
+    for column in ws.columns:
+        max_length = 0
+        column_letter = get_column_letter(column[0].column)
+        for cell in column:
+            try:
+                if len(str(cell.value)) > max_length:
+                    max_length = len(str(cell.value))
+            except:
+                pass
+        adjusted_width = min(max_length + 2, 50)
+        ws.column_dimensions[column_letter].width = adjusted_width
+    
+    # Prepare response
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    filename = f"paid_doubts_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    
+    wb.save(response)
+    return response
 
 
 

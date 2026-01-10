@@ -92,6 +92,9 @@
                             <h4 class="mb-sm-0 font-size-18">Customer List 
                                 <span class="badge bg-primary ms-2">Total: {{ count|default:0 }}</span>
                             </h4>
+                            <a href="{% url 'export_customer_list_excel' %}" class="btn btn-success">
+                                <i class="bi bi-download"></i> Download to Excel
+                            </a>
                         </div>
                     </div>
                 </div>

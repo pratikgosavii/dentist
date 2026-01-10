@@ -57,6 +57,7 @@ urlpatterns = [
     path('update-enquiry/<enquiry_id>', update_enquiry, name='update_enquiry'),
     path('delete-enquiry/<enquiry_id>', delete_enquiry, name='delete_enquiry'),
     path('list-enquiry/', list_enquiry, name='list_enquiry'),
+    path('export-enquiry-excel/', export_enquiry_excel, name='export_enquiry_excel'),
     
     path('list-apppoinments/', list_apppoinments, name='list_apppoinments'),
 
@@ -79,6 +80,7 @@ urlpatterns = [
     path('admin/support-tickets/<int:ticket_id>/', ticket_detail, name='ticket_detail'),
     
     path('list-paiddoubts/', list_paiddoubts, name='list_paiddoubts'),
+    path('export-paiddoubts-excel/', export_paiddoubts_excel, name='export_paiddoubts_excel'),
     path('list-prescription/', list_prescription, name='list_prescription'),
     path('list-prescription-medicine/<prescription_id>', prescription_medicine_list, name='prescription_medicine_list'),
     path('create-prescription/', create_prescription, name='create_prescription'),

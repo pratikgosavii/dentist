@@ -57,13 +57,14 @@ class medicine_Form(forms.ModelForm):
     
     class Meta:
         model = medicine
-        fields = ['name', 'form', 'quantity', 'description', 'meal_relation', 'is_active']
+        fields = ['name', 'form', 'quantity', 'description', 'meal_relation', 'duration', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Medicine Name'}),
             'form': forms.Select(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Quantity', 'step': '0.01'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description', 'rows': 4}),
             'meal_relation': forms.Select(attrs={'class': 'form-control'}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Duration (days)', 'min': '1'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
     
