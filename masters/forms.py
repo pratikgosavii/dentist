@@ -44,19 +44,34 @@ class area_Form(forms.ModelForm):
         }
 
 class medicine_Form(forms.ModelForm):
-
+    # Exclude dose_time from form fields - handle it manually in views
+    dose_time = forms.MultipleChoiceField(
+        choices=[
+            ('morning', 'Morning'),
+            ('afternoon', 'Afternoon'),
+            ('night', 'Night'),
+        ],
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': 'multiple', 'size': '3'})
+    )
+    
     class Meta:
         model = medicine
-        fields = ['name', 'brand', 'form', 'description', 'dose_time', 'meal_relation', 'is_active']
+        fields = ['name', 'brand', 'form', 'description', 'meal_relation', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Medicine Name'}),
             'brand': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Brand Name'}),
             'form': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description'}),
-            'dose_time': forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': 'multiple'}),
             'meal_relation': forms.Select(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set initial value for dose_time from instance
+        if self.instance and self.instance.pk and self.instance.dose_time:
+            self.fields['dose_time'].initial = self.instance.dose_time
 
 class treatment_Form(forms.ModelForm):
 
