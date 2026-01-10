@@ -439,10 +439,11 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        # ✅ Allow next_appointment only if appointment is accepted
-        if appointment.status.lower() != "accepted":
+        # ✅ Allow next_appointment only if appointment is accepted, rescheduled, or next_appointment
+        allowed_statuses = ["accepted", "rescheduled", "next_appointment"]
+        if appointment.status.lower() not in allowed_statuses:
             return Response(
-                {"error": "Only accepted appointments can be marked as next appointment."},
+                {"error": f"Only appointments with status: {', '.join(allowed_statuses)} can be marked as next appointment."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
