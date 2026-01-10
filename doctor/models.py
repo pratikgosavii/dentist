@@ -13,6 +13,10 @@ from datetime import datetime
 def current_time():
     return datetime.now().time()
 
+def default_dose_time_list():
+    """Return an empty list as default for dose_time JSONField"""
+    return []
+
 GENDER_CHOICES = (
     ("Male", "Male"),
     ("Female", "Female"),
@@ -109,7 +113,7 @@ class Appoinment_Medicine(models.Model):
     quantity = models.DecimalField(max_digits=4, decimal_places=1)  # Add max_digits also
     
     dose_time = models.JSONField(
-        default=list,
+        default=default_dose_time_list,
         blank=True,
         null=True,
         help_text="List of selected times: ['morning', 'afternoon', 'night']"

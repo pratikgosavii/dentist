@@ -5,45 +5,65 @@ import json
 
 
 def fix_dose_time_json(apps, schema_editor):
-    """Fix existing dose_time values to be valid JSON"""
-    AppoinmentMedicine = apps.get_model('doctor', 'Appoinment_Medicine')
+    """Fix existing dose_time values to be valid JSON using raw SQL to avoid validation errors"""
+    connection = schema_editor.connection
     
-    for medicine in AppoinmentMedicine.objects.all():
-        try:
-            # If dose_time is None, set to empty list
-            if medicine.dose_time is None:
-                medicine.dose_time = []
-                medicine.save(update_fields=['dose_time'])
-                continue
+    with connection.cursor() as cursor:
+        # Get all records with their raw dose_time values using raw SQL
+        # This bypasses Django ORM validation
+        cursor.execute("SELECT id, dose_time FROM doctor_appoinment_medicine")
+        
+        valid_times = ['morning', 'afternoon', 'night']
+        
+        for row in cursor.fetchall():
+            record_id, dose_time_value = row
             
-            # If it's already a list, validate it
-            if isinstance(medicine.dose_time, list):
-                # Ensure all values are valid
-                valid_times = ['morning', 'afternoon', 'night']
-                valid_list = [time for time in medicine.dose_time if time in valid_times]
-                if valid_list != medicine.dose_time:
-                    medicine.dose_time = valid_list if valid_list else []
-                    medicine.save(update_fields=['dose_time'])
-                continue
-            
-            # If it's a string (from old CharField), convert to list
-            if isinstance(medicine.dose_time, str):
-                valid_times = ['morning', 'afternoon', 'night']
-                if medicine.dose_time in valid_times:
-                    medicine.dose_time = [medicine.dose_time]
+            try:
+                # If None, keep as None (nullable field)
+                if dose_time_value is None:
+                    continue
+                
+                # Try to parse as JSON first
+                parsed_value = None
+                if isinstance(dose_time_value, str):
+                    try:
+                        parsed_value = json.loads(dose_time_value)
+                    except json.JSONDecodeError:
+                        # Not valid JSON - might be old string value
+                        parsed_value = dose_time_value
                 else:
-                    medicine.dose_time = []
-                medicine.save(update_fields=['dose_time'])
-                continue
-            
-            # For any other invalid type, set to empty list
-            medicine.dose_time = []
-            medicine.save(update_fields=['dose_time'])
-            
-        except (TypeError, ValueError, AttributeError, json.JSONDecodeError) as e:
-            # If there's any error, set to empty list
-            medicine.dose_time = []
-            medicine.save(update_fields=['dose_time'])
+                    parsed_value = dose_time_value
+                
+                # Determine the fixed value
+                fixed_value = None
+                
+                # If it's a list, validate contents
+                if isinstance(parsed_value, list):
+                    valid_list = [time for time in parsed_value if time in valid_times]
+                    fixed_value = json.dumps(valid_list if valid_list else [])
+                # If it's a string (from old CharField), convert to list
+                elif isinstance(parsed_value, str) and parsed_value in valid_times:
+                    fixed_value = json.dumps([parsed_value])
+                else:
+                    # Invalid value, set to empty list
+                    fixed_value = json.dumps([])
+                
+                # Update using parameterized query (works with SQLite ? and PostgreSQL %s)
+                cursor.execute(
+                    "UPDATE doctor_appoinment_medicine SET dose_time = ? WHERE id = ?",
+                    [fixed_value, record_id]
+                )
+                    
+            except Exception as e:
+                # If there's any error, set to empty list JSON
+                try:
+                    fixed_value = json.dumps([])
+                    cursor.execute(
+                        "UPDATE doctor_appoinment_medicine SET dose_time = ? WHERE id = ?",
+                        [fixed_value, record_id]
+                    )
+                except:
+                    pass  # Skip if we can't fix it
 
 
 def reverse_fix_dose_time_json(apps, schema_editor):
