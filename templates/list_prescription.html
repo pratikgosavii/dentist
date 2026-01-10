@@ -81,8 +81,8 @@
                 <p class="text-center text-danger">❌ No user found with mobile number <strong>{{ mobile }}</strong></p>
             {% endif %}
 
-            {% if user!=None and user!='' %}
-                <h5 class="text-center mb-3">Showing prescriptions for: <strong>{{ user.firstname }} {{ user.lastname }}</strong> ({{ user.phone_number }})</h5>
+            {% if user %}
+                <h5 class="text-center mb-3">Showing prescriptions for: <strong>{{ user.first_name }} {{ user.last_name }}</strong> ({{ user.mobile }})</h5>
                  <div style="justify-content: center; display: flex;" class="mb-2">
                     <a href="{% url 'create_prescription' %}?user_id={{ user.id }}" class="btn btn-success">
                         + Add New Prescription

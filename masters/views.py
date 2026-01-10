@@ -15,7 +15,7 @@ from customer.models import Appointment
 
 # Create your views here.
 
-
+from users.models import User
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
@@ -1035,6 +1035,7 @@ def list_prescription(request):
     mobile = request.GET.get('mobile')
     print(mobile)
     user = None
+    prescriptions = None
 
     if mobile:
         user = User.objects.filter(mobile=mobile).first()
@@ -1044,7 +1045,12 @@ def list_prescription(request):
             prescriptions = None
     else:
         prescriptions = Prescription.objects.select_related('user').order_by('-date')
-    return render(request, "list_prescription.html", {"prescriptions": prescriptions})
+    
+    return render(request, "list_prescription.html", {
+        "prescriptions": prescriptions,
+        "user": user,
+        "mobile": mobile
+    })
 
 
 def prescription_medicine_list(request, prescription_id):
