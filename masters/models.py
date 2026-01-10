@@ -64,6 +64,7 @@ class medicine(models.Model):
         ('drop', 'Drop'),
         ('spray', 'Spray'),
     ])
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, help_text="Quantity in stock")
     description = models.TextField(blank=True, null=True)
     
     dose_time = models.JSONField(
