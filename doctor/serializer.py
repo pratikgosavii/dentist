@@ -7,7 +7,8 @@ from .models import *
 from customer.serializer import *
 from rest_framework import serializers
 from users.serializer import UserProfileSerializer
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 
 
 
@@ -77,9 +78,9 @@ class doctor_serializer(serializers.ModelSerializer):
     
     def get_offers(self, obj):
         """Return only active offers for this doctor"""
-        today = date.today()
+        now = timezone.now()
         offers = Offer.objects.filter(
-            user=obj.user, valid_to__lte=today
+            user=obj.user, valid_to__gte=now
         )
         return OfferSerializer(offers, many=True).data
 
