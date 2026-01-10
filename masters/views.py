@@ -136,11 +136,17 @@ def add_medicine(request):
             form_instance = forms.save(commit=False)
             form_instance.created_by = request.user  # 👈 Set the current superuser
             
-            # Handle dose_time - convert from list to JSON
+            # Handle dose_time - convert from list to JSON, ensure valid JSON
             dose_time_list = request.POST.getlist('dose_time')
-            if dose_time_list:
-                form_instance.dose_time = dose_time_list
+            if dose_time_list and len(dose_time_list) > 0:
+                # Filter out empty strings and ensure valid values
+                valid_times = [time for time in dose_time_list if time in ['morning', 'afternoon', 'night']]
+                form_instance.dose_time = valid_times if valid_times else []
             else:
+                form_instance.dose_time = []  # Ensure empty list is valid JSON
+            
+            # Explicitly ensure it's a list (valid JSON)
+            if not isinstance(form_instance.dose_time, list):
                 form_instance.dose_time = []
             
             form_instance.save()
@@ -177,14 +183,20 @@ def update_medicine(request, medicine_id):
             form_instance = forms.save(commit=False)
             form_instance.created_by = request.user  # 👈 Set the current superuser
             
-            # Handle dose_time - convert from list to JSON
+            # Handle dose_time - convert from list to JSON, ensure valid JSON
             dose_time_list = request.POST.getlist('dose_time')
-            if dose_time_list:
-                form_instance.dose_time = dose_time_list
+            if dose_time_list and len(dose_time_list) > 0:
+                # Filter out empty strings and ensure valid values
+                valid_times = [time for time in dose_time_list if time in ['morning', 'afternoon', 'night']]
+                form_instance.dose_time = valid_times if valid_times else []
             else:
+                form_instance.dose_time = []  # Ensure empty list is valid JSON
+            
+            # Explicitly ensure it's a list (valid JSON)
+            if not isinstance(form_instance.dose_time, list):
                 form_instance.dose_time = []
         
-            forms.save()
+            form_instance.save()
             return redirect('list_medicine')
         else:
             print(forms.errors)

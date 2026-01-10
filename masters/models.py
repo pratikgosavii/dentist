@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+def default_dose_time():
+    """Return an empty list as default for dose_time JSONField"""
+    return []
+
 
 
 
@@ -63,9 +67,19 @@ class medicine(models.Model):
     description = models.TextField(blank=True, null=True)
     
     dose_time = models.JSONField(
-        default=list,
+        default=default_dose_time,
+        blank=True,
+        null=True,
         help_text="List of selected times: ['morning', 'afternoon', 'night']"
     )
+    
+    def save(self, *args, **kwargs):
+        """Ensure dose_time is always a valid list (JSON)"""
+        if self.dose_time is None:
+            self.dose_time = []
+        elif not isinstance(self.dose_time, list):
+            self.dose_time = []
+        super().save(*args, **kwargs)
     
     meal_relation = models.CharField(
         max_length=30,
