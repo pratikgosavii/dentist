@@ -30,26 +30,28 @@
                                 <li><a href="{% url 'dentist_list' %}">Dentist List</a></li>
                                 <li><a href="{% url 'customer_list' %}">Patient List</a></li>
                             </ul>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="{% url 'list_support_tickets' %}">Chat Support</a></li>
-                            </ul>
-                            
+                        </li>
+
+                        <li>
+                            <a href="{% url 'list_support_tickets' %}">
+                                <i data-feather="message-circle"></i>
+                                <span data-key="t-chat-support">Chat Support</span>
+                            </a>
                         </li>
 
 
-                        
                         <li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="layers"></i>
-                                    <span data-key="t-authentication">Coupon</span>
+                                    <span data-key="t-authentication">Enquiry</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{% url 'add_coupon' %}">Add Coupon</a></li>
-                                    <li><a href="{% url 'list_coupon' %}">Coupon List</a></li>
+                                    <li><a href="{% url 'list_enquiry' %}">List Enquiry</a></li>
                                 </ul>
                             </li>
                         <li>
+                     
 
                             <li>
                             <a href="javascript: void(0);" class="has-arrow">
@@ -103,51 +105,14 @@
                         <li>
 
 
-                        <li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow">
-                                    <i data-feather="layers"></i>
-                                    <span data-key="t-authentication">City</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{% url 'add_city' %}">Add City</a></li>
-                                    <li><a href="{% url 'list_city' %}">City List</a></li>
-                                </ul>
-                            </li>
-                        <li>
 
-                        <li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow">
-                                    <i data-feather="layers"></i>
-                                    <span data-key="t-authentication">Area</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{% url 'add_area' %}">Add Area</a></li>
-                                    <li><a href="{% url 'list_area' %}">Area List</a></li>
-                                </ul>
-                            </li>
-                        <li>
 
 
                         <li>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="layers"></i>
-                                    <span data-key="t-authentication">Enquiry</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{% url 'list_enquiry' %}">List Enquiry</a></li>
-                                </ul>
-                            </li>
-                        <li>
-
-
-                        <li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow">
-                                    <i data-feather="layers"></i>
-                                    <span data-key="t-authentication">Paiddoubts</span>
+                                    <span data-key="t-authentication">Paid doubts</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="{% url 'list_paiddoubts' %}">List Paiddoubts</a></li>
