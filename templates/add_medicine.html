@@ -66,11 +66,6 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label">Power:</label>
-                            {{ form.power }}
-                        </div>
-
-                        <div class="mb-4">
                             <label class="form-label">Form:</label>
                             {{ form.form }}
                         </div>
@@ -78,6 +73,21 @@
                         <div class="mb-4">
                             <label class="form-label">Description:</label>
                             {{ form.description }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Dose Time (Select multiple):</label>
+                            <select name="dose_time" class="form-control" multiple id="dose_time_select" size="3">
+                                <option value="morning" {% if form.instance.pk and 'morning' in form.instance.dose_time %}selected{% endif %}>Morning</option>
+                                <option value="afternoon" {% if form.instance.pk and 'afternoon' in form.instance.dose_time %}selected{% endif %}>Afternoon</option>
+                                <option value="night" {% if form.instance.pk and 'night' in form.instance.dose_time %}selected{% endif %}>Night</option>
+                            </select>
+                            <small class="form-text text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple options</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Meal Relation:</label>
+                            {{ form.meal_relation }}
                         </div>
 
                         <div class="mb-4">

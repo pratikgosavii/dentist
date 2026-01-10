@@ -159,7 +159,7 @@ class doctor_serializer(serializers.ModelSerializer):
 class medicine_serializer(serializers.ModelSerializer):
     class Meta:
         model = medicine
-        fields = ['id', 'name', 'brand', 'power', 'form', 'description', 'is_active']
+        fields = ['id', 'name', 'brand', 'form', 'description', 'dose_time', 'meal_relation', 'is_active']
         read_only_fields = ['created_by']
         
     def create(self, validated_data):
@@ -170,6 +170,22 @@ from customer.serializer import AppointmentSerializer
 
 class AppointmentMedicineSerializer(serializers.ModelSerializer):
     medicine_details = medicine_serializer(source="medicine", read_only=True)
+    
+    DOSE_TIME_CHOICES = ['morning', 'afternoon', 'night']
+    
+    def validate_dose_time(self, value):
+        """Validate that dose_time contains only valid choices"""
+        if not isinstance(value, list):
+            raise serializers.ValidationError("dose_time must be a list.")
+        if not value:
+            raise serializers.ValidationError("At least one dose_time must be selected.")
+        invalid_choices = [choice for choice in value if choice not in self.DOSE_TIME_CHOICES]
+        if invalid_choices:
+            raise serializers.ValidationError(
+                f"Invalid choices: {invalid_choices}. Valid choices are: {self.DOSE_TIME_CHOICES}"
+            )
+        return value
+    
     class Meta:
         model = Appoinment_Medicine
         fields = "__all__"

@@ -51,7 +51,6 @@ class medicine(models.Model):
     
     name = models.CharField(max_length=255)
     brand = models.CharField(max_length=255, blank=True, null=True)
-    power = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'Standard', 'Extra Strong'
     form = models.CharField(max_length=100, choices=[
         ('tablet', 'Tablet'),
         ('capsule', 'Capsule'),
@@ -62,6 +61,21 @@ class medicine(models.Model):
         ('spray', 'Spray'),
     ])
     description = models.TextField(blank=True, null=True)
+    
+    dose_time = models.JSONField(
+        default=list,
+        help_text="List of selected times: ['morning', 'afternoon', 'night']"
+    )
+    
+    meal_relation = models.CharField(
+        max_length=30,
+        choices=[
+            ('before_meal', 'Before Meal'),
+            ('after_meal', 'After Meal'),
+        ],
+        blank=True,
+        null=True
+    )
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

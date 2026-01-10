@@ -47,13 +47,14 @@ class medicine_Form(forms.ModelForm):
 
     class Meta:
         model = medicine
-        fields = ['name', 'brand', 'power', 'form', 'description', 'is_active']
+        fields = ['name', 'brand', 'form', 'description', 'dose_time', 'meal_relation', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Medicine Name'}),
             'brand': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Brand Name'}),
-            'power': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 500mg, Extra Strong'}),
             'form': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description'}),
+            'dose_time': forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': 'multiple'}),
+            'meal_relation': forms.Select(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 

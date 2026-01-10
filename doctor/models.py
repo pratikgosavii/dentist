@@ -108,13 +108,9 @@ class Appoinment_Medicine(models.Model):
 
     quantity = models.DecimalField(max_digits=4, decimal_places=1)  # Add max_digits also
     
-    dose_time = models.CharField(
-        max_length=20,
-        choices=[
-            ('morning', 'Morning'),
-            ('afternoon', 'Afternoon'),
-            ('night', 'Night'),
-        ]
+    dose_time = models.JSONField(
+        default=list,
+        help_text="List of selected times: ['morning', 'afternoon', 'night']"
     )
 
     dose = models.CharField(
@@ -132,12 +128,8 @@ class Appoinment_Medicine(models.Model):
     meal_relation = models.CharField(
         max_length=30,
         choices=[
-            ('before_breakfast', 'Before Breakfast'),
-            ('after_breakfast', 'After Breakfast'),
-            ('before_lunch', 'Before Lunch'),
-            ('after_lunch', 'After Lunch'),
-            ('before_dinner', 'Before Dinner'),
-            ('after_dinner', 'After Dinner'),
+            ('before_meal', 'Before Meal'),
+            ('after_meal', 'After Meal'),
         ]
     )
 

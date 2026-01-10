@@ -135,6 +135,14 @@ def add_medicine(request):
         if forms.is_valid():
             form_instance = forms.save(commit=False)
             form_instance.created_by = request.user  # 👈 Set the current superuser
+            
+            # Handle dose_time - convert from list to JSON
+            dose_time_list = request.POST.getlist('dose_time')
+            if dose_time_list:
+                form_instance.dose_time = dose_time_list
+            else:
+                form_instance.dose_time = []
+            
             form_instance.save()
             return redirect('list_medicine')
         else:
@@ -168,6 +176,13 @@ def update_medicine(request, medicine_id):
 
             form_instance = forms.save(commit=False)
             form_instance.created_by = request.user  # 👈 Set the current superuser
+            
+            # Handle dose_time - convert from list to JSON
+            dose_time_list = request.POST.getlist('dose_time')
+            if dose_time_list:
+                form_instance.dose_time = dose_time_list
+            else:
+                form_instance.dose_time = []
         
             forms.save()
             return redirect('list_medicine')
