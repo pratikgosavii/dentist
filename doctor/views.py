@@ -874,7 +874,7 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
 
 class AvailableSlotsAPIView(APIView):
     """
-    Get available slots for a specific date.
+    Get all configured slots for a specific date.
     Query parameter: ?date=2026-01-15 (YYYY-MM-DD format)
     """
     permission_classes = [IsAuthenticated, IsDoctor]
@@ -947,41 +947,19 @@ class AvailableSlotsAPIView(APIView):
                 "available_slots": []
             }, status=200)
         
-        # Get all booked slots for this date
-        from customer.models import Appointment
-        booked_slots = set(
-            Appointment.objects.filter(
-                doctor=doctor_instance,
-                date=selected_date,
-                slot__isnull=False
-            ).values_list('slot_id', flat=True)
-        )
-        
-        # Filter available slots (configured slots minus booked slots)
-        available_slots_data = []
-        
+        # Get all slots for this day
+        slots_data = []
         for availability in availabilities:
             slot_obj = availability.slot
-            # Only include slots that are not booked
-            if slot_obj.id not in booked_slots:
-                slot_data = slot_serializer(slot_obj).data
-                available_slots_data.append(slot_data)
-        
-        available_count = len(available_slots_data)
-        booked_count = len(booked_slots)
-        total_count = len(availabilities)
+            slot_data = slot_serializer(slot_obj).data
+            slots_data.append(slot_data)
         
         return Response({
             "date": selected_date.strftime("%Y-%m-%d"),
             "day": day_name,
             "is_available": True,
             "reason": None,
-            "summary": {
-                "total_configured_slots": total_count,
-                "available_slots": available_count,
-                "booked_slots": booked_count
-            },
-            "available_slots": available_slots_data
+            "slots": slots_data
         }, status=200)
 
    
