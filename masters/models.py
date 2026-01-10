@@ -54,7 +54,6 @@ class medicine(models.Model):
     created_by = models.ForeignKey("users.User", on_delete=models.CASCADE, blank=True, null=True)
     
     name = models.CharField(max_length=255)
-    brand = models.CharField(max_length=255, blank=True, null=True)
     form = models.CharField(max_length=100, choices=[
         ('tablet', 'Tablet'),
         ('capsule', 'Capsule'),

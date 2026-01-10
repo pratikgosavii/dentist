@@ -761,11 +761,7 @@ class list_patient(generics.ListAPIView):
 
 
     
-class DoctorLeaveViewSet(viewsets.ModelViewSet):
-    serializer_class = DoctorLeaveSerializer
-    permission_classes = [IsAuthenticated, IsDoctor]
-
-    from datetime import date
+from datetime import date
 
 class DoctorLeaveViewSet(viewsets.ModelViewSet):
     serializer_class = DoctorLeaveSerializer
@@ -800,10 +796,14 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
             .values_list('date', flat=True)
             .distinct()
         )
+        
+        # Weekly off days (default to empty list if None)
+        weekly_off_days = doctor_instance.weekly_off_days if doctor_instance.weekly_off_days else []
 
         return Response({
             "leave_dates": leave_dates,
-            "appointment_dates": appointment_dates
+            "appointment_dates": appointment_dates,
+            "weekly_off_days": weekly_off_days
         })
     
 
@@ -814,6 +814,44 @@ class DoctorLeaveViewSet(viewsets.ModelViewSet):
         except doctor.DoesNotExist:
             raise serializers.ValidationError("You are not registered as a doctor.")
         serializer.save(doctor=doctor_instance)
+    
+    @action(detail=False, methods=['post'], url_path='set-weekly-off-days')
+    def set_weekly_off_days(self, request):
+        """
+        Set weekly off days for the clinic.
+        POST data: {"weekly_off_days": ["Mon", "Tue", "Sun"]}
+        """
+        try:
+            doctor_instance = doctor.objects.get(user=request.user)
+        except doctor.DoesNotExist:
+            return Response({"error": "You are not registered as a doctor."}, status=400)
+        
+        weekly_off_days = request.data.get('weekly_off_days', [])
+        
+        # Validate the days
+        valid_days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        if not isinstance(weekly_off_days, list):
+            return Response({"error": "weekly_off_days must be a list"}, status=400)
+        
+        # Check if all days are valid
+        invalid_days = [day for day in weekly_off_days if day not in valid_days]
+        if invalid_days:
+            return Response({
+                "error": f"Invalid day(s): {invalid_days}. Valid days are: {valid_days}"
+            }, status=400)
+        
+        # Remove duplicates and sort
+        weekly_off_days = sorted(list(set(weekly_off_days)))
+        
+        # Update doctor instance
+        doctor_instance.weekly_off_days = weekly_off_days
+        doctor_instance.save()
+        
+        return Response({
+            "message": "Weekly off days updated successfully",
+            "weekly_off_days": doctor_instance.weekly_off_days
+        }, status=200)
+    
 
    
 

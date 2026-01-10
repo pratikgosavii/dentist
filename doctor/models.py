@@ -62,6 +62,13 @@ class doctor(models.Model):
 
     remark = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    
+    # Weekly off days for clinic (list of day codes: ['Mon', 'Tue', 'Sun'])
+    weekly_off_days = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of weekly off days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+    )
 
     
     

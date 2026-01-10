@@ -52,18 +52,17 @@ class medicine_Form(forms.ModelForm):
             ('night', 'Night'),
         ],
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'multiple': 'multiple', 'size': '3'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     class Meta:
         model = medicine
-        fields = ['name', 'brand', 'form', 'quantity', 'description', 'meal_relation', 'is_active']
+        fields = ['name', 'form', 'quantity', 'description', 'meal_relation', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Medicine Name'}),
-            'brand': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Brand Name'}),
             'form': forms.Select(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Quantity', 'step': '0.01'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter Description', 'rows': 4}),
             'meal_relation': forms.Select(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

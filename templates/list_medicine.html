@@ -74,9 +74,8 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Name</th>
-                                                <th>Brand</th>
-                                                <th>Power</th>
                                                 <th>Form</th>
+                                                <th>Quantity</th>
                                                 <th>Description</th>
                                                 <th>Active</th>
                                                 <th>Action</th>
@@ -88,9 +87,8 @@
                                                     <tr>
                                                         <td>{{ forloop.counter }}</td>
                                                         <td>{{ medicine.name }}</td>
-                                                        <td>{{ medicine.brand }}</td>
-                                                        <td>{{ medicine.power }}</td>
                                                         <td>{{ medicine.form }}</td>
+                                                        <td>{{ medicine.quantity|default:"-" }}</td>
                                                         <td>{{ medicine.description|truncatechars:50 }}</td>
                                                         <td>
                                                             {% if medicine.is_active %}
