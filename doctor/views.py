@@ -37,7 +37,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
-from .models import doctor
+from .models import doctor, Tooth
 
 class DoctorViewSet(mixins.RetrieveModelMixin,
                              mixins.UpdateModelMixin,
@@ -1061,6 +1061,83 @@ class ToothViewSet(
             return Tooth.objects.filter(user=user)
 
         return Tooth.objects.none()
+
+    @action(detail=False, methods=['post'])
+    def update_status(self, request):
+        """
+        Update multiple teeth with a single status.
+        
+        Request body:
+        {
+            "tooth_ids": [1, 2, 3, ...],
+            "status": "decayed"
+        }
+        """
+        tooth_ids = request.data.get('tooth_ids', [])
+        new_status = request.data.get('status')
+
+        if not tooth_ids:
+            return Response(
+                {"error": "tooth_ids is required and cannot be empty"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not new_status:
+            return Response(
+                {"error": "status is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Validate status
+        valid_statuses = [choice[0] for choice in Tooth.STATUS_CHOICES]
+        if new_status not in valid_statuses:
+            return Response(
+                {"error": f"Invalid status. Must be one of: {', '.join(valid_statuses)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Ensure tooth_ids is a list
+        if not isinstance(tooth_ids, list):
+            return Response(
+                {"error": "tooth_ids must be a list"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Get accessible queryset based on user permissions
+        accessible_teeth = self.get_queryset()
+
+        # Filter to only include teeth that the user has permission to access
+        teeth_to_update = accessible_teeth.filter(id__in=tooth_ids)
+
+        if not teeth_to_update.exists():
+            return Response(
+                {"error": "No accessible teeth found with the provided IDs"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Check if all requested tooth IDs are accessible
+        found_ids = set(teeth_to_update.values_list('id', flat=True))
+        requested_ids = set(tooth_ids)
+        missing_ids = requested_ids - found_ids
+
+        if missing_ids:
+            return Response(
+                {"error": f"Some tooth IDs are not accessible: {list(missing_ids)}"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Update all teeth with the new status
+        updated_count = teeth_to_update.update(status=new_status)
+
+        # Fetch updated teeth for response
+        updated_teeth = self.get_queryset().filter(id__in=tooth_ids)
+        serializer = self.get_serializer(updated_teeth, many=True)
+
+        return Response({
+            "message": f"Successfully updated {updated_count} tooth/teeth with status '{new_status}'",
+            "updated_count": updated_count,
+            "teeth": serializer.data
+        }, status=status.HTTP_200_OK)
 
 
 
