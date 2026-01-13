@@ -413,16 +413,16 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-        Create PaidDoubt (Skip the Doubt) - Fixed ₹199 payment
+        Create PaidDoubt (Skip the Doubt) - Fixed ₹99 payment
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        # Save the doubt with fixed ₹199 amount
-        paid_doubt = serializer.save(user=request.user, amount=1.00)
+        # Save the doubt with fixed ₹99 amount
+        paid_doubt = serializer.save(user=request.user, amount=99.00)
 
-        # Create Razorpay order for ₹199
-        amount_paise = 100  # ₹199 in paise
+        # Create Razorpay order for ₹99
+        amount_paise = 9900  # ₹99 in paise
         order_data = {
             "amount": amount_paise,
             "currency": "INR",
@@ -440,7 +440,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
             "status": "success",
             "paid_doubt_id": paid_doubt.id,
             "order_id": order["id"],
-            "amount": 1.00,
+            "amount": 99.00,
             "currency": "INR",
             "key": settings.RAZORPAY_KEY_ID,
         }, status=status.HTTP_201_CREATED)
@@ -451,7 +451,7 @@ class PaidDoubtViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def razorpay_webhook(request):
     """
-    Handle Razorpay webhook events for Skip the Doubt (₹199 payment)
+    Handle Razorpay webhook events for Skip the Doubt (₹99 payment)
     """
     webhook_secret = getattr(settings, "RAZORPAY_WEBHOOK_SECRET", None)
     received_signature = request.headers.get('X-Razorpay-Signature')
@@ -475,7 +475,7 @@ def razorpay_webhook(request):
     event = payload.get('event')
     event_payload = payload.get('payload', {})
     
-    # Handle payment.captured event for Skip the Doubt (₹199)
+    # Handle payment.captured event for Skip the Doubt (₹99)
     if event == "payment.captured":
         payment_entity = event_payload.get('payment', {}).get('entity', {})
         order_id = payment_entity.get('order_id')

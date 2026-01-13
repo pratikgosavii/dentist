@@ -167,12 +167,12 @@ class Review(models.Model):
 
 class PaidDoubt(models.Model):
     """
-    Skip the Doubt - One-time payment of ₹199
+    Skip the Doubt - One-time payment of ₹99
     """
     user = models.ForeignKey('users.User', on_delete=models.CASCADE, blank=True, null=True)
     phone = models.CharField(max_length=15)
     message = models.TextField(blank=True, null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=199.00)  # Fixed ₹199
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=99.00)  # Fixed ₹99
     razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
     razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
     payment_status = models.CharField(
