@@ -25,42 +25,69 @@ def send_otp_via_msgclub(mobile, otp_code):
     Returns:
         tuple: (success: bool, message: str)
     """
-    api_url = getattr(settings, 'MSG_CLUB_API_URL', 'https://msg.msgclub.net/rest/sms/json')
+    api_url = getattr(settings, 'MSG_CLUB_API_URL', 'http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms')
     api_key = getattr(settings, 'MSG_CLUB_API_KEY', '')
-    sender_id = getattr(settings, 'MSG_CLUB_SENDER_ID', 'DENTAL')
+    sender_id = getattr(settings, 'MSG_CLUB_SENDER_ID', 'TOOTHT')
+    route_id = getattr(settings, 'MSG_CLUB_ROUTE_ID', '1')
+    sms_content_type = getattr(settings, 'MSG_CLUB_SMS_CONTENT_TYPE', 'english')
+    message_template = getattr(settings, 'OTP_MESSAGE_TEMPLATE', 'OTP {otp_code} to verify your dental record on ToothTrack. Track treatment, reports & get 24x7 dental support. Download ToothTrack App. SNEHAL DIGITAL VENTURES PRIVATE LIMITED')
+    expiry_minutes = getattr(settings, 'OTP_EXPIRY_MINUTES', 5)
     
     if not api_key:
         return False, "MSG_CLUB_API_KEY not configured"
     
-    # Format mobile number (ensure it's 10 digits)
+    # Format mobile number (keep as 10 digits, no country code needed)
     mobile = str(mobile).strip()
-    if len(mobile) == 10:
-        mobile = f"91{mobile}"  # Add country code for India
-    elif not mobile.startswith('91'):
-        mobile = f"91{mobile}"
+    # Remove country code if present
+    if mobile.startswith('91') and len(mobile) == 12:
+        mobile = mobile[2:]
+    elif len(mobile) > 10:
+        # Keep last 10 digits
+        mobile = mobile[-10:]
     
-    # Prepare message
-    message = f"Your OTP for Dental App login is {otp_code}. Valid for 5 minutes. Do not share this OTP with anyone."
+    if len(mobile) != 10:
+        return False, "Invalid mobile number. Must be 10 digits."
     
-    # Prepare payload
-    payload = {
-        'apikey': api_key,
-        'sender': sender_id,
-        'numbers': mobile,
-        'message': message
+    # Prepare message using template
+    message = message_template.format(
+        otp_code=otp_code,
+        expiry_minutes=expiry_minutes
+    )
+    
+    # Prepare query parameters (msg.msgclub.net uses GET with query params)
+    params = {
+        'AUTH_KEY': api_key,
+        'message': message,
+        'senderId': sender_id,
+        'routeId': route_id,
+        'mobileNos': mobile,
+        'smsContentType': sms_content_type
     }
     
     try:
-        response = requests.post(api_url, json=payload, timeout=10)
+        # msg.msgclub.net uses GET request with query parameters
+        response = requests.get(api_url, params=params, timeout=10)
         response.raise_for_status()
-        result = response.json()
         
-        # Check if SMS was sent successfully
-        # msg.msgclub.net typically returns success in 'type' field
-        if response.status_code == 200:
-            return True, "OTP sent successfully"
-        else:
-            return False, f"Failed to send OTP: {result.get('message', 'Unknown error')}"
+        # Try to parse JSON response
+        try:
+            result = response.json()
+            # Check response code
+            response_code = result.get('responseCode', '')
+            response_msg = result.get('response', '')
+            
+            if response_code == '3009' or 'Token Not Found' in response_msg:
+                return False, f"Authentication failed: {response_msg}"
+            elif response_code and response_code != '200':
+                return False, f"Failed to send OTP: {response_msg} (Code: {response_code})"
+            else:
+                return True, "OTP sent successfully"
+        except ValueError:
+            # If response is not JSON, check status code
+            if response.status_code == 200:
+                return True, "OTP sent successfully"
+            else:
+                return False, f"Failed to send OTP: HTTP {response.status_code}"
             
     except requests.exceptions.RequestException as e:
         return False, f"Error sending OTP: {str(e)}"

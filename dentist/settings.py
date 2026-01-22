@@ -72,9 +72,12 @@ REST_FRAMEWORK = {
 
 
 # OTP Configuration for msg.msgclub.net
-MSG_CLUB_API_URL = "https://msg.msgclub.net/rest/sms/json"
-MSG_CLUB_API_KEY = "5f4e34db5673b2ee18ee66442e73d45"  # Set your msg.msgclub.net API key here
+MSG_CLUB_API_URL = "http://msg.msgclub.net/rest/services/sendSMS/sendGroupSms"
+MSG_CLUB_API_KEY = "5f4e34db5673b2ee18ee66442e73d45"  # AUTH_KEY for msg.msgclub.net
 MSG_CLUB_SENDER_ID = "TOOTHT"  # Sender ID for SMS
+MSG_CLUB_ROUTE_ID = "1"  # Route ID (default: 1)
+MSG_CLUB_SMS_CONTENT_TYPE = "english"  # SMS content type
+OTP_MESSAGE_TEMPLATE = "OTP {otp_code} to verify your dental record on ToothTrack. Track treatment, reports & get 24x7 dental support. Download ToothTrack App. SNEHAL DIGITAL VENTURES PRIVATE LIMITED"  # OTP message template
 OTP_EXPIRY_MINUTES = 5  # OTP expires after 5 minutes
 OTP_LENGTH = 6  # 6-digit OTP
 
