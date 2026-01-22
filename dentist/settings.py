@@ -71,14 +71,12 @@ REST_FRAMEWORK = {
 }
 
 
-# # firebase_config.py
-import os
-from firebase_admin import credentials, initialize_app
-
-# Firebase Admin SDK setup
-firebase_key_path = os.path.join(BASE_DIR, 'dentist', 'firebase_key.json')
-cred = credentials.Certificate(firebase_key_path)
-initialize_app(cred)
+# OTP Configuration for msg.msgclub.net
+MSG_CLUB_API_URL = "https://msg.msgclub.net/rest/sms/json"
+MSG_CLUB_API_KEY = "5f4e34db5673b2ee18ee66442e73d45"  # Set your msg.msgclub.net API key here
+MSG_CLUB_SENDER_ID = "DEMOOS"  # Sender ID for SMS
+OTP_EXPIRY_MINUTES = 5  # OTP expires after 5 minutes
+OTP_LENGTH = 6  # 6-digit OTP
 
 
 

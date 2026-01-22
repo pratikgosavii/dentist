@@ -38,38 +38,110 @@ from .forms import *
 #     context = {'form': forms}
 #     return render(request, 'adminLogin.html', context)
 
-from firebase_admin import auth as firebase_auth
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User  # Your custom user model
+from .models import User, OTP  # Your custom user model
+from .otp_utils import create_and_send_otp, verify_otp
+
+
+class SendOTPView(APIView):
+    """Send OTP to mobile number"""
+    
+    def post(self, request):
+        mobile = request.data.get("mobile")
+        
+        if not mobile:
+            return Response({"error": "Mobile number is required"}, status=400)
+        
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        if len(mobile) < 10:
+            return Response({"error": "Invalid mobile number"}, status=400)
+        
+        # Create and send OTP
+        otp_obj, success, message = create_and_send_otp(mobile)
+        
+        if success:
+            return Response({
+                "message": "OTP sent successfully",
+                "mobile": mobile
+            }, status=200)
+        else:
+            return Response({"error": message}, status=400)
+
+
+class VerifyOTPView(APIView):
+    """Verify OTP and return JWT tokens"""
+    
+    def post(self, request):
+        mobile = request.data.get("mobile")
+        otp_code = request.data.get("otp")
+        
+        if not mobile or not otp_code:
+            return Response({"error": "Mobile number and OTP are required"}, status=400)
+        
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        # Verify OTP
+        otp_obj, is_valid, message = verify_otp(mobile, otp_code)
+        
+        if not is_valid:
+            return Response({"error": message}, status=400)
+        
+        # Get or create user
+        user = User.objects.filter(mobile=mobile).first()
+        created = False
+        
+        if not user:
+            user = User.objects.create(
+                mobile=mobile,
+                is_active=True
+            )
+            created = True
+        
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "user": {
+                "id": user.id,
+                "mobile": user.mobile,
+                "created": created
+            }
+        }, status=200)
 
 
 class SignupView(APIView):
-
+    """Signup user after OTP verification"""
+    
     def post(self, request):
-        id_token = request.data.get("idToken")
+        mobile = request.data.get("mobile")
+        otp_code = request.data.get("otp")
         user_type = request.data.get("user_type")
         city = request.data.get("city")
         area = request.data.get("area")
         name = request.data.get("name")
         email = request.data.get("email")
 
-        print(city)
-        print(area)
+        if not mobile or not otp_code or not user_type or not city or not area:
+            return Response({"error": "Mobile, OTP, user_type, city, and area are required"}, status=400)
 
-        if not id_token or not user_type or not city or not area:
-            return Response({"error": "idToken or user_type of city or area are required"}, status=400)
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        # Verify OTP first
+        otp_obj, is_valid, message = verify_otp(mobile, otp_code)
+        
+        if not is_valid:
+            return Response({"error": message}, status=400)
 
         try:
-            decoded_token = firebase_auth.verify_id_token(id_token)
-            mobile = decoded_token.get("phone_number")
-            uid = decoded_token.get("uid")
-
-            if not mobile:
-                return Response({"error": "Phone number not found in Firebase token"}, status=400)
-
             # Role flags
             role_flags = {
                 "is_customer": False,
@@ -79,7 +151,7 @@ class SignupView(APIView):
             if f"is_{user_type}" not in role_flags:
                 return Response({"error": "Invalid user_type"}, status=400)
 
-            user = User.objects.filter(mobile=mobile, city = city, area = area).first()
+            user = User.objects.filter(mobile=mobile, city=city, area=area).first()
             created = False
 
             if user:
@@ -94,10 +166,6 @@ class SignupView(APIView):
                         "error": f"This number is already registered as a {existing_roles[0]}. Cannot register again as {user_type}."
                     }, status=400)
 
-                if user.firebase_uid != uid:
-                    user.firebase_uid = uid
-                    user.save()
-
             else:
                 role_flags[f"is_{user_type}"] = True
 
@@ -107,11 +175,10 @@ class SignupView(APIView):
 
                 user = User.objects.create(
                     mobile=mobile,
-                    firebase_uid=uid,
                     first_name=name or "",
-                    email=email or decoded_token.get("email", ""),
-                    city__id=city,
-                    area__id=area,
+                    email=email or "",
+                    city_id=city,
+                    area_id=area,
                     **role_flags
                 )
                 created = True
@@ -125,8 +192,8 @@ class SignupView(APIView):
                     "mobile": user.mobile,
                     "email": user.email,
                     "name": user.first_name,
-                    "city": user.city.name,
-                    "area": user.area.name,
+                    "city": user.city.name if user.city else "",
+                    "area": user.area.name if user.area else "",
                     "user_type": user_type,
                     "created": created
                 }
@@ -139,58 +206,50 @@ class SignupView(APIView):
 from customer.models import customer
 
 class LoginAPIView(APIView):
-
+    """Login user after OTP verification"""
     
     def post(self, request):
-        id_token = request.data.get("idToken")
+        mobile = request.data.get("mobile")
+        otp_code = request.data.get("otp")
         user_type = request.data.get("user_type")
 
-        if not id_token:
-            return Response({"error": "idToken is required"}, status=400)
+        if not mobile or not otp_code:
+            return Response({"error": "Mobile number and OTP are required"}, status=400)
+
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        # Verify OTP
+        otp_obj, is_valid, message = verify_otp(mobile, otp_code)
+        
+        if not is_valid:
+            return Response({"error": message}, status=400)
 
         try:
-            # Verify token with Firebase
-            decoded_token = firebase_auth.verify_id_token(id_token)
-            mobile = decoded_token.get("phone_number")
-            uid = decoded_token.get("uid")
-
-            if not mobile:
-                return Response({"error": "Phone number not found in token"}, status=400)
-
             user = User.objects.filter(mobile=mobile).first()
             created = False
 
             if user:
                 if not user.is_active:
                     user.is_active = True
-                if user.firebase_uid != uid:
-                    user.firebase_uid = uid
-                    print('--------------------------------------------')
-                    print(user)
-                user.save()
+                    user.save()
             else:
                 user = User.objects.create(
                     mobile=mobile,
-                    firebase_uid=uid,
+                    is_active=True
                 )
                 created = True
-                print('--------------------')
-                print(user_type)
+                
                 # Set user type flags based on frontend
                 if user_type == "doctor":
-                    print('-----1---------------')
-
                     user.is_doctor = True
-                    doctor.objects.create(user=user, is_active = True)  
+                    doctor.objects.create(user=user, is_active=True)  
 
                 elif user_type == "customer":
-                    print('--------2------------')
-                
                     user.is_customer = True
-                    customer.objects.create(user=user, is_active = True)  
+                    customer.objects.create(user=user, is_active=True)  
 
                 user.save()
-
 
             # Token creation
             refresh = RefreshToken.for_user(user)
@@ -214,10 +273,9 @@ class LoginAPIView(APIView):
                 "user_details": user_details
             }, status=201 if created else 200)
 
-
         except Exception as e:
             print(f"Login failed: {e}")
-            return Response({"error": "Invalid or expired Firebase token."}, status=400)
+            return Response({"error": str(e)}, status=400)
 
 
 
@@ -262,20 +320,34 @@ class UserUpdateView(APIView):
 
 
 class ResetPasswordView(APIView):
+    """Reset password using OTP verification"""
+    
     def post(self, request):
-        id_token = request.data.get("idToken")
+        mobile = request.data.get("mobile")
+        otp_code = request.data.get("otp")
         new_password = request.data.get("new_password")
 
-        if not id_token or not new_password:
-            return Response({"error": "idToken and new_password are required"}, status=400)
+        if not mobile or not otp_code or not new_password:
+            return Response({"error": "Mobile, OTP, and new_password are required"}, status=400)
+
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        # Verify OTP
+        otp_obj, is_valid, message = verify_otp(mobile, otp_code)
+        
+        if not is_valid:
+            return Response({"error": message}, status=400)
 
         try:
-            # Decode the token to get UID
-            decoded = firebase_auth.verify_id_token(id_token)
-            uid = decoded.get("uid")
+            user = User.objects.filter(mobile=mobile).first()
+            
+            if not user:
+                return Response({"error": "User not found"}, status=404)
 
-            # Update Firebase password
-            firebase_auth.update_user(uid, password=new_password)
+            # Update password
+            user.set_password(new_password)
+            user.save()
 
             return Response({"message": "Password updated successfully."})
 
@@ -648,34 +720,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction, IntegrityError
-import firebase_admin
-
-
-from django.db import transaction, IntegrityError
-
-from firebase_admin import auth as firebase_auth
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
-from firebase_admin import auth
 
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_user(request):
-
+    """Delete user account"""
     user = request.user
 
     try:
         with transaction.atomic():
-            # Delete user from Firebase first
-            if getattr(user, "firebase_uid", None):
-                try:
-                    auth.delete_user(user.firebase_uid)
-                except Exception as e:
-                    raise IntegrityError(f"Firebase deletion failed: {str(e)}")
-
             # Delete user from Django
             user.delete()
 

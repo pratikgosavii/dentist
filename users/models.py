@@ -22,6 +22,31 @@ class CustomUserManager(BaseUserManager):
 
 
 from datetime import date
+from django.utils import timezone
+
+
+class OTP(models.Model):
+    """Model to store OTP codes for phone number verification"""
+    mobile = models.CharField(max_length=15)
+    otp_code = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_verified = models.BooleanField(default=False)
+    verified_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['mobile', 'is_verified']),
+        ]
+    
+    def __str__(self):
+        return f"OTP for {self.mobile} - {self.otp_code}"
+    
+    def is_expired(self):
+        """Check if OTP has expired"""
+        return timezone.now() > self.expires_at
+
 
 class User(AbstractUser):
 

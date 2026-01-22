@@ -18,7 +18,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id',
-            'firebase_uid',
             'mobile',
             'profile_photo',
             'first_name',
@@ -31,7 +30,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'is_doctor',
             'password',  # Include this for input only
         ]
-        read_only_fields = ['id', 'mobile', 'firebase_uid']
+        read_only_fields = ['id', 'mobile']
         extra_kwargs = {
             'email': {'required': False, 'allow_blank': True, 'allow_null': True},
         }

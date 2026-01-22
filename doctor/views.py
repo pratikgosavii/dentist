@@ -535,7 +535,7 @@ class InventoryProductViewSet(viewsets.ModelViewSet):
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from firebase_admin import auth as firebase_auth
+from users.otp_utils import verify_otp
 
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -548,9 +548,20 @@ class DoctorVerifyCustomerOTP(APIView):
         if not request.user.is_doctor:
             return Response({"error": "Only doctors can verify customers."}, status=403)
 
-        id_token = request.data.get("idToken")
-        if not id_token:
-            return Response({"error": "idToken is required."}, status=400)
+        mobile = request.data.get("mobile")
+        otp_code = request.data.get("otp")
+        
+        if not mobile or not otp_code:
+            return Response({"error": "Mobile number and OTP are required."}, status=400)
+
+        # Clean mobile number
+        mobile = ''.join(filter(str.isdigit, str(mobile)))
+        
+        # Verify OTP
+        otp_obj, is_valid, message = verify_otp(mobile, otp_code)
+        
+        if not is_valid:
+            return Response({"error": message}, status=400)
 
         # Optional fields
         first_name = request.data.get("first_name", "")
@@ -559,17 +570,12 @@ class DoctorVerifyCustomerOTP(APIView):
         gender = request.data.get("gender")     # 'male' or 'female'
 
         try:
-            decoded_token = firebase_auth.verify_id_token(id_token)
-            mobile = decoded_token.get("phone_number")
-            uid = decoded_token.get("uid")
-
             if User.objects.filter(mobile=mobile).exists():
                 return Response({"error": "User already exists."}, status=400)
 
             # 1️⃣ Create User
             user = User.objects.create(
                 mobile=mobile,
-                firebase_uid=uid,
                 is_customer=True,
                 first_name=first_name,
                 last_name=last_name,
