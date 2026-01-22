@@ -113,7 +113,8 @@ class doctor_serializer(serializers.ModelSerializer):
 
     def get_is_availabilities_details(self, obj):
 
-        # ✅ Check if doctor has all 7 days of active availability
+        # ✅ Check if doctor has all required days of active availability
+        # (excluding weekly off days)
         days_present = (
             obj.availabilities
             .filter(is_active=True)
@@ -121,11 +122,38 @@ class doctor_serializer(serializers.ModelSerializer):
             .distinct()
         )
 
-        required_days = {
+        # All 7 days of the week
+        all_days = {
             'Monday', 'Tuesday', 'Wednesday',
             'Thursday', 'Friday', 'Saturday', 'Sunday'
         }
-
+        
+        # Get weekly off days from doctor model
+        weekly_off_days = getattr(obj, 'weekly_off_days', []) or []
+        
+        # Map short codes to full day names if needed
+        day_mapping = {
+            'Mon': 'Monday',
+            'Tue': 'Tuesday',
+            'Wed': 'Wednesday',
+            'Thu': 'Thursday',
+            'Fri': 'Friday',
+            'Sat': 'Saturday',
+            'Sun': 'Sunday'
+        }
+        
+        # Convert weekly_off_days to full day names
+        off_days_full = set()
+        for day in weekly_off_days:
+            if day in day_mapping:
+                off_days_full.add(day_mapping[day])
+            elif day in all_days:
+                off_days_full.add(day)
+        
+        # Required days = All days minus weekly off days
+        required_days = all_days - off_days_full
+        
+        # Check if all required (non-off) days have availability
         if not required_days.issubset(set(days_present)):
             return False
 
