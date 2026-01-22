@@ -201,6 +201,11 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
+        "otp_service": {
+            "handlers": ["request_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
 
