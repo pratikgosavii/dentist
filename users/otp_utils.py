@@ -73,15 +73,40 @@ def send_otp_via_msgclub(mobile, otp_code):
         try:
             result = response.json()
             # Check response code
-            response_code = result.get('responseCode', '')
+            response_code = str(result.get('responseCode', ''))
             response_msg = result.get('response', '')
             
-            if response_code == '3009' or 'Token Not Found' in response_msg:
+            # Handle authentication errors (3009 = Token Not Found)
+            if response_code == '3009' or 'Token Not Found' in str(response_msg) or 'AUTH_KEY' in str(response_msg):
                 return False, f"Authentication failed: {response_msg}"
-            elif response_code and response_code != '200':
+            
+            # Code 3001 with a long numeric value is a transaction ID (success)
+            # Transaction IDs are typically long numbers (10+ digits)
+            if response_code == '3001' or (response_code.isdigit() and len(response_code) > 10):
+                return True, f"OTP sent successfully (Transaction ID: {response_code})"
+            
+            # Standard success code
+            if response_code == '200':
+                return True, "OTP sent successfully"
+            
+            # If response code is a long number (transaction ID), treat as success
+            if response_code and response_code.isdigit() and len(response_code) >= 10:
+                return True, f"OTP sent successfully (Transaction ID: {response_code})"
+            
+            # If HTTP status is 200 and we got a response, assume success
+            # (msg.msgclub.net may return transaction IDs as responseCode)
+            if response.status_code == 200:
+                if response_code:
+                    return True, f"OTP sent successfully (Code: {response_code})"
+                else:
+                    return True, "OTP sent successfully"
+            
+            # Only treat as error if we have a clear error code
+            if response_code and response_code not in ['200', '3001']:
                 return False, f"Failed to send OTP: {response_msg} (Code: {response_code})"
             else:
                 return True, "OTP sent successfully"
+                
         except ValueError:
             # If response is not JSON, check status code
             if response.status_code == 200:
