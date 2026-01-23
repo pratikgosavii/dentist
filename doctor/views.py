@@ -568,10 +568,16 @@ class DoctorVerifyCustomerOTP(APIView):
         last_name = request.data.get("last_name", "")
         dob = request.data.get("dob")           # "YYYY-MM-DD" string
         gender = request.data.get("gender")     # 'male' or 'female'
+        email = request.data.get("email", "")
+        address = request.data.get("address", "")
 
         try:
             if User.objects.filter(mobile=mobile).exists():
                 return Response({"error": "User already exists."}, status=400)
+
+            # Ensure email is unique if provided
+            if email and User.objects.filter(email=email).exists():
+                return Response({"error": "This email is already in use."}, status=400)
 
             # 1️⃣ Create User
             user = User.objects.create(
@@ -580,7 +586,9 @@ class DoctorVerifyCustomerOTP(APIView):
                 first_name=first_name,
                 last_name=last_name,
                 dob=dob,
-                gender=gender
+                gender=gender,
+                email=email or None,
+                address=address or None
             )
 
             # 2️⃣ Create Customer profile and link to doctor
@@ -600,6 +608,8 @@ class DoctorVerifyCustomerOTP(APIView):
                     "mobile": user.mobile,
                     "first_name": user.first_name,
                     "last_name": user.last_name,
+                    "email": user.email,
+                    "address": user.address,
                     "dob": user.dob,
                     "gender": user.gender,
                     "customer_id": cust.id,
