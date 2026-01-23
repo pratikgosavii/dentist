@@ -108,7 +108,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Title</th>
-                                                <th>Description</th>
+                                                <th>Link</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -117,8 +117,8 @@
                                             {% for i in data %}
                                                 <tr>
                                                     <td>{{ forloop.counter }}</td>
-                                                    <td>{{ i.name }}</td>
-                                                    <td>{{ i.description }}</td>
+                                                    <td>{{ i.title }}</td>
+                                                    <td><a href="{{ i.link }}" target="_blank">{{ i.link }}</a></td>
                                                   
                                                     <td>
                                                         <!-- remove Button -->
