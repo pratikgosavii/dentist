@@ -40,7 +40,7 @@ class HelpQuestionSerializer(serializers.ModelSerializer):
 class HomeBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = home_banner
-        fields = ['image'] 
+        fields = ['image', 'link'] 
     
     def get_image(self, obj):
         request = self.context.get('request')

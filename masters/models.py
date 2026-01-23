@@ -188,7 +188,7 @@ class enquiry(models.Model):
 
 class home_banner(models.Model):
     title = models.CharField(max_length=225, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    link = models.URLField(blank=True, null=True, help_text="URL link for the banner")
     image = models.ImageField(upload_to='homeBanners/')
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
