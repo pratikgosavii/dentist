@@ -63,7 +63,9 @@ class DoctorViewSet(mixins.RetrieveModelMixin,
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        return Response(serializer.data)
+        data = serializer.data
+        data['is_subscribed'] = request.user.subscription_is_active
+        return Response(data)
     
     
 from rest_framework.generics import ListAPIView

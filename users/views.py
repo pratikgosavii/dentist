@@ -231,8 +231,10 @@ class LoginAPIView(APIView):
 
             if user:
                 if not user.is_active:
-                    user.is_active = True
-                    user.save()
+                    return Response(
+                        {"error": "Your account has been deactivated. Please contact support."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
             else:
                 user = User.objects.create(
                     mobile=mobile,

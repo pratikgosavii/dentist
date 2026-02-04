@@ -99,3 +99,23 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.first_name or self.last_name
+
+
+class UserToken(models.Model):
+    """Stores FCM/device tokens for push notifications (user_token table)."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="device_tokens")
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "user_token"
+        ordering = ["-created_at"]
+        # Optional: allow same token once per user (unique together)
+        unique_together = [["user", "token"]]
+
+    def __str__(self):
+        return f"{self.user_id} - {self.token[:20]}..."
+
+
+
+        

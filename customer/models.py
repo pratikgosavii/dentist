@@ -91,9 +91,29 @@ class Appointment(models.Model):
     # Meta info
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
+    def __str__(self):
+        return f"Appointment #{self.id} - {self.user} with {self.doctor} ({self.status})"
 
 
+class Notification(models.Model):
+    """In-app notification + push notification record for appointment status updates."""
+    RECIPIENT_CHOICES = [
+        ("patient", "Patient"),
+        ("doctor", "Doctor"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
+    title = models.CharField(max_length=255)
+    body = models.TextField(blank=True)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=True, blank=True, related_name="notifications")
+    recipient_type = models.CharField(max_length=10, choices=RECIPIENT_CHOICES)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.title} - {self.user}"
 
 
 class SupportTicket(models.Model):
