@@ -42,7 +42,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User, OTP  # Your custom user model
+from .models import User, OTP, UserToken  # Your custom user model
 from .otp_utils import create_and_send_otp, verify_otp
 
 
@@ -201,6 +201,18 @@ class SignupView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+
+class RegisterDeviceTokenAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = (request.data.get("token") or "").strip()
+        if not token:
+            return Response({"error": "Token required"}, status=400)
+        UserToken.objects.update_or_create(
+            user=request.user, token=token, defaults={}
+        )
+        return Response({"success": True})
 
 
 from customer.models import customer
