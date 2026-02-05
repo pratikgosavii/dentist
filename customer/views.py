@@ -95,7 +95,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "cancelled"
         appointment.save()
-        notify_appointment_status(appointment, "cancelled", notify_patient=False, notify_doctor=True)
+        notify_appointment_status(appointment, "cancelled", notify_patient=True, notify_doctor=True)
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
