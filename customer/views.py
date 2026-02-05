@@ -274,8 +274,8 @@ class DoctorWeeklyAvailabilityAPIView(APIView):
                 is_active=True
             ).select_related("slot")
 
-            # use your SlotSerializer
             slots = [availability.slot for availability in availabilities]
+            slots = sorted(slots, key=lambda s: s.start)
             serialized_slots = slot_serializer(slots, many=True).data
 
             availability_response.append({
