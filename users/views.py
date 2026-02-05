@@ -42,9 +42,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, OTP, UserToken  # Your custom user model
+from .serializer import NotificationSerializer
 from .otp_utils import create_and_send_otp, verify_otp
+from customer.models import Notification
 
 
 class SendOTPView(APIView):
@@ -214,6 +217,31 @@ class RegisterDeviceTokenAPIView(APIView):
             user=request.user, token=token, defaults={}
         )
         return Response({"success": True})
+
+
+class NotificationListAPIView(ListAPIView):
+    """List all notifications for the logged-in user (works for both doctor and customer)."""
+    permission_classes = [IsAuthenticated]
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by("-created_at")
+
+
+class MarkNotificationReadAPIView(APIView):
+    """Mark a single notification as read. PATCH or POST."""
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk=None):
+        pk = pk or self.kwargs.get("pk")
+        if pk is None:
+            return Response({"error": "Notification ID required."}, status=status.HTTP_400_BAD_REQUEST)
+        notification = Notification.objects.filter(user=request.user, pk=pk).first()
+        if not notification:
+            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+        notification.is_read = True
+        notification.save()
+        return Response({"success": True, "id": notification.id})
 
 
 from customer.models import customer

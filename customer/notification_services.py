@@ -2,9 +2,12 @@
 Appointment status notification messages and send logic.
 Creates in-app Notification records and sends push to patient/doctor.
 """
+import logging
 from django.utils import timezone
 from .models import Notification, Appointment
 from .push_services import send_push_notification
+
+logger = logging.getLogger(__name__)
 
 
 def _format_date(appointment):
@@ -31,6 +34,7 @@ def get_patient_message(status, appointment):
     date_str = _format_date(appointment)
     messages = {
         "accepted": ("Appointment Accepted", "Your appointment has been accepted."),
+        "rejected": ("Appointment Rejected", "Your appointment has been rejected by the doctor."),
         "rescheduled": ("Appointment Rescheduled", "Your appointment has been Rescheduled."),
         "next_appointment": (
             "Next Appointment Booked",
@@ -44,6 +48,7 @@ def get_patient_message(status, appointment):
             "Appointment Completed",
             "Congratulations! Your appointment has been successfully completed.",
         ),
+        "cancelled": ("Appointment Cancelled", "Your appointment has been cancelled."),
     }
     return messages.get(status, ("Appointment Update", f"Your appointment status: {status}."))
 
@@ -70,12 +75,19 @@ def get_doctor_message(status, appointment):
             "Appointment Completed",
             f"Congratulations! Your appointment with {patient} has been successfully completed.",
         ),
+        "cancelled": ("Appointment Cancelled", f"{patient} has cancelled the appointment."),
     }
     return messages.get(status, ("Appointment Update", f"Appointment status: {status}."))
 
 
 def _create_and_send(user, title, body, appointment, recipient_type):
     """Create Notification record and send push to user."""
+    logger.info(
+        "[NOTIFICATION] Sending to %s (user_id=%s, recipient=%s) | appointment_id=%s | title=%s",
+        getattr(user, "mobile", user.pk), user.pk, recipient_type,
+        appointment.id if appointment else None, title,
+    )
+    print(f"[NOTIFICATION] Sending to user_id={user.pk} recipient={recipient_type} appointment_id={appointment.id if appointment else None} | {title}: {body}")
     Notification.objects.create(
         user=user,
         title=title,
@@ -99,10 +111,13 @@ def notify_appointment_status(appointment, new_status, notify_patient=True, noti
 
     Call this after updating appointment.status.
 
-    Status values: accepted, rescheduled, next_appointment, rescheduled_by_patient, completed.
+    Status values: accepted, rejected, rescheduled, next_appointment, rescheduled_by_patient, completed, cancelled.
     """
     if not appointment:
         return
+    logger.info("[NOTIFICATION] notify_appointment_status appointment_id=%s new_status=%s notify_patient=%s notify_doctor=%s",
+                appointment.id, new_status, notify_patient, notify_doctor)
+    print(f"[NOTIFICATION] notify_appointment_status appointment_id={appointment.id} status={new_status} (patient={notify_patient}, doctor={notify_doctor})")
 
     if notify_patient and appointment.user:
         title, body = get_patient_message(new_status, appointment)
@@ -122,5 +137,7 @@ def notify_new_appointment_to_doctor(appointment):
     doctor_user = getattr(appointment.doctor, "user", None)
     if not doctor_user:
         return
+    logger.info("[NOTIFICATION] notify_new_appointment_to_doctor appointment_id=%s doctor_id=%s", appointment.id, doctor_user.pk)
+    print(f"[NOTIFICATION] notify_new_appointment_to_doctor appointment_id={appointment.id} doctor_id={doctor_user.pk}")
     title, body = get_doctor_message("new_appointment", appointment)
     _create_and_send(doctor_user, title, body, appointment, "doctor")

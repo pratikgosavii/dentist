@@ -39,12 +39,17 @@ def send_push_notification(user, title, body, data=None):
     tokens = _get_tokens_for_user(user)
     if not tokens:
         logger.debug("Push skipped: user %s has no tokens in user_token", user.id if user else None)
+        print(f"[PUSH] Skipped: user_id={user.id if user else None} has no device tokens")
         return False
 
     fcm_key = getattr(settings, "FCM_SERVER_KEY", None) or getattr(settings, "FCM_LEGACY_SERVER_KEY", None)
     if not fcm_key:
         logger.debug("Push skipped: FCM_SERVER_KEY not configured")
+        print("[PUSH] Skipped: FCM_SERVER_KEY not configured")
         return False
+
+    logger.info("[PUSH] Sending to user_id=%s title=%s tokens_count=%s", user.id, title, len(tokens))
+    print(f"[PUSH] Sending to user_id={user.id} | title={title} | body={body} | tokens={len(tokens)}")
 
     headers = {
         "Authorization": f"key={fcm_key}",
@@ -62,6 +67,7 @@ def send_push_notification(user, title, body, data=None):
             "data": data_payload,
         }
         try:
+            print(f"[PUSH] FCM request for user_id={user.id} token_preview={token[:20]}...")
             response = requests.post(
                 "https://fcm.googleapis.com/fcm/send",
                 json=payload,
@@ -70,10 +76,13 @@ def send_push_notification(user, title, body, data=None):
             )
             if response.status_code == 200:
                 logger.info("Push sent to user %s (token)", user.id)
+                print(f"[PUSH] Sent OK to user_id={user.id}")
                 sent = True
             else:
                 logger.warning("FCM returned %s: %s", response.status_code, response.text)
+                print(f"[PUSH] FCM error status={response.status_code} body={response.text[:200]}")
         except Exception as e:
             logger.exception("Push notification failed: %s", e)
+            print(f"[PUSH] Exception: {e}")
 
     return sent

@@ -65,7 +65,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
 # from rest_framework import serializers
 # from .models import Notification
 
-# class NotificationSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Notification
-#         fields = ['id', 'title', 'message', 'is_read', 'created_at']
+from customer.models import Notification as CustomerNotification
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    """In-app notifications for the logged-in user (doctor or customer)."""
+    appointment_id = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomerNotification
+        fields = ['id', 'title', 'body', 'appointment_id', 'recipient_type', 'is_read', 'created_at']
+        read_only_fields = ['id', 'title', 'body', 'appointment_id', 'recipient_type', 'is_read', 'created_at']
+
+    def get_appointment_id(self, obj):
+        return obj.appointment_id if obj.appointment_id else None

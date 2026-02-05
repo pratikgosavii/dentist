@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 
 from rest_framework.generics import CreateAPIView, ListAPIView
 from .models import *
+from .notification_services import notify_appointment_status, notify_new_appointment_to_doctor
 
 
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -81,6 +82,9 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        appointment = serializer.instance
+        if appointment:
+            notify_new_appointment_to_doctor(appointment)
 
     @action(detail=True, methods=["post"])
     def cancelled(self, request, pk=None):
@@ -91,6 +95,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "cancelled"
         appointment.save()
+        notify_appointment_status(appointment, "cancelled", notify_patient=False, notify_doctor=True)
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
@@ -119,7 +124,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment.slot_id = slot  
         appointment.status = "rescheduled_by_patient"  
         appointment.save()
-
+        notify_appointment_status(appointment, "rescheduled_by_patient", notify_patient=True, notify_doctor=True)
         return Response({"detail": "Appointment rescheduled successfully."},
                         status=status.HTTP_200_OK)
 

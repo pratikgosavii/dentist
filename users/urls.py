@@ -23,6 +23,10 @@ urlpatterns = [
     path('logout/', logout_page, name='logout'),
     path('register-device-token/', RegisterDeviceTokenAPIView.as_view(), name='RegisterDeviceTokenAPIView'),
 
+    # Notifications (same API for doctor and customer — returns notifications for logged-in user)
+    path('notifications/', NotificationListAPIView.as_view(), name='notification_list'),
+    path('notifications/<int:pk>/mark-read/', MarkNotificationReadAPIView.as_view(), name='notification_mark_read'),
+
     path('delete-account/', delete_user, name='delete_account'),
 
     path('dentist_list/', dentist_list, name='dentist_list'),

@@ -218,6 +218,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from customer.models import Appointment
+from customer.notification_services import notify_appointment_status, notify_new_appointment_to_doctor
 from .serializer import AppointmentTreatmentSerializer
 
 
@@ -367,6 +368,7 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "accepted"
         appointment.save()
+        notify_appointment_status(appointment, "accepted", notify_patient=True, notify_doctor=True)
         return Response({"detail": "Appointment accepted."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
@@ -378,8 +380,9 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "rejected"
         appointment.save()
+        notify_appointment_status(appointment, "rejected", notify_patient=True, notify_doctor=False)
         return Response({"detail": "Appointment rejected."}, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=["post"])
     def completed(self, request, pk=None):
         appointment = self.get_object()
@@ -389,10 +392,10 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
 
         appointment.status = "completed"
         appointment.save()
+        notify_appointment_status(appointment, "completed", notify_patient=True, notify_doctor=True)
         return Response({"detail": "Appointment marked as completed."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
-
     def reschedule(self, request, pk=None):
         appointment = self.get_object()
 
@@ -425,7 +428,7 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         appointment.slot_id = slot
         appointment.status = "rescheduled"
         appointment.save()
-
+        notify_appointment_status(appointment, "rescheduled", notify_patient=True, notify_doctor=True)
         return Response(
             {"detail": "Appointment rescheduled successfully."},
             status=status.HTTP_200_OK
@@ -464,13 +467,11 @@ class DoctorAppointmentViewSet(viewsets.ModelViewSet):
         appointment.slot_id = slot
         appointment.status = "next_appointment"
         appointment.save()
-
+        notify_appointment_status(appointment, "next_appointment", notify_patient=True, notify_doctor=True)
         return Response(
             {"detail": "Appointment marked as next appointment successfully."},
             status=status.HTTP_200_OK
         )
-
-        
 
     @action(detail=False, methods=['get'], url_path='patients')
     def list_patients(self, request):

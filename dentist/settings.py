@@ -206,6 +206,16 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "customer.notification_services": {
+            "handlers": ["request_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "customer.push_services": {
+            "handlers": ["request_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
 
