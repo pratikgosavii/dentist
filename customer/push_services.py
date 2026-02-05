@@ -38,13 +38,13 @@ def send_push_notification(user, title, body, data=None):
     """
     tokens = _get_tokens_for_user(user)
     if not tokens:
-        logger.debug("Push skipped: user %s has no tokens in user_token", user.id if user else None)
+        logger.info("[PUSH] Skipped: user_id=%s has no device tokens in user_token", user.id if user else None)
         print(f"[PUSH] Skipped: user_id={user.id if user else None} has no device tokens")
         return False
 
     fcm_key = getattr(settings, "FCM_SERVER_KEY", None) or getattr(settings, "FCM_LEGACY_SERVER_KEY", None)
     if not fcm_key:
-        logger.debug("Push skipped: FCM_SERVER_KEY not configured")
+        logger.info("[PUSH] Skipped: FCM_SERVER_KEY not configured")
         print("[PUSH] Skipped: FCM_SERVER_KEY not configured")
         return False
 
