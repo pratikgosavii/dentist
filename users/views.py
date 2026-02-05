@@ -41,6 +41,7 @@ from .forms import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, OTP, UserToken  # Your custom user model
 from .otp_utils import create_and_send_otp, verify_otp
