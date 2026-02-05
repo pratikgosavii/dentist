@@ -81,7 +81,9 @@ OTP_MESSAGE_TEMPLATE = "OTP {otp_code} to verify your dental record on ToothTrac
 OTP_EXPIRY_MINUTES = 5  # OTP expires after 5 minutes
 OTP_LENGTH = 6  # 6-digit OTP
 
-
+# Push notifications: Firebase Admin SDK (firebase_key.json). Legacy Server key only if you set it below.
+FCM_SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, "dentist", "firebase_key.json")
+FCM_SERVER_KEY = ""  # optional: set to legacy Server key if not using Firebase Admin
 
 from datetime import timedelta
 
