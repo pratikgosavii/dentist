@@ -86,17 +86,29 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         if appointment:
             notify_new_appointment_to_doctor(appointment)
 
-    @action(detail=True, methods=["post"])
-    def cancelled(self, request, pk=None):
+    def _do_cancel(self, request, pk=None):
+        """Shared cancel logic: set status and send notifications to patient + doctor."""
         appointment = self.get_object()
         if appointment.user != request.user:
             return Response({"error": "This appointment does not belong to you."},
                             status=status.HTTP_403_FORBIDDEN)
-
         appointment.status = "cancelled"
         appointment.save()
-        notify_appointment_status(appointment, "cancelled", notify_patient=True, notify_doctor=True)
+        try:
+            notify_appointment_status(appointment, "cancelled", notify_patient=True, notify_doctor=True)
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).exception("Cancel notification failed: %s", e)
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"])
+    def cancelled(self, request, pk=None):
+        return self._do_cancel(request, pk)
+
+    @action(detail=True, methods=["post"], url_path="cancel")
+    def cancel(self, request, pk=None):
+        """Same as cancelled; use POST .../cancel/ or .../cancelled/."""
+        return self._do_cancel(request, pk)
 
     @action(detail=True, methods=["post"])
     def reschedule(self, request, pk=None):
