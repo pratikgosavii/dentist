@@ -14,6 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 
 from rest_framework.generics import CreateAPIView, ListAPIView
+import logging
 from .models import *
 from .notification_services import notify_appointment_status, notify_new_appointment_to_doctor
 
@@ -88,7 +89,13 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
     def _do_cancel(self, request, pk=None):
         """Shared cancel logic: set status and send notifications to patient + doctor."""
+        log = logging.getLogger("customer.views")
+        pk = pk or self.kwargs.get("pk")
+        log.info("[CANCEL] Cancel requested pk=%s user_id=%s", pk, getattr(request.user, "id", None))
+        print(f"[CANCEL] Cancel requested pk={pk} user_id={getattr(request.user, 'id', None)}")
         appointment = self.get_object()
+        log.info("[CANCEL] Appointment id=%s status=%s -> cancelling", appointment.id, appointment.status)
+        print(f"[CANCEL] Appointment id={appointment.id} -> sending notifications")
         if appointment.user != request.user:
             return Response({"error": "This appointment does not belong to you."},
                             status=status.HTTP_403_FORBIDDEN)
@@ -96,9 +103,11 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment.save()
         try:
             notify_appointment_status(appointment, "cancelled", notify_patient=True, notify_doctor=True)
+            log.info("[CANCEL] Notifications sent for appointment_id=%s", appointment.id)
+            print(f"[CANCEL] Notifications sent for appointment_id={appointment.id}")
         except Exception as e:
-            import logging
-            logging.getLogger(__name__).exception("Cancel notification failed: %s", e)
+            log.exception("Cancel notification failed: %s", e)
+            print(f"[CANCEL] Notification failed: {e}")
         return Response({"detail": "Appointment cancelled."}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])

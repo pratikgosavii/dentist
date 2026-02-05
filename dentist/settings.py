@@ -218,6 +218,11 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
+        "customer.views": {
+            "handlers": ["request_file", "console"],
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
 
