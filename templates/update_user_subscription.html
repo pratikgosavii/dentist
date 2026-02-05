@@ -270,6 +270,11 @@
                                     <a href="{% url 'subscription_payment_history' user.id %}" class="btn btn-info me-2">
                                         <i class="bi bi-clock-history"></i> View Payment History
                                     </a>
+                                    {% if user.is_doctor and user.subscription_valid_to and user.subscription_is_active %}
+                                    <button type="button" class="btn btn-warning me-2" onclick="deactivateSubscription()">
+                                        <i class="bi bi-x-octagon"></i> Deactivate Subscription
+                                    </button>
+                                    {% endif %}
                                     <button type="submit" class="btn btn-primary">
                                         <i class="bi bi-save"></i> Update Subscription
                                     </button>
@@ -291,6 +296,10 @@
                     <input type="hidden" name="action" value="activate_user">
                 </form>
                 {% endif %}
+                <form id="deactivateSubscriptionForm" method="POST" action="{% url 'update_user_subscription' user.id %}" style="display: none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="deactivate_subscription">
+                </form>
             </div>
         </div>
     </div>
@@ -313,6 +322,12 @@
     function deactivateUser() {
         if (confirm('Are you sure you want to deactivate this user account? They will not be able to login.')) {
             document.getElementById('deactivateUserForm').submit();
+        }
+    }
+
+    function deactivateSubscription() {
+        if (confirm('Deactivate subscription? Valid To will be set to yesterday so the subscription becomes inactive.')) {
+            document.getElementById('deactivateSubscriptionForm').submit();
         }
     }
 </script>

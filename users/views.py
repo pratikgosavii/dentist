@@ -651,7 +651,15 @@ def update_user_subscription(request, user_id):
             user.save()
             messages.success(request, 'User account deactivated successfully!')
             return redirect('update_user_subscription', user_id=user_id)
-        
+
+        elif action == 'deactivate_subscription':
+            from django.utils import timezone
+            yesterday = timezone.now().date() - timezone.timedelta(days=1)
+            user.subscription_valid_to = yesterday
+            user.save()
+            messages.success(request, 'Subscription deactivated successfully (valid to set to yesterday).')
+            return redirect('update_user_subscription', user_id=user_id)
+
         # Regular update of subscription fields
         subscription_valid_from = request.POST.get('subscription_valid_from')
         subscription_valid_to = request.POST.get('subscription_valid_to')

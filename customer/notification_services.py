@@ -3,6 +3,7 @@ Appointment status notification messages and send logic.
 Creates in-app Notification records and sends push to patient/doctor.
 """
 import logging
+from datetime import datetime as dt
 from django.utils import timezone
 from .models import Notification, Appointment
 from .push_services import send_push_notification
@@ -11,10 +12,20 @@ logger = logging.getLogger(__name__)
 
 
 def _format_date(appointment):
-    """Format appointment date for display e.g. '23 Jan 2026'."""
+    """Format appointment date for display e.g. '23 Jan 2026'. Handles date object or YYYY-MM-DD string."""
     if not appointment or not appointment.date:
         return ""
-    return appointment.date.strftime("%d %b %Y")
+    d = appointment.date
+    if hasattr(d, "strftime"):
+        return d.strftime("%d %b %Y")
+    # date may be a string (e.g. from API) like "2026-02-10"
+    if isinstance(d, str):
+        try:
+            parsed = dt.strptime(d[:10], "%Y-%m-%d").date()
+            return parsed.strftime("%d %b %Y")
+        except (ValueError, TypeError):
+            return str(d)
+    return str(d)
 
 
 def _patient_name(appointment):
@@ -62,6 +73,7 @@ def get_doctor_message(status, appointment):
     patient = _patient_name(appointment)
     messages = {
         "new_appointment": ("New Appointment", "You have got a new appointment."),
+        "accepted": ("Appointment Accepted", "You have accepted the appointment."),
         "rescheduled": ("Appointment Rescheduled", "Your appointment has been Rescheduled."),
         "next_appointment": (
             "Next Appointment Booked",
