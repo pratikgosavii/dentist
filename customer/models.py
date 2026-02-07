@@ -91,6 +91,14 @@ class Appointment(models.Model):
     # Meta info
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),  # customer appointment list
+            models.Index(fields=["doctor", "date"]),  # doctor appointments by date
+            models.Index(fields=["doctor", "date", "status"]),  # slot check, date filter
+            models.Index(fields=["-created_at"]),  # ordering, dashboard weekly
+        ]
+
     def __str__(self):
         return f"Appointment #{self.id} - {self.user} with {self.doctor} ({self.status})"
 
@@ -111,6 +119,9 @@ class Notification(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),  # notification list API
+        ]
 
     def __str__(self):
         return f"{self.title} - {self.user}"
@@ -143,6 +154,11 @@ class SupportTicket(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="open")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),  # support ticket list
+        ]
 
     def __str__(self):
         return f"Ticket #{self.id} - {self.subject}"
@@ -201,6 +217,12 @@ class PaidDoubt(models.Model):
         default='pending'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["payment_status", "-created_at"]),  # dashboard, revenue
+            models.Index(fields=["user", "payment_status"]),  # payment history
+        ]
 
     def __str__(self):
         return f"{self.phone} - {self.payment_status}"

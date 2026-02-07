@@ -62,6 +62,11 @@ class doctor(models.Model):
 
     remark = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_active"]),  # doctor list filter
+        ]
     
     # Weekly off days for clinic (list of day codes: ['Mon', 'Tue', 'Sun'])
     weekly_off_days = models.JSONField(
@@ -107,8 +112,11 @@ class video_call_history(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
-
+    class Meta:
+        indexes = [
+            models.Index(fields=["doctor", "-timestamp"]),
+            models.Index(fields=["user", "-timestamp"]),
+        ]
 
 class Appoinment_Medicine(models.Model):
 
@@ -151,6 +159,11 @@ class Appoinment_Medicine(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["appointment", "-created_at"]),  # medicines by appointment
+        ]
+
     def save(self, *args, **kwargs):
         """Ensure dose_time is always a valid list (JSON) or None"""
         if self.dose_time is None:
@@ -171,6 +184,11 @@ class AppointmentTreatment(models.Model):
     doctor = models.ForeignKey("doctor", on_delete=models.CASCADE, related_name="appointment_treatments")
     treatment = models.ForeignKey("masters.treatment", on_delete=models.CASCADE, related_name="appointment_treatments")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["appointment", "-created_at"]),
+        ]
 
 class AppointmentTreatmentStep(models.Model):
     STATUS_CHOICES = [
@@ -219,11 +237,15 @@ class AppointmentLedger(models.Model):
 
 
 class Expense(models.Model):
-    
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField(auto_now_add=False)  # default today if not provided
+    date = models.DateField(auto_now_add=False)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "date"]),  # expense reports
+        ]
 
     def __str__(self):
         return f"{self.title} - {self.amount} ({self.date})"
@@ -231,6 +253,10 @@ class Expense(models.Model):
 
 
 class AppointmentDocument(models.Model):
+    class Meta:
+        indexes = [
+            models.Index(fields=["appointment", "-uploaded_at"]),
+        ]
 
     TITLE_CHOICES = [
         ("xray", "X-Ray"),
@@ -290,21 +316,25 @@ class LabWork(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
+    class Meta:
+        indexes = [
+            models.Index(fields=["appointment", "-created_at"]),
+            models.Index(fields=["lab", "status"]),
+        ]
 
 
-
-    
 class Offer(models.Model):
-  
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")  
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     valid_to = models.DateTimeField(auto_now_add=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),
+        ]
 
     def __str__(self):
         return self.title
@@ -343,16 +373,19 @@ class DoctorAvailability(models.Model):
     slot = models.ForeignKey("masters.slot", on_delete=models.CASCADE, related_name='doctor_slots')
     
     is_active = models.BooleanField(default=True)  # in case you want to turn off that slot
-    
-    
-    
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["doctor", "day", "is_active"]),  # weekly availability, slot filter
+        ]
+
 
 class DoctorLeave(models.Model):
-    doctor = models.ForeignKey("doctor", on_delete=models.CASCADE)  # assuming doctor is a User
+    doctor = models.ForeignKey("doctor", on_delete=models.CASCADE)
     leave_date = models.DateField()
 
     class Meta:
-        unique_together = ('doctor', 'leave_date')  # prevent duplicate leaves
+        unique_together = ('doctor', 'leave_date')  # creates index for (doctor, leave_date)
 
    
     

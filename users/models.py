@@ -86,7 +86,14 @@ class User(AbstractUser):
     username = None  # Remove username field
 
     USERNAME_FIELD = 'mobile'  # Set mobile as the login field
-    REQUIRED_FIELDS = [] 
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_doctor", "date_joined"]),  # dashboard, dentist_list
+            models.Index(fields=["is_customer"]),  # user_list, customer_list
+            models.Index(fields=["email"]),  # duplicate check
+        ]
 
     objects = CustomUserManager()
 
@@ -110,8 +117,7 @@ class UserToken(models.Model):
     class Meta:
         db_table = "user_token"
         ordering = ["-created_at"]
-        # Optional: allow same token once per user (unique together)
-        unique_together = [["user", "token"]]
+        unique_together = [["user", "token"]]  # FK+unique covers filter(user=user)
 
     def __str__(self):
         return f"{self.user_id} - {self.token[:20]}..."

@@ -17,45 +17,44 @@
                     </div>
                     <!-- end page title -->
 
+                    <!-- Row 1: Money -->
                     <div class="row">
-                        <div class="col-xl-3 col-md-6">
-                            <!-- card -->
+                        <div class="col-xl-4 col-md-6">
                             <div class="card card-h-100">
-                                <!-- card body -->
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Sales</span>
-                                            <h4 class="mb-3">
-                                                $<span class="counter-value" data-target="354.5">0</span>k
-                                            </h4>
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Revenue</span>
+                                            <h4 class="mb-3">₹<span class="counter-value" data-target="{{ total_revenue }}">{{ total_revenue }}</span></h4>
                                             <div class="text-nowrap">
-                                                <span class="badge bg-soft-success text-success">+$20.9k</span>
+                                                {% if total_revenue_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ total_revenue_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ total_revenue_growth }}%</span>
+                                                {% endif %}
                                                 <span class="ms-1 text-muted font-size-13">Since last week</span>
                                             </div>
                                         </div>
-
                                         <div class="flex-shrink-0 text-end dash-widget">
                                             <div id="mini-chart1" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
                                         </div>
                                     </div>
-                                </div><!-- end card body -->
-                            </div><!-- end card -->
-                        </div><!-- end col -->
-
-                        <div class="col-xl-3 col-md-6">
-                            <!-- card -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
                             <div class="card card-h-100">
-                                <!-- card body -->
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Items</span>
-                                            <h4 class="mb-3">
-                                                <span class="counter-value" data-target="1256">0</span>
-                                            </h4>
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Subscription Revenue</span>
+                                            <h4 class="mb-3">₹<span class="counter-value" data-target="{{ subscription_revenue }}">{{ subscription_revenue }}</span></h4>
                                             <div class="text-nowrap">
-                                                <span class="badge bg-soft-danger text-danger">-29 Trades</span>
+                                                {% if subscription_revenue_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ subscription_revenue_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ subscription_revenue_growth }}%</span>
+                                                {% endif %}
                                                 <span class="ms-1 text-muted font-size-13">Since last week</span>
                                             </div>
                                         </div>
@@ -63,23 +62,22 @@
                                             <div id="mini-chart2" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
                                         </div>
                                     </div>
-                                </div><!-- end card body -->
-                            </div><!-- end card -->
-                        </div><!-- end col-->
-
-                        <div class="col-xl-3 col-md-6">
-                            <!-- card -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-md-6">
                             <div class="card card-h-100">
-                                <!-- card body -->
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Average Sales</span>
-                                            <h4 class="mb-3">
-                                                $<span class="counter-value" data-target="7.54">0</span>M
-                                            </h4>
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Doubt Revenue</span>
+                                            <h4 class="mb-3">₹<span class="counter-value" data-target="{{ doubt_revenue }}">{{ doubt_revenue }}</span></h4>
                                             <div class="text-nowrap">
-                                                <span class="badge bg-soft-success text-success">+ $2.8k</span>
+                                                {% if doubt_revenue_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ doubt_revenue_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ doubt_revenue_growth }}%</span>
+                                                {% endif %}
                                                 <span class="ms-1 text-muted font-size-13">Since last week</span>
                                             </div>
                                         </div>
@@ -87,23 +85,26 @@
                                             <div id="mini-chart3" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
                                         </div>
                                     </div>
-                                </div><!-- end card body -->
-                            </div><!-- end card -->
-                        </div><!-- end col -->
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end row 1 -->
 
+                    <!-- Row 2: Counts -->
+                    <div class="row">
                         <div class="col-xl-3 col-md-6">
-                            <!-- card -->
                             <div class="card card-h-100">
-                                <!-- card body -->
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Orders</span>
-                                            <h4 class="mb-3">
-                                                <span class="counter-value" data-target="{{ current_week_order_count }}">0</span>%
-                                            </h4>
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Appointments</span>
+                                            <h4 class="mb-3"><span class="counter-value" data-target="{{ total_appointments }}">{{ total_appointments }}</span></h4>
                                             <div class="text-nowrap">
-                                                <span class="badge bg-soft-success text-success">+{{ percentage_change }}%</span>
+                                                {% if appointments_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ appointments_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ appointments_growth }}%</span>
+                                                {% endif %}
                                                 <span class="ms-1 text-muted font-size-13">Since last week</span>
                                             </div>
                                         </div>
@@ -111,10 +112,79 @@
                                             <div id="mini-chart4" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
                                         </div>
                                     </div>
-                                </div><!-- end card body -->
-                            </div><!-- end card -->
-                        </div><!-- end col -->
-                    </div><!-- end row-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Doubts</span>
+                                            <h4 class="mb-3"><span class="counter-value" data-target="{{ total_doubts }}">{{ total_doubts }}</span></h4>
+                                            <div class="text-nowrap">
+                                                {% if doubts_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ doubts_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ doubts_growth }}%</span>
+                                                {% endif %}
+                                                <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 text-end dash-widget">
+                                            <div id="mini-chart5" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Doctors</span>
+                                            <h4 class="mb-3"><span class="counter-value" data-target="{{ total_doctors }}">{{ total_doctors }}</span></h4>
+                                            <div class="text-nowrap">
+                                                {% if doctors_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ doctors_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ doctors_growth }}%</span>
+                                                {% endif %}
+                                                <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 text-end dash-widget">
+                                            <div id="mini-chart6" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card card-h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted mb-3 lh-1 d-block text-truncate">Total Users</span>
+                                            <h4 class="mb-3"><span class="counter-value" data-target="{{ total_users }}">{{ total_users }}</span></h4>
+                                            <div class="text-nowrap">
+                                                {% if users_growth >= 0 %}
+                                                <span class="badge bg-soft-success text-success">+{{ users_growth }}%</span>
+                                                {% else %}
+                                                <span class="badge bg-soft-danger text-danger">{{ users_growth }}%</span>
+                                                {% endif %}
+                                                <span class="ms-1 text-muted font-size-13">Since last week</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 text-end dash-widget">
+                                            <div id="mini-chart7" data-colors='["#4952FB;", "#F0D28C"]' class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end row 2-->
 
                     <div class="row">
                         <div class="col-xl-8">
@@ -153,16 +223,13 @@
                                                 <div class="mt-0">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm m-auto">
-                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">
-                                                                1
-                                                            </span>
+                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">1</span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <span class="font-size-14">Doctors</span>
+                                                            <span class="font-size-14">Doctors ({{ total_doctors }})</span>
                                                         </div>
-
                                                         <div class="flex-shrink-0">
-                                                            <span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+5.4%</span>
+                                                            {% if doctors_growth >= 0 %}<span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+{{ doctors_growth }}%</span>{% else %}<span class="badge rounded-pill badge-soft-danger font-size-12 fw-medium">{{ doctors_growth }}%</span>{% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -235,8 +302,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="mt-4 pt-2">
-                                                    <a href="" class="btn btn-primary w-100" style="background-color: #4952FB;">See All Appointment <i
-                                                            class="mdi mdi-arrow-right ms-1"></i></a>
+                                                    <a href="{% url 'user_list' %}" class="btn btn-primary w-100" style="background-color: #4952FB;">See Users & Appointments <i class="mdi mdi-arrow-right ms-1"></i></a>
                                                 </div>
 
                                             </div>
@@ -255,45 +321,27 @@
                                 <!-- card body -->
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap align-items-center mb-4">
-                                        <h5 class="card-title me-2">Appointment by Locations</h5>
+                                        <h5 class="card-title me-2">Appointments by City</h5>
                                         <div class="ms-auto">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle text-reset" href="#" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="text-muted font-size-12">Sort By:</span> <span class="fw-medium">World<i class="mdi mdi-chevron-down ms-1"></i></span>
-                                                </a>
-
-                                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                                                    <a class="dropdown-item" href="#">Delhi</a>
-                                                    <a class="dropdown-item" href="#">Hydarabad</a>
-                                                    <a class="dropdown-item" href="#">Mumbai</a>
-                                                </div>
-                                            </div>
+                                            <span class="text-muted font-size-12">By doctor's clinic location</span>
                                         </div>
                                     </div>
 
                                     <div id="sales-by-locations" data-colors='["#0a3622"]' style="height: 253px"></div>
 
                                     <div class="px-2 py-2">
-                                        <p class="mb-1">Delhi <span class="float-end">75%</span></p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped" role="progressbar"
-                                                style="width: 75%; background-color: #F0D28C" aria-valuenow="75" aria-valuemin="0" aria-valuemax="75">
+                                        {% if appointments_by_city %}
+                                            {% for item in appointments_by_city %}
+                                            <p class="mb-1">{{ item.city }} <span class="float-end">{{ item.count }} ({{ item.percent }}%)</span></p>
+                                            <div class="progress mt-2" style="height: 6px;">
+                                                <div class="progress-bar progress-bar-striped" role="progressbar"
+                                                    style="width: {{ item.percent }}%; background-color: #F0D28C" aria-valuenow="{{ item.count }}" aria-valuemin="0" aria-valuemax="{{ total_appointments }}">
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <p class="mt-3 mb-1">Hydarabad <span class="float-end">55%</span></p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped" role="progressbar"
-                                                style="width: 55%; background-color: #F0D28C" aria-valuenow="55" aria-valuemin="0" aria-valuemax="55">
-                                            </div>
-                                        </div>
-
-                                        <p class="mt-3 mb-1">Mumbai <span class="float-end">85%</span></p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped" role="progressbar"
-                                                style="width: 85%; background-color: #F0D28C" aria-valuenow="85" aria-valuemin="0" aria-valuemax="85">
-                                            </div>
-                                        </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p class="text-muted mb-0">No appointments yet. City is derived from doctor's clinic.</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <!-- end card body -->

@@ -45,6 +45,11 @@ class coupon(models.Model):
     end_date = models.DateTimeField()
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_active", "end_date"]),  # valid coupons
+        ]
+
     def __str__(self):
         return self.code
     
@@ -99,6 +104,11 @@ class medicine(models.Model):
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_active"]),  # medicine list filter
+        ]
 
     def __str__(self):
         return f"{self.name}"
@@ -185,6 +195,12 @@ class enquiry(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["status", "-created_at"]),
+            models.Index(fields=["user", "-created_at"]),
+        ]
+
 
 class home_banner(models.Model):
     title = models.CharField(max_length=225, blank=True, null=True)
@@ -192,6 +208,11 @@ class home_banner(models.Model):
     image = models.ImageField(upload_to='homeBanners/')
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_active"]),  # active banners
+        ]
 
     def __str__(self):
         return self.title
@@ -205,6 +226,10 @@ class treatment(models.Model):
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_active"]),  # treatment list filter
+        ]
 
     def __str__(self):
         return self.name
@@ -250,6 +275,10 @@ class Prescription(models.Model):
     date = models.DateField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),  # prescription list
+        ]
 
     def __str__(self):
         return self.title
