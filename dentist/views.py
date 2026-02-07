@@ -1,13 +1,17 @@
 
+import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count
 from django.utils import timezone
 from datetime import timedelta
 
+from django.db.models.functions import TruncMonth
+
 from users.models import User
-from doctor.models import doctor
+from doctor.models import doctor, Lab
 from customer.models import Appointment, PaidDoubt
+from masters.models import medicine, treatment
 
 
 def _week_dates():
@@ -115,5 +119,41 @@ def dashboard(request):
     for item in city_data:
         item['percent'] = round((item['count'] / total_for_pct) * 100, 1)
     context['appointments_by_city'] = city_data
+
+    # --- Market Overview ---
+    total_labs = Lab.objects.count()
+    context['total_labs'] = total_labs
+    context['labs_growth'] = 0  # Lab has no created_at, cannot compute growth
+
+    total_medicines = medicine.objects.count()
+    medicines_this_week = medicine.objects.filter(created_at__gte=this_week_start).count()
+    medicines_last_week = medicine.objects.filter(
+        created_at__gte=last_week_start,
+        created_at__lt=last_week_end
+    ).count()
+    context['total_medicines'] = total_medicines
+    context['medicines_growth'] = _growth_pct(medicines_this_week, medicines_last_week)
+
+    total_treatments = treatment.objects.count()
+    context['total_treatments'] = total_treatments
+    context['treatments_growth'] = 0  # treatment has no created_at
+
+    # Appointments by month (current year) for market-overview chart
+    now = timezone.now()
+    start_of_year = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+    appointments_by_month = (
+        Appointment.objects.filter(created_at__gte=start_of_year)
+        .annotate(month=TruncMonth('created_at'))
+        .values('month')
+        .annotate(count=Count('id'))
+        .order_by('month')
+    )
+    month_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    chart_data = [0] * 12
+    for item in appointments_by_month:
+        m = item['month'].month
+        chart_data[m - 1] = item['count']
+    context['market_chart_labels'] = json.dumps(month_labels)
+    context['market_chart_data'] = json.dumps(chart_data)
 
     return render(request, 'adminDashboard.html', context)

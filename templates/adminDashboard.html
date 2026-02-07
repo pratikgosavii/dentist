@@ -24,5 +24,28 @@
     <script src="{% static 'js/pages/allchart.js' %}"></script>
     <!-- dashboard init -->
     <script src="{% static 'js/pages/dashboard.init.js' %}"></script>
+    <!-- update market-overview chart with real appointment data -->
+    <script>
+    (function() {
+        var labels = {{ market_chart_labels|safe }};
+        var data = {{ market_chart_data|safe }};
+        setTimeout(function() {
+            try {
+                if (typeof ApexCharts !== 'undefined') {
+                    ApexCharts.exec('market-overview', 'updateOptions', {
+                        xaxis: { categories: labels },
+                        series: [{ name: 'Appointments', data: data }],
+                        chart: { stacked: false },
+                        yaxis: {
+                            labels: {
+                                formatter: function(val) { return val; }
+                            }
+                        }
+                    }, false, true);
+                }
+            } catch (e) {}
+        }, 100);
+    })();
+    </script>
 
 {% endblock extra_js %}

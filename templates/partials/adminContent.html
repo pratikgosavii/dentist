@@ -195,20 +195,7 @@
                                     <div class="d-flex flex-wrap align-items-center mb-4">
                                         <h5 class="card-title me-2">Market Overview</h5>
                                         <div class="ms-auto">
-                                            <div>
-                                                <button type="button" class="btn btn-soft-primary btn-sm">
-                                                    ALL
-                                                </button>
-                                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                                    1M
-                                                </button>
-                                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                                    6M
-                                                </button>
-                                                <button type="button" class="btn btn-soft-secondary btn-sm active">
-                                                    1Y
-                                                </button>
-                                            </div>
+                                            <span class="text-muted font-size-12">This year</span>
                                         </div>
                                     </div>
 
@@ -237,16 +224,13 @@
                                                 <div class="mt-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm m-auto">
-                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">
-                                                                2
-                                                            </span>
+                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">2</span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <span class="font-size-14">Labs</span>
+                                                            <span class="font-size-14">Labs ({{ total_labs }})</span>
                                                         </div>
-
                                                         <div class="flex-shrink-0">
-                                                            <span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+6.8%</span>
+                                                            <span class="text-muted font-size-12">—</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -254,16 +238,13 @@
                                                 <div class="mt-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm m-auto">
-                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">
-                                                                3
-                                                            </span>
+                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">3</span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <span class="font-size-14">Medicines</span>
+                                                            <span class="font-size-14">Medicines ({{ total_medicines }})</span>
                                                         </div>
-
                                                         <div class="flex-shrink-0">
-                                                            <span class="badge rounded-pill badge-soft-danger font-size-12 fw-medium">-4.9%</span>
+                                                            {% if medicines_growth >= 0 %}<span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+{{ medicines_growth }}%</span>{% else %}<span class="badge rounded-pill badge-soft-danger font-size-12 fw-medium">{{ medicines_growth }}%</span>{% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -271,16 +252,13 @@
                                                 <div class="mt-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm m-auto">
-                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">
-                                                                4
-                                                            </span>
+                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">4</span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <span class="font-size-14">Test</span>
+                                                            <span class="font-size-14">Treatments ({{ total_treatments }})</span>
                                                         </div>
-
                                                         <div class="flex-shrink-0">
-                                                            <span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+3.5%</span>
+                                                            <span class="text-muted font-size-12">—</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -288,16 +266,13 @@
                                                 <div class="mt-3">
                                                     <div class="d-flex align-items-center">
                                                         <div class="avatar-sm m-auto">
-                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">
-                                                                5
-                                                            </span>
+                                                            <span class="avatar-title rounded-circle bg-light text-dark font-size-13">5</span>
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <span class="font-size-14">Tests</span>
+                                                            <span class="font-size-14">Users ({{ total_users }})</span>
                                                         </div>
-
                                                         <div class="flex-shrink-0">
-                                                            <span class="badge rounded-pill badge-soft-danger font-size-12 fw-medium">-0.3%</span>
+                                                            {% if users_growth >= 0 %}<span class="badge rounded-pill badge-soft-success font-size-12 fw-medium">+{{ users_growth }}%</span>{% else %}<span class="badge rounded-pill badge-soft-danger font-size-12 fw-medium">{{ users_growth }}%</span>{% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
