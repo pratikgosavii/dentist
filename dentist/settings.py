@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'dentist.middleware.RequestLoggingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -197,6 +198,11 @@ LOGGING = {
             "handlers": ["request_file", "console"],
             "level": "INFO",
             "propagate": True,
+        },
+        "request_log": {
+            "handlers": ["request_file", "console"],
+            "level": "INFO",
+            "propagate": False,
         },
         "razorpay_webhook": {
             "handlers": ["webhook_file", "console"],

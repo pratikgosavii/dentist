@@ -27,7 +27,7 @@ urlpatterns = [
     path('notifications/', NotificationListAPIView.as_view(), name='notification_list'),
     path('notifications/<int:pk>/mark-read/', MarkNotificationReadAPIView.as_view(), name='notification_mark_read'),
 
-    path('delete-account/', delete_user, name='delete_account'),
+    path('delete-account/', DeleteAccountAPIView.as_view(), name='delete_account'),
 
     path('dentist_list/', dentist_list, name='dentist_list'),
     path('export-dentist-list-excel/', export_dentist_list_excel, name='export_dentist_list_excel'),

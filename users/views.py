@@ -276,23 +276,28 @@ class LoginAPIView(APIView):
                         {"error": "Your account has been deactivated. Please contact support."},
                         status=status.HTTP_403_FORBIDDEN
                     )
+                # Existing user: params are mobile + type — type must match account
+                # Mobile is doctor but they sent type customer → reject
+                if user.is_doctor:
+                    return Response(
+                        {"error": "This number is registered as a doctor. Please use doctor login."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+                # Mobile is customer but they sent type doctor → reject
+                if user.is_customer and (user_type or "").lower() == "doctor":
+                    return Response(
+                        {"error": "This number is registered as a customer. Please use customer login."},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
             else:
+                # New user: only create as customer (no doctor signup here)
                 user = User.objects.create(
                     mobile=mobile,
-                    is_active=True
+                    is_active=True,
+                    is_customer=True
                 )
+                customer.objects.create(user=user, is_active=True)
                 created = True
-                
-                # Set user type flags based on frontend
-                if user_type == "doctor":
-                    user.is_doctor = True
-                    doctor.objects.create(user=user, is_active=True)  
-
-                elif user_type == "customer":
-                    user.is_customer = True
-                    customer.objects.create(user=user, is_active=True)  
-
-                user.save()
 
             # Token creation
             refresh = RefreshToken.for_user(user)
@@ -773,24 +778,22 @@ from rest_framework import status
 from django.db import transaction, IntegrityError
 
 
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def delete_user(request):
-    """Delete user account"""
-    user = request.user
+class DeleteAccountAPIView(APIView):
+    """Delete the authenticated user's account. Class-based for consistency with other DRF endpoints."""
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['delete']
 
-    try:
-        with transaction.atomic():
-            # Delete user from Django
-            user.delete()
-
-        return Response(
-            {"detail": "Your account has been deleted successfully."},
-            status=status.HTTP_204_NO_CONTENT
-        )
-
-    except IntegrityError as e:
-        return Response(
-            {"detail": f"Account deletion failed: {str(e)}"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    def delete(self, request):
+        user = request.user
+        try:
+            with transaction.atomic():
+                user.delete()
+            return Response(
+                {"detail": "Your account has been deleted successfully."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except IntegrityError as e:
+            return Response(
+                {"detail": f"Account deletion failed: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
