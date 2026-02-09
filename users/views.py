@@ -276,15 +276,16 @@ class LoginAPIView(APIView):
                         {"error": "Your account has been deactivated. Please contact support."},
                         status=status.HTTP_403_FORBIDDEN
                     )
-                # Existing user: params are mobile + type — type must match account
-                # Mobile is doctor but they sent type customer → reject
-                if user.is_doctor:
+                # Existing user: type must match account — doctor+doctor and customer+customer only
+                user_type_lower = (user_type or "").lower()
+                # Doctor account but they sent type customer → reject
+                if user.is_doctor and user_type_lower != "doctor":
                     return Response(
                         {"error": "This number is registered as a doctor. Please use doctor login."},
                         status=status.HTTP_403_FORBIDDEN
                     )
-                # Mobile is customer but they sent type doctor → reject
-                if user.is_customer and (user_type or "").lower() == "doctor":
+                # Customer account but they sent type doctor → reject
+                if user.is_customer and user_type_lower == "doctor":
                     return Response(
                         {"error": "This number is registered as a customer. Please use customer login."},
                         status=status.HTTP_403_FORBIDDEN

@@ -60,8 +60,28 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", 
-    "http://localhost:8081" # React frontend
+    "http://localhost:3000",
+    "http://localhost:8081",
+    "https://admin.toothtrack.in",  # production admin / same-host app
+]
+# Allow DELETE and other methods (fixes status 0 when app sends DELETE)
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+# Allow Authorization header (required for JWT / Bearer)
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "origin",
+    "user-agent",
+    "x-requested-with",
 ]
 
 REST_FRAMEWORK = {
