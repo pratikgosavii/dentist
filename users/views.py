@@ -291,13 +291,19 @@ class LoginAPIView(APIView):
                         status=status.HTTP_403_FORBIDDEN
                     )
             else:
-                # New user: only create as customer (no doctor signup here)
+                # New user: create as doctor or customer based on type from params
                 user = User.objects.create(
                     mobile=mobile,
-                    is_active=True,
-                    is_customer=True
+                    is_active=True
                 )
-                customer.objects.create(user=user, is_active=True)
+                user_type_lower = (user_type or "customer").lower()
+                if user_type_lower == "doctor":
+                    user.is_doctor = True
+                    doctor.objects.create(user=user)
+                else:
+                    user.is_customer = True
+                    customer.objects.create(user=user, is_active=True)
+                user.save()
                 created = True
 
             # Token creation
