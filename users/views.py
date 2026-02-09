@@ -245,6 +245,7 @@ class MarkNotificationReadAPIView(APIView):
 
 
 from customer.models import customer
+from doctor.models import doctor
 
 class LoginAPIView(APIView):
     """Login user after OTP verification"""
