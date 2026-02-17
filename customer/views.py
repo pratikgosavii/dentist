@@ -400,16 +400,35 @@ class NearbyDoctorsAPIView(APIView):
     def post(self, request):
         user_lat = float(request.data.get("latitude"))
         user_lon = float(request.data.get("longitude"))
+        radius_km = float(request.data.get("radius_km", 50))  # default 50km so list isn't empty
 
         doctors = doctor.objects.filter(is_active=True)
         serializer = doctor_serializer(doctors, many=True)
         doctor_data = serializer.data
 
-        doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctor_data)
+        # Only pass doctors that have latitude/longitude (otherwise Google API drops them)
+        doctors_with_coords = [
+            d for d in doctor_data
+            if d.get("latitude") is not None and d.get("longitude") is not None
+        ]
 
-        # ✅ Filter only within 10km (using GOOGLE distance_value)
+        if not doctors_with_coords:
+            # No coords: return all active doctors without distance so list isn't blank
+            return Response({"doctors": doctor_data})
+
+        try:
+            doctors_with_distance = get_distance_and_eta(user_lat, user_lon, doctors_with_coords)
+        except Exception:
+            doctors_with_distance = doctors_with_coords
+
+        # If distance API returned nothing, show doctors with coords anyway (no distance filter)
+        if not doctors_with_distance:
+            doctors_with_distance = doctors_with_coords
+
+        # Filter within radius_km (default 50km); include docs with no distance_value
         nearby_doctors = [
-            doc for doc in doctors_with_distance if doc.get("distance_value", 0) / 1000 <= 10
+            doc for doc in doctors_with_distance
+            if (doc.get("distance_value") or 0) / 1000 <= radius_km
         ]
 
         return Response({"doctors": nearby_doctors})
